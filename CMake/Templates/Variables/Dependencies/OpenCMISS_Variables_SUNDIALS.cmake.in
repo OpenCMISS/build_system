@@ -1,0 +1,17 @@
+#[=======================================================================[.rst:
+OpenCMISS SUNDIALS Variables
+----------------------------
+
+Setup the variables to use SUNDIALS with OpenCMISS.
+
+#]=======================================================================]
+
+set(OpenCMISS_FIND_SYSTEM_SUNDIALS OFF CACHE BOOL "Find a system version of SUNDIALS rather than an OpenCMISS version." FORCE)
+
+# SUNDIALS repository options
+set(OpenCMISS_SUNDIALS_VERSION 3.11.0 CACHE STRING "The version/tag of SUNDIALS to use." FORCE)
+set(OpenCMISS_SUNDIALS_GIT_HOST @OC_DEPENDENCIES_GIT_HOST@ CACHE STRING "The hostname of the SUNDIALS Git repository." FORCE)
+set(OpenCMISS_SUNDIALS_GIT_ORGANISATION @OC_DEPENDENCIES_GIT_ORGANISATION@ CACHE STRING "The organisation of the SUNDIALS Git repository." FORCE)
+set(OpenCMISS_SUNDIALS_GIT_BRANCH @OC_DEPENDENCIES_GIT_BRANCH@ CACHE STRING "The branch of the SUNDIALS Git repository to use." FORCE)
+
+# SUNDIALS configuration options

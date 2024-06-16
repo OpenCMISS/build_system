@@ -1,0 +1,17 @@
+#[=======================================================================[.rst:
+OpenCMISS OPARI2 Variables
+--------------------------
+
+Setup the variables to use OPARI2 with OpenCMISS.
+
+#]=======================================================================]
+
+set(OpenCMISS_FIND_SYSTEM_OPARI2 OFF CACHE BOOL "Find a system version of OPARI2 rather than an OpenCMISS version." FORCE)
+
+# OPARI2 repository options
+set(OpenCMISS_OPARI2_VERSION 3.11.0 CACHE STRING "The version/tag of OPARI2 to use." FORCE)
+set(OpenCMISS_OPARI2_GIT_HOST @OC_DEPENDENCIES_GIT_HOST@ CACHE STRING "The hostname of the OPARI2 Git repository." FORCE)
+set(OpenCMISS_OPARI2_GIT_ORGANISATION @OC_DEPENDENCIES_GIT_ORGANISATION@ CACHE STRING "The organisation of the OPARI2 Git repository." FORCE)
+set(OpenCMISS_OPARI2_GIT_BRANCH @OC_DEPENDENCIES_GIT_BRANCH@ CACHE STRING "The branch of the OPARI2 Git repository to use." FORCE)
+
+# OPARI2 configuration options

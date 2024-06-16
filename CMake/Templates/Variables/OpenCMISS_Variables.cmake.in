@@ -1,0 +1,205 @@
+#[=======================================================================[.rst:
+OpenCMISS Variables
+-------------------
+
+A number of variables are used for the configuration of OpenCMISS.
+
+OpenCMISS repository options
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+These variables control where the OpenCMISS source is obtained from
+and what version is obtained.
+
+  **OpenCMISS_VERSION**:STRING
+  The version/tag of the OpenCMISS source to obtain. The format is
+  three integers in the format of major.minor.patch version numbers.
+  
+  **OpenCMISS_GIT_HOST**:STRING
+  The hostname of the git server to obtain the OpenCMISS source from.
+
+  **OpenCMISS_GIT_ORGANISATION**:STRING
+  The git organisation that contains the OpenCMISS repositories. For
+  most users this will be the main OpenCMISS organisation but for
+  developers who wish to use their version of OpenCMISS then this
+  should be the name of their git organisation.
+  
+  **OpenCMISS_GIT_BRANCH**:STRING
+  The git branch of the OpenCMISS source to obtain. For most
+  users this is determined by the tag number in **OpenCMISS_VERSION**
+  and only really plays a role for developers.
+  
+OpenCMISS compilation options
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+These variables control what OpenCMISS options are set in the
+configuration. These options affect the compilation of the OpenCMISS
+source and so a fixed once compiled.
+
+  **OpenCMISS_LARGE_INDICES**:BOOL
+  Determines whether OpenCMISS and its dependencies are compiled with
+  large indicies (64-bit) support. This is required to support
+  indicies for nodes, elements, DOFs, etc. that are larger than
+  2^32-1 = 2147483648.
+
+
+OpenCMISS build options
+^^^^^^^^^^^^^^^^^^^^^^^
+
+
+OpenCMISS dependencies options
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+These variables control what dependencies are included in the
+OpenCMISS configuration.
+
+#]=======================================================================]
+
+# OpenCMISS repository options
+
+set(OpenCMISS_VERSION 1.0.0 CACHE STRING "OpenCMISS version to use." FORCE)
+set(OpenCMISS_GIT_HOST @OC_GIT_HOST@ CACHE STRING "OpenCMISS Git host to use." FORCE)
+set(OpenCMISS_GIT_ORGANISATION @OC_GIT_ORGANISATION@ CACHE STRING "OpenCMISS Git organisation to use." FORCE)
+set(OpenCMISS_GIT_BRANCH @OC_GIT_BRANCH@ CACHE STRING "OpenCMISS Git branch to use." FORCE)
+
+# OpenCMISS compilation options
+
+set(OpenCMISS_SHARED_LIBRARIES ON CACHE BOOL "Build OpenCMISS shared libraries." FORCE)
+set(OpenCMISS_STATIC_LIBRARIES OFF CACHE BOOL "Build OpenCMISS static libraries." FORCE)
+set(OpenCMISS_LARGE_INDICES OFF CACHE BOOL "Build OpenCMISS with large (64-bit) indices." FORCE)
+set(OpenCMISS_REAL_PRECISION DOUBLE CACHE STRING "OpenCMISS real precision to use. Options are SINGLE|DOUBLE." FORCE)
+set(OpenCMISS_OPTIMISED_BLAS_LAPACK "None" CACHE STRING "Build OpenCMISS with an optimised BLAS/LAPACK library. Options are None|IntelMKL." FORCE)
+set(OpenCMISS_WITH_DIAGNOSTICS ON CACHE BOOL "Build OpenCMISS with diagnostics support." FORCE)
+set(OpenCMISS_WITH_NO_CHECKS ON CACHE BOOL "Build OpenCMISS with no internal checks." FORCE)
+set(OpenCMISS_WITH_NO_PRECHECKS ON CACHE BOOL "Build OpenCMISS with no internal prechecks." FORCE)
+set(OpenCMISS_WITH_NO_POSTCHECKS ON CACHE BOOL "Build OpenCMISS with no internal postchecks." FORCE)
+set(OpenCMISS_WITH_PROFILING ON CACHE BOOL "Build OpenCMISS with profiling support." FORCE)
+set(OpenCMISS_WITH_CUDA OFF CACHE BOOL "Build OpenCMISS with CUDA." FORCE)
+set(OpenCMISS_WITH_MPI ON CACHE BOOL "Build OpenCMISS with MPI." FORCE)
+set(OpenCMISS_WITH_TESTS ON CACHE BOOL "Build OpenCMISS with tests enabled." FORCE)
+set(OpenCMISS_WITH_C_BINDINGS ON CACHE BOOL "Build the C bindings for OpenCMISS." FORCE)
+set(OpenCMISS_WITH_Python_BINDINGS ON CACHE BOOL "Build the python bindings for OpenCMISS." FORCE)
+
+# OpenCMISS build configuration
+
+set(OpenCMISS_WARN_ALL OFF CACHE BOOL "Build OpenCMISS with all warnings enabled." FORCE)
+set(OpenCMISS_CHECK_ALL OFF CACHE BOOL "Build OpenCMISS with all checks enabled." FORCE)
+
+# OpenCMISS dependencies compilation options
+
+set(OpenCMISS_DEPENDENCIES_SHARED_LIBRARIES ON CACHE BOOL "Build OpenCMISS dependencies shared libraries." FORCE)
+set(OpenCMISS_DEPENDENCIES_STATIC_LIBRARIES OFF CACHE BOOL "Build OpenCMISS dependencies static libraries." FORCE)
+set(OpenCMISS_DEPENDENCIES_BUILD_PRECISION "SDCZ" CACHE STRING "Build dependencies with (S)ingle, (D)ouble, (C)omplex, and (Z)double complex precision." FORCE)
+set(OpenCMISS_WITH_DEPENDENCIES_TESTS ON CACHE BOOL "Build OpenCMISS with tests for dependencies enabled." FORCE)
+
+# OpenCMISS dependencies configuration
+
+set(OpenCMISS_USE_BLAS_LAPACK @OC_DEFAULT_USE_NOMPI@ CACHE BOOL "Build OpenCMISS using BLAS/LAPACK." FORCE)
+set(OpenCMISS_USE_BLACS_SCALAPACK @OC_DEFAULT_USE_MPI@ CACHE BOOL "Build OpenCMISS using BLACS/SCALAPACK." FORCE)
+set(OpenCMISS_USE_BZip2 @OC_DEFAULT_USE_NOMPI@ CACHE BOOL "Build OpenCMISS using BZip2." FORCE)
+set(OpenCMISS_USE_CellML @OC_DEFAULT_USE_NOMPI@ CACHE BOOL "Build OpenCMISS using CellML." FORCE)
+set(OpenCMISS_USE_CSim @OC_DEFAULT_USE_NOMPI@ CACHE BOOL "Build OpenCMISS using CSim." FORCE)
+set(OpenCMISS_USE_Cube4 OFF CACHE BOOL "Build OpenCMISS using Cube4." FORCE)
+set(OpenCMISS_USE_FieldML @OC_DEFAULT_USE_NOMPI@ CACHE BOOL "Build OpenCMISS using FieldML." FORCE)
+#set(OpenCMISS_USE_HDF5 @OC_DEFAULT_USE_NOMPI@ CACHE BOOL "Build OpenCMISS using HDF5." FORCE)
+set(OpenCMISS_USE_HDF5 OFF CACHE BOOL "Build OpenCMISS using HDF5." FORCE)
+set(OpenCMISS_USE_HYPRE @OC_DEFAULT_USE_NOMPI@ CACHE BOOL "Build OpenCMISS using HYPRE." FORCE)
+set(OpenCMISS_USE_libCellML @OC_DEFAULT_USE_NOMPI@ CACHE BOOL "Build OpenCMISS using libCellML." FORCE)
+set(OpenCMISS_USE_LibXml2 @OC_DEFAULT_USE_NOMPI@ CACHE BOOL "Build OpenCMISS using LibXml2." FORCE)
+#set(OpenCMISS_USE_LLVM @OC_DEFAULT_USE_NOMPI@ CACHE BOOL "Build OpenCMISS using LLVM." FORCE)
+set(OpenCMISS_USE_LLVM OFF CACHE BOOL "Build OpenCMISS using LLVM." FORCE)
+set(OpenCMISS_USE_METIS @OC_DEFAULT_USE_NOMPI@ CACHE BOOL "Build OpenCMISS using METIS." FORCE)
+set(OpenCMISS_USE_MUMPS @OC_DEFAULT_USE_MPI@ CACHE BOOL "Build OpenCMISS using MUMPS." FORCE)
+set(OpenCMISS_USE_OPARI2 OFF CACHE BOOL "Build OpenCMISS using OPARI2." FORCE)
+set(OpenCMISS_USE_OTF2 OFF CACHE BOOL "Build OpenCMISS using OTF2." FORCE)
+set(OpenCMISS_USE_PAPI OFF CACHE BOOL "Build OpenCMISS using PAPI." FORCE)
+set(OpenCMISS_USE_ParMETIS_METIS_GKlib @OC_DEFAULT_USE_MPI@ CACHE BOOL "Build OpenCMISS using ParMETIS/METIS/GKlib." FORCE)
+set(OpenCMISS_USE_PETSc @OC_DEFAULT_USE_MPI@ CACHE BOOL "Build OpenCMISS using PETSc." FORCE)
+set(OpenCMISS_USE_Scalasca OFF CACHE BOOL "Build OpenCMISS using Scalasca." FORCE)
+set(OpenCMISS_USE_ScoreP OFF CACHE BOOL "Build OpenCMISS using Scalasca." FORCE)
+set(OpenCMISS_USE_Scotch @OC_DEFAULT_USE_MPI@ CACHE BOOL "Build OpenCMISS using SCOTCH." FORCE)
+set(OpenCMISS_USE_SLEPc @OC_DEFAULT_USE_MPI@ CACHE BOOL "Build OpenCMISS using SLEPc." FORCE)
+set(OpenCMISS_USE_SuiteSparse @OC_DEFAULT_USE_NOMPI@ CACHE BOOL "Build OpenCMISS using SuiteSparse." FORCE)
+set(OpenCMISS_USE_SUNDIALS @OC_DEFAULT_USE_NOMPI@ CACHE BOOL "Build OpenCMISS using SUNDIALS." FORCE)
+set(OpenCMISS_USE_SuperLU @OC_DEFAULT_USE_NOMPI@ CACHE BOOL "Build OpenCMISS using SuperLU." FORCE)
+set(OpenCMISS_USE_SuperLU_DIST @OC_DEFAULT_USE_MPI@ CACHE BOOL "Build OpenCMISS using SuperLU_DIST." FORCE)
+set(OpenCMISS_USE_SuperLU_MT @OC_DEFAULT_USE_MULTITHREADING@ CACHE BOOL "Build OpenCMISS using SuperLU_MT." FORCE)
+set(OpenCMISS_USE_SZip @OC_DEFAULT_USE_NOMPI@ CACHE BOOL "Build OpenCMISS using SuperLU_MT." FORCE)
+set(OpenCMISS_USE_ZLIB @OC_DEFAULT_USE_NOMPI@ CACHE BOOL "Build OpenCMISS using ZLIB." FORCE)
+
+##################################################################################################################
+#
+# SHOULD NOT NEED TO CHANGE ANYTHING BELOW HERE
+#
+##################################################################################################################
+
+
+# Debug information
+
+OCCMakeDebug("OpenCMISS Variables:" 1)
+OCCMakeDebug("" 1)
+OCCMakeDebug("  OpenCMISS Repository Variables:" 1)
+OCCMakeDebug("    OpenCMISS_VERSION = ${OpenCMISS_VERSION}" 1)
+OCCMakeDebug("    OpenCMISS_GIT_HOST = ${OpenCMISS_GIT_HOST}" 1)
+OCCMakeDebug("    OpenCMISS_GIT_ORGANISATION = ${OpenCMISS_GIT_ORGANISATION}" 1)
+OCCMakeDebug("    OpenCMISS_GIT_BRANCH = ${OpenCMISS_GIT_BRANCH}" 1)
+OCCMakeDebug("" 1)
+OCCMakeDebug("  OpenCMISS Compilation Options:" 1)
+OCCMakeDebug("    OpenCMISS_SHARED_LIBRARIES = ${OpenCMISS_SHARED_LIBRARIES}" 1)
+OCCMakeDebug("    OpenCMISS_STATIC_LIBRARIES = ${OpenCMISS_STATIC_LIBRARIES}" 1)
+OCCMakeDebug("    OpenCMISS_LARGE_INDICES = ${OpenCMISS_LARGE_INDICES}" 1)
+OCCMakeDebug("    OpenCMISS_REAL_PRECISION = ${OpenCMISS_REAL_PRECISION}" 1)
+OCCMakeDebug("    OpenCMISS_OPTIMISED_BLAS_LAPACK = ${OpenCMISS_OPTIMISED_BLAS_LAPACK}" 1)
+OCCMakeDebug("    OpenCMISS_WITH_DIAGNOSTICS = ${OpenCMISS_WITH_DIAGNOSTICS}" 1)
+OCCMakeDebug("    OpenCMISS_WITH_NO_CHECKS = ${OpenCMISS_WITH_NO_CHECKS}" 1)
+OCCMakeDebug("    OpenCMISS_WITH_NO_PRECHECKS = ${OpenCMISS_WITH_NO_PRECHECKS}" 1)
+OCCMakeDebug("    OpenCMISS_WITH_NO_POSTCHECKS = ${OpenCMISS_WITH_NO_POSTCHECKS}" 1)
+OCCMakeDebug("    OpenCMISS_WITH_PROFILING = ${OpenCMISS_WITH_PROFILING}" 1)
+OCCMakeDebug("    OpenCMISS_WITH_CUDA = ${OpenCMISS_WITH_CUDA}" 1)
+OCCMakeDebug("    OpenCMISS_WITH_MPI = ${OpenCMISS_WITH_MPI}" 1)
+OCCMakeDebug("    OpenCMISS_WITH_TESTS = ${OpenCMISS_WITH_MPI}" 1)
+OCCMakeDebug("    OpenCMISS_WITH_C_BINDINGS = ${OpenCMISS_WITH_C_BINDINGS}" 1)
+OCCMakeDebug("    OpenCMISS_WITH_Python_BINDINGS = ${OpenCMISS_WITH_Python_BINDINGS}" 1)
+OCCMakeDebug("" 1)
+OCCMakeDebug("  OpenCMISS Dependencies Build Configuration:" 1)
+OCCMakeDebug("    OpenCMISS_WARN_ALL = ${OpenCMISS_WARN_ALL}" 1)
+OCCMakeDebug("    OpenCMISS_CHECK_ALL = ${OpenCMISS_CHECK_ALL}" 1)
+OCCMakeDebug("" 1)
+OCCMakeDebug("  OpenCMISS Dependencies Compilation Options:" 1)
+OCCMakeDebug("    OpenCMISS_DEPENDENCIES_SHARED_LIBRARIES = ${OpenCMISS_DEPENDENCIES_SHARED_LIBRARIES}" 1)
+OCCMakeDebug("    OpenCMISS_DEPENDENCIES_STATIC_LIBRARIES = ${OpenCMISS_DEPENDENCIES_STATIC_LIBRARIES}" 1)
+OCCMakeDebug("" 1)
+OCCMakeDebug("  OpenCMISS Dependencies Configuration:" 1)
+OCCMakeDebug("    OpenCMISS_USE_BLAS_LAPACK = ${OpenCMISS_USE_BLAS_LAPACK}" 1)
+OCCMakeDebug("    OpenCMISS_USE_BZip2 = ${OpenCMISS_USE_BZip2}" 1)
+OCCMakeDebug("    OpenCMISS_USE_CellML = ${OpenCMISS_USE_CellML}" 1)
+OCCMakeDebug("    OpenCMISS_USE_CSim = ${OpenCMISS_USE_CSim}" 1)
+OCCMakeDebug("    OpenCMISS_USE_Cube4 = ${OpenCMISS_USE_Cube4}" 1)
+OCCMakeDebug("    OpenCMISS_USE_FieldML = ${OpenCMISS_USE_FieldML}" 1)
+OCCMakeDebug("    OpenCMISS_USE_HDF5 = ${OpenCMISS_USE_HDF5}" 1)
+OCCMakeDebug("    OpenCMISS_USE_HYPRE = ${OpenCMISS_USE_HYPRE}" 1)
+OCCMakeDebug("    OpenCMISS_USE_libCellML = ${OpenCMISS_USE_libCellML}" 1)
+OCCMakeDebug("    OpenCMISS_USE_LibXml2 = ${OpenCMISS_USE_LibXml2}" 1)
+OCCMakeDebug("    OpenCMISS_USE_LLVM = ${OpenCMISS_USE_LLVM}" 1)
+OCCMakeDebug("    OpenCMISS_USE_MUMPS = ${OpenCMISS_USE_MUMPS}" 1)
+OCCMakeDebug("    OpenCMISS_USE_OPARI2 = ${OpenCMISS_USE_OPARI2}" 1)
+OCCMakeDebug("    OpenCMISS_USE_OTF2 = ${OpenCMISS_USE_OTF2}" 1)
+OCCMakeDebug("    OpenCMISS_USE_PAPI = ${OpenCMISS_USE_PAPI}" 1)
+OCCMakeDebug("    OpenCMISS_USE_ParMETIS_METIS_GKlib = ${OpenCMISS_USE_ParMETIS_METIS_GKlib}" 1)
+OCCMakeDebug("    OpenCMISS_USE_PETSc = ${OpenCMISS_USE_PETSc}" 1)
+OCCMakeDebug("    OpenCMISS_USE_Scalasca = ${OpenCMISS_USE_Scalasca}" 1)
+OCCMakeDebug("    OpenCMISS_USE_ScoreP = ${OpenCMISS_USE_ScoreP}" 1)
+OCCMakeDebug("    OpenCMISS_USE_Scotch = ${OpenCMISS_USE_Scotch}" 1)
+OCCMakeDebug("    OpenCMISS_USE_SLEPc = ${OpenCMISS_USE_SLEPc}" 1)
+OCCMakeDebug("    OpenCMISS_USE_SuiteSparse = ${OpenCMISS_USE_SuiteSparse}" 1)
+OCCMakeDebug("    OpenCMISS_USE_SUNDIALS = ${OpenCMISS_USE_SUNDIALS}" 1)
+OCCMakeDebug("    OpenCMISS_USE_SuperLU = ${OpenCMISS_USE_SuperLU}" 1)
+OCCMakeDebug("    OpenCMISS_USE_SuperLU_DIST = ${OpenCMISS_USE_SuperLU_DIST}" 1)
+OCCMakeDebug("    OpenCMISS_USE_SuperLU_MT = ${OpenCMISS_USE_SuperLU_MT}" 1)
+OCCMakeDebug("    OpenCMISS_USE_SuperLU = ${OpenCMISS_USE_SuperLU}" 1)
+OCCMakeDebug("    OpenCMISS_USE_SZip = ${OpenCMISS_USE_SZip}" 1)
+OCCMakeDebug("    OpenCMISS_USE_ZLIB = ${OpenCMISS_USE_ZLIB}" 1)
+
+# Include all the dependency options
+
+include(OpenCMISS_Variables_Dependencies)
+

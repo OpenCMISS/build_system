@@ -1,0 +1,19 @@
+#[=======================================================================[.rst:
+OpenCMISS GKlib Variables
+-------------------------
+
+Setup the variables to use GKlib with OpenCMISS.
+
+#]=======================================================================]
+
+set(OpenCMISS_FIND_SYSTEM_GKlib OFF CACHE BOOL "Find a system version of GKlib rather than an OpenCMISS version." FORCE)
+
+# GKlib repository options
+set(OpenCMISS_GKlib_VERSION 3.11.0 CACHE STRING "The version/tag of GKlib to use." FORCE)
+set(OpenCMISS_GKlib_GIT_HOST @OC_DEPENDENCIES_GIT_HOST@ CACHE STRING "The hostname of the GKlib Git repository." FORCE)
+set(OpenCMISS_GKlib_GIT_ORGANISATION @OC_DEPENDENCIES_GIT_ORGANISATION@ CACHE STRING "The organisation of the GKlib Git repository." FORCE)
+set(OpenCMISS_GKlib_GIT_BRANCH @OC_DEPENDENCIES_GIT_BRANCH@ CACHE STRING "The branch of the GKlib Git repository to use." FORCE)
+
+# GKlib configuration options
+
+

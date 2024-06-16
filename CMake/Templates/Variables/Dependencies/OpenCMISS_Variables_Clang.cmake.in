@@ -1,0 +1,16 @@
+#[=======================================================================[.rst:
+OpenCMISS-BuildSystem Clang Variables
+-------------------------------------
+
+Setup the variables to use Clang with OpenCMISS.
+
+#]=======================================================================]
+
+set(OpenCMISS_FIND_SYSTEM_Clang OFF)
+
+# Clang repository options
+set(OpenCMISS_Clang_VERSION 1.0)
+set(OpenCMISS_Clang_BRANCH @OC_DEFAULT_BRANCH@)
+set(OpenCMISS_Clang_REPOSITORY @OC_DEPENDENCIES_DEFAULT_REPOSITORY@)
+
+# Clang configuration options

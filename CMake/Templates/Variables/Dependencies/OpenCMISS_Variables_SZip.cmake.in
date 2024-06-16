@@ -1,0 +1,17 @@
+#[=======================================================================[.rst:
+OpenCMISS SZip Variables
+------------------------
+
+Setup the variables to use SZip with OpenCMISS.
+
+#]=======================================================================]
+
+set(OpenCMISS_FIND_SYSTEM_SZip OFF CACHE BOOL "Find a system version of SZip rather than an OpenCMISS version." FORCE)
+
+# SZip repository options
+set(OpenCMISS_SZip_VERSION 1.3.0.1 CACHE STRING "The version/tag of SZip to use." FORCE)
+set(OpenCMISS_SZip_GIT_HOST @OC_DEPENDENCIES_GIT_HOST@ CACHE STRING "The hostname of the SZip Git repository." FORCE)
+set(OpenCMISS_SZip_GIT_ORGANISATION @OC_DEPENDENCIES_GIT_ORGANISATION@ CACHE STRING "The organisation of the SZip Git repository." FORCE)
+set(OpenCMISS_SZip_GIT_BRANCH @OC_DEPENDENCIES_GIT_BRANCH@ CACHE STRING "The branch of the SZip Git repository to use." FORCE)
+
+# SZip configuration options

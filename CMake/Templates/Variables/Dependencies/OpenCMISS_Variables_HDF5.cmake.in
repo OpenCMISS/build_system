@@ -1,0 +1,20 @@
+#[=======================================================================[.rst:
+OpenCMISS HDF5 Variables
+------------------------
+
+Setup the variables to use HDF5 with OpenCMISS.
+
+#]=======================================================================]
+
+set(OpenCMISS_FIND_SYSTEM_HDF5 OFF CACHE BOOL "Find a system version of HDF5 rather than an OpenCMISS version." FORCE)
+
+# HDF5 repository options
+set(OpenCMISS_HDF5_VERSION 1.13.0 CACHE STRING "The version/tag of HDF5 to use." FORCE)
+set(OpenCMISS_HDF5_GIT_HOST @OC_DEPENDENCIES_GIT_HOST@ CACHE STRING "The hostname of the HDF5 Git repository." FORCE)
+set(OpenCMISS_HDF5_GIT_ORGANISATION @OC_DEPENDENCIES_GIT_ORGANISATION@ CACHE STRING "The organisation of the HDF5 Git repository." FORCE)
+set(OpenCMISS_HDF5_GIT_BRANCH @OC_DEPENDENCIES_GIT_BRANCH@ CACHE STRING "The organisation of the HDF5 Git repository." FORCE)
+
+# HDF5 configuration options
+set(OpenCMISS_HDF5_ENABLE_PARALLEL OFF CACHE BOOL "Build HDF5 with parallism (MPI) enabled." FORCE)
+set(OpenCMISS_HDF5_ENABLE_TRACE OFF CACHE BOOL "Build HDF5 with tracing enabled." FORCE)
+set(OpenCMISS_HDF5_ENABLE_INSTRUMENTATION OFF CACHE BOOL "Build HDF5 with instrumentation enabled." FORCE)

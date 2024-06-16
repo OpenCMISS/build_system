@@ -1,0 +1,17 @@
+#[=======================================================================[.rst:
+OpenCMISS Scalasca Variables
+----------------------------
+
+Setup the variables to use Scalasca with OpenCMISS.
+
+#]=======================================================================]
+
+set(OpenCMISS_FIND_SYSTEM_Scalasca OFF CACHE BOOL "Find a system version of Scalasca rather than an OpenCMISS version." FORCE)
+
+# Scalasca repository options
+set(OpenCMISS_Scalasca_VERSION 3.11.0 CACHE STRING "The version/tag of Scalasca to use." FORCE)
+set(OpenCMISS_Scalasca_GIT_HOST @OC_DEPENDENCIES_GIT_HOST@ CACHE STRING "The hostname of the Scalasca Git repository." FORCE)
+set(OpenCMISS_Scalasca_GIT_ORGANISATION @OC_DEPENDENCIES_GIT_ORGANISATION@ CACHE STRING "The organisation of the Scalasca Git repository." FORCE)
+set(OpenCMISS_Scalasca_GIT_BRANCH @OC_DEPENDENCIES_GIT_BRANCH@ CACHE STRING "The branch of the Scalasca Git repository to use." FORCE)
+
+# Scalasca configuration options

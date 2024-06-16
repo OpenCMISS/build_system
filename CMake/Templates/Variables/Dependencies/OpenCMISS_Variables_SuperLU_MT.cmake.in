@@ -1,0 +1,17 @@
+#[=======================================================================[.rst:
+OpenCMISS SuperLU_MT Variables
+------------------------------
+
+Setup the variables to use SuperLU_MT with OpenCMISS.
+
+#]=======================================================================]
+
+set(OpenCMISS_FIND_SYSTEM_SuperLU_MT OFF CACHE BOOL "Find a system version of SuperLU_MT rather than an OpenCMISS version." FORCE)
+
+# SuperLU_MT repository options
+set(OpenCMISS_SuperLU_MT_VERSION 3.11.0 CACHE STRING "The version/tag of SuperLU_MT to use." FORCE)
+set(OpenCMISS_SuperLU_MT_GIT_HOST @OC_DEPENDENCIES_GIT_HOST@ CACHE STRING "The hostname of the SuperLU_MT Git repository." FORCE)
+set(OpenCMISS_SuperLU_MT_GIT_ORGANISATION @OC_DEPENDENCIES_GIT_ORGANISATION@ CACHE STRING "The organisation of the SuperLU_MT Git repository." FORCE)
+set(OpenCMISS_SuperLU_MT_GIT_BRANCH @OC_DEPENDENCIES_GIT_BRANCH@ CACHE STRING "The branch of the SuperLU_MT Git repository to use." FORCE)
+
+# SuperLU_MT configuration options

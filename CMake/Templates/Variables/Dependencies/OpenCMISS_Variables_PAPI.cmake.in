@@ -1,0 +1,17 @@
+#[=======================================================================[.rst:
+OpenCMISS PAPI Variables
+------------------------
+
+Setup the variables to use PAPI with OpenCMISS.
+
+#]=======================================================================]
+
+set(OpenCMISS_FIND_SYSTEM_PAPI OFF CACHE BOOL "Find a system version of PAPI rather than an OpenCMISS version." FORCE)
+
+# PAPI repository options
+set(OpenCMISS_PAPI_VERSION 3.11.0 CACHE STRING "The version/tag of PAPI to use." FORCE)
+set(OpenCMISS_PAPI_GIT_HOST @OC_DEPENDENCIES_GIT_HOST@ CACHE STRING "The hostname of the PAPI Git repository." FORCE)
+set(OpenCMISS_PAPI_GIT_ORGANISATION @OC_DEPENDENCIES_GIT_ORGANISATION@ CACHE STRING "The organisation of the PAPI Git repository." FORCE)
+set(OpenCMISS_PAPI_GIT_BRANCH @OC_DEPENDENCIES_GIT_BRANCH@ CACHE STRING "The branch of the PAPI Git repository to use." FORCE)
+
+# PAPI configuration options

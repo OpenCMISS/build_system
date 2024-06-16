@@ -1,0 +1,27 @@
+#[=======================================================================[.rst:
+OpenCMISS PETSc Variables
+-------------------------
+
+Setup the variables to use PETSc with OpenCMISS.
+
+#]=======================================================================]
+
+set(OpenCMISS_FIND_SYSTEM_PETSc OFF CACHE BOOL "Find a system version of PETSc rather than an OpenCMISS version." FORCE)
+
+# PETSc repository options
+set(OpenCMISS_PETSc_VERSION 3.16.2 CACHE STRING "The version/tag of PETSc to use." FORCE)
+set(OpenCMISS_PETSc_GIT_HOST @OC_DEPENDENCIES_GIT_HOST@ CACHE STRING "The hostname of the PETSc Git repository." FORCE)
+set(OpenCMISS_PETSc_GIT_ORGANISATION @OC_DEPENDENCIES_GIT_ORGANISATION@ CACHE STRING "The organisation of the PETSc Git repository." FORCE)
+set(OpenCMISS_PETSc_GIT_BRANCH @OC_DEPENDENCIES_GIT_BRANCH@ CACHE STRING "The branch of the PETSc Git repository to use." FORCE)
+
+# PETSc configuration options
+set(OpenCMISS_PETSc_WITH_BLAS_LAPACK ON CACHE BOOL "Build PETSc with BLAS/LAPACK enabled." FORCE)
+set(OpenCMISS_PETSc_WITH_CUDA OFF CACHE BOOL "Build PETSc with CUDA enabled." FORCE)
+set(OpenCMISS_PETSc_WITH_HDF5 ON CACHE BOOL "Build PETSc with HDF5 enabled." FORCE)
+set(OpenCMISS_PETSc_WITH_HYPRE ON CACHE BOOL "Build PETSc with HYPRE enabled." FORCE)
+set(OpenCMISS_PETSc_WITH_METIS_ParMETIS ON CACHE BOOL "Build PETSc with METIS/ParMETIS enabled." FORCE)
+set(OpenCMISS_PETSc_WITH_MUMPS ON CACHE BOOL "Build PETSc with MUMPS enabled." FORCE)
+set(OpenCMISS_PETSc_WITH_Scotch_PTScotch ON CACHE BOOL "Build PETSc with Scotch/PTScotch enabled." FORCE)
+set(OpenCMISS_PETSc_WITH_SuiteSparse ON CACHE BOOL "Build PETSc with SuiteSparse enabled." FORCE)
+set(OpenCMISS_PETSc_WITH_SUNDIALS ON CACHE BOOL "Build PETSc with SUNDIALS enabled." FORCE)
+set(OpenCMISS_PETSc_WITH_SuperLU ON CACHE BOOL "Build PETSc with SuperLU enabled." FORCE)

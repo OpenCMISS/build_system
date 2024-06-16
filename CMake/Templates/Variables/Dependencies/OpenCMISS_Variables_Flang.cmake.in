@@ -1,0 +1,16 @@
+#[=======================================================================[.rst:
+OpenCMISS-BuildSystem Flang Variables
+-------------------------------------
+
+Setup the variables to use Flang with OpenCMISS.
+
+#]=======================================================================]
+
+set(OPENCMISS_FIND_SYSTEM_FLANG OFF)
+
+# Flang repository options
+set(OPENCMISS_FLANG_VERSION 1.0)
+set(OPENCMISS_FLANG_BRANCH @OC_DEFAULT_BRANCH@)
+set(OPENCMISS_FLANG_REPOSITORY @OC_DEPENDENCIES_DEFAULT_REPOSITORY@)
+
+# Flang configuration options

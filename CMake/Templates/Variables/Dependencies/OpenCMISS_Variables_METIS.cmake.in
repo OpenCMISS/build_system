@@ -1,0 +1,16 @@
+#[=======================================================================[.rst:
+OpenCMISS METIS Variables
+-------------------------
+
+Setup the variables to use METIS with OpenCMISS.
+
+#]=======================================================================]
+
+set(OpenCMISS_FIND_SYSTEM_METIS OFF)
+
+# METIS repository options
+set(OpenCMISS_METIS_VERSION 5.1)
+set(OpenCMISS_METIS_BRANCH @OC_DEFAULT_BRANCH@)
+set(OpenCMISS_METIS_REPOSITORY @OC_DEPENDENCIES_DEFAULT_REPOSITORY@)
+
+# METIS configuration options

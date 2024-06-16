@@ -1,0 +1,19 @@
+#[=======================================================================[.rst:
+OpenCMISS LibXml2 Variables
+---------------------------
+
+Setup the variables to use LibXml2 with OpenCMISS.
+
+#]=======================================================================]
+
+set(OpenCMISS_FIND_SYSTEM_LibXml2 OFF CACHE BOOL "Find a system version of LibXml2 rather than an OpenCMISS version." FORCE)
+
+# LibXML2 repository options
+set(OpenCMISS_LibXml2_VERSION 3.18.0 CACHE STRING "The version/tag of LibXml2 to use." FORCE)
+set(OpenCMISS_LibXml2_GIT_HOST @OC_DEPENDENCIES_GIT_HOST@ CACHE STRING "The hostname of the LibXml2 Git repository." FORCE)
+set(OpenCMISS_LibXml2_GIT_ORGANISATION @OC_DEPENDENCIES_GIT_ORGANISATION@ CACHE STRING "The organisation of the LibXml2 Git repository." FORCE)
+set(OpenCMISS_LibXml2_GIT_BRANCH @OC_DEPENDENCIES_GIT_BRANCH@ CACHE STRING "The branch of the LibXml2 Git repository to use." FORCE)
+
+# LibXML2 configuration options
+set(OpenCMISS_LibXml2_WITH_ZLIB ON CACHE BOOL "Build LibXml2 with ZLIB enabled." FORCE)
+set(OpenCMISS_LibXml2_WITH_LZMA OFF CACHE BOOL "Build LibXml2 with LZMA enabled." FORCE)
