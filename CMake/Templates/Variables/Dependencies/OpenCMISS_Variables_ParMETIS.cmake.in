@@ -16,3 +16,17 @@ set(OpenCMISS_ParMETIS_GIT_BRANCH @OC_DEPENDENCIES_GIT_BRANCH@ CACHE STRING "The
 
 # ParMETIS configuration options
 
+##################################################################################################################
+#
+# SHOULD NOT NEED TO CHANGE ANYTHING BELOW HERE
+#
+##################################################################################################################
+
+# Debug information
+OCCMakeDebug("" 2)
+OCCMakeDebug("    OpenCMISS ParMETIS Dependency Configuration:" 2)
+OCCMakeDebug("      OpenCMISS_FIND_SYSTEM_ParMETIS = ${OpenCMISS_FIND_SYSTEM_ParMETIS}" 2)
+OCCMakeDebug("      OpenCMISS_ParMETIS_VERSION = ${OpenCMISS_ParMETIS_VERSION}" 2)
+OCCMakeDebug("      OpenCMISS_ParMETIS_GIT_HOST = ${OpenCMISS_ParMETIS_GIT_HOST}" 2)
+OCCMakeDebug("      OpenCMISS_ParMETIS_GIT_ORGANISATION = ${OpenCMISS_ParMETIS_GIT_ORGANISATION}" 2)
+OCCMakeDebug("      OpenCMISS_ParMETIS_GIT_BRANCH = ${OpenCMISS_ParMETIS_GIT_BRANCH}" 2)

@@ -16,4 +16,17 @@ set(OpenCMISS_GKlib_GIT_BRANCH @OC_DEPENDENCIES_GIT_BRANCH@ CACHE STRING "The br
 
 # GKlib configuration options
 
+##################################################################################################################
+#
+# SHOULD NOT NEED TO CHANGE ANYTHING BELOW HERE
+#
+##################################################################################################################
 
+# Debug information
+OCCMakeDebug("" 2)
+OCCMakeDebug("    OpenCMISS GKlib Dependency Configuration:" 2)
+OCCMakeDebug("      OpenCMISS_FIND_SYSTEM_GKlib = ${OpenCMISS_FIND_SYSTEM_GKlib}" 2)
+OCCMakeDebug("      OpenCMISS_GKlib_VERSION = ${OpenCMISS_GKlib_VERSION}" 2)
+OCCMakeDebug("      OpenCMISS_GKlib_GIT_HOST = ${OpenCMISS_GKlib_GIT_HOST}" 2)
+OCCMakeDebug("      OpenCMISS_GKlib_GIT_ORGANISATIOGKN = ${OpenCMISS_GKlib_GIT_ORGANISATION}" 2)
+OCCMakeDebug("      OpenCMISS_GKlib_GIT_BRANCH = ${OpenCMISS_GKlib_GIT_BRANCH}" 2)

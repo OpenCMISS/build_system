@@ -45,10 +45,10 @@ function(OCAddExternal
     set(_SOURCE_DIR "${EXTERNAL_SOURCE_BASE_DIR}/${EXTERNAL_REPO_NAME}/${EXTERNAL_SOURCE_SUBDIR}")
   endif()
   if(OC_HAVE_MULTICONFIG_ENV)
-    set(_BUILD_DIR "${EXTERNAL_BUILD_BASE_DIR}/${EXTERNAL_REPO_NAME}")
+    set(_BUILD_DIR "${EXTERNAL_BUILD_BASE_DIR}/${EXTERNAL_NAME}")
   else()
     string(TOLOWER ${OC_BUILD_TYPE} _LOWERCASE_BUILD_TYPE)
-    set(_BUILD_DIR "${EXTERNAL_BUILD_BASE_DIR}}/${EXTERNAL_REPO_NAME}/${_LOWERCASE_BUILD_TYPE}")
+    set(_BUILD_DIR "${EXTERNAL_BUILD_BASE_DIR}/${EXTERNAL_NAME}/${OC_BUILD_TYPE}")
   endif()
   set(_INSTALL_DIR "${EXTERNAL_INSTALL_BASE_DIR}")
   OCCMakeDebug("Directories for external project:" 1)
@@ -68,6 +68,7 @@ function(OCAddExternal
     list(APPEND _BUILD_OPTIONS "--config=<$<CONFIG>>")
     list(APPEND _INSTALL_OPTIONS "--config=<$<CONFIG>>")
   endif()
+  list(APPEND _CMAKE_ARGS "${OC_EXTERNAL_CMAKE_ARGS}")
   if(NOT EXTERNAL_DEFINES STREQUAL "")
     list(APPEND _CMAKE_ARGS "${EXTERNAL_DEFINES}")
   endif()  
@@ -94,11 +95,11 @@ function(OCAddExternal
   endif()
   
   # Create the list of dependencies
-  set(_DEPENDENCIES_TARGETS )
-  foreach(_EXTERNAL ${EXTERNAL_DEPENDENCIES})
-    string(TOLOWER ${_EXTERNAL} _LOWER_EXTERNAL)
-    list(APPEND _DEPENDENCIES_TARGETS "${_LOWER_EXTERNAL}")
-  endforeach()
+  #set(_DEPENDENCIES_TARGETS )
+  #foreach(_EXTERNAL ${EXTERNAL_DEPENDENCIES})
+  #  string(TOLOWER ${_EXTERNAL} _LOWER_EXTERNAL)
+  #  list(APPEND _DEPENDENCIES_TARGETS "${_LOWER_EXTERNAL}")
+  #endforeach()
 
   OCCMakeDebug("_CMAKE_ARGS: '${_CMAKE_ARGS}'." 1)
   OCCMakeDebug("_DOWNLOAD_OPTIONS: '${_DOWNLOAD_OPTIONS}'." 1)
@@ -113,7 +114,8 @@ function(OCAddExternal
     set(_EXTERNAL_PROJECT_LOGS "ON")
   endif()
   
-  ExternalProject_Add(${_LOWER_EXTERNAL_NAME}
+  ExternalProject_Add(${EXTERNAL_NAME}
+    LIST_SEPARATOR ${OC_CMAKE_SEPARATOR}
     # Directory options
     #PREFIX "${_BUILD_DIR}"
     SOURCE_DIR "${_SOURCE_DIR}"
@@ -134,17 +136,15 @@ function(OCAddExternal
     # Test options
     # Output log options
     # Target options
-    DEPENDS ${_DEPENDENCIES_TARGETS}
+    #DEPENDS ${_DEPENDENCIES_TARGETS}
+    DEPENDS ${EXTERNAL_DEPENDENCIES}
     # Miscellaneous options
     LOG_DOWNLOAD ${_EXTERNAL_PROJECT_LOGS}
     LOG_UPDATE ${_EXTERNAL_PROJECT_LOGS}
     LOG_CONFIGURE ${_EXTERNAL_PROJECT_LOGS}
     LOG_BUILD ${_EXTERNAL_PROJECT_LOGS}
     LOG_INSTALL ${_EXTERNAL_PROJECT_LOGS}
-    LIST_SEPARATOR ${OC_CMAKE_SEPARATOR}
-  )
-
-  list(APPEND OC_DEPENDENCIES_LIST ${_LOWER_EXTERNAL_NAME})
+   )
 
   unset(_EXTERNAL_PROJECT_LOGS)
   unset(_INSTALL_DIR)

@@ -29,7 +29,7 @@ if(NOT BLAS_FOUND)
   
   OCCMakeMessage(STATUS "Trying to find BLAS in the OpenCMISS build system...")
     
-  set(CMAKE_FIND_DEBUG_MODE TRUE)
+  #set(CMAKE_FIND_DEBUG_MODE TRUE)
   
   find_package(LAPACK CONFIG
     QUIET
@@ -42,26 +42,18 @@ if(NOT BLAS_FOUND)
     NO_CMAKE_SYSTEM_PACKAGE_REGISTRY
   )
   
-  set(CMAKE_FIND_DEBUG_MODE FALSE)
+  #set(CMAKE_FIND_DEBUG_MODE FALSE)
   
   if(TARGET blas)
-    OCCMakeDebug("Target BLAS found in LAPACK configuration." 1)
-    get_target_property(BLAS_IMPORTED_CONFIGURATIONS blas IMPORTED_CONFIGURATIONS)
-    foreach(config ${BLAS_IMPORTED_CONFIGURATIONS})
-      get_target_property(BLAS_LIBRARY_${config} blas IMPORTED_LOCATION_${config})
-    endforeach()
-    add_library(BLAS::BLAS ALIAS blas)
-    get_property(_HAVE_MULTICONFIG_ENV GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
-    if(_HAVE_MULTICONFIG_ENV)
-      set(BLAS_LIBRARIES ${BLAS_LIBARAY_$<UPPER_CASE:$<CONFIG>>})
-    else()
-      string(TOUPPER ${CMAKE_BUILD_TYPE} _UPPER_BUILD_TYPE)
-      set(BLAS_LIBRARIES ${BLAS_LIBRARY_${_UPPER_BUILD_TYPE}})
-      unset(_UPPER_BUILD_TYPE)
+    OCCMakeDebug(STATUS "Found target blas in LAPACK configuration." 1)
+    OCCMakeFoundTargetPropertiesToVariables(blas BLAS
+      IMPORTED_LOCATIONS
+      INTERFACE_LINK_LIBRARIES
+    )
+    if(NOT TARGET BLAS::BLAS)
+      add_library(BLAS::BLAS ALIAS blas)
     endif()
     set(BLAS_FOUND ON)
-    unset(_HAVE_MULTICONFIG_ENV)
-    OCCMakeDebug("BLAS_LIBRARIES = '${BLAS_LIBRARIES}'." 1)      
   endif()
   
   if(BLAS_FOUND)
@@ -71,4 +63,9 @@ if(NOT BLAS_FOUND)
   endif()
 else()
   OCCMakeMessage(STATUS "Found BLAS (version ${BLAS_VERSION}) at the system level.")
+endif()
+
+if(BLAS_FOUND)
+  OCCMakeDebug("BLAS_INCLUDE_DIRS = '${BLAS_INCLUDE_DIRS}'." 2)    
+  OCCMakeDebug("BLAS_LIBRARIES = '${BLAS_LIBRARIES}'." 2)    
 endif()

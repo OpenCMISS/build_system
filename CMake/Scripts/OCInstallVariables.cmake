@@ -34,7 +34,7 @@ set(OC_VARIABLES_FILES_LIST
   Dependencies/OpenCMISS_Variables_PETSc
   Dependencies/OpenCMISS_Variables_Scalasca
   Dependencies/OpenCMISS_Variables_ScoreP
-  Dependencies/OpenCMISS_Variables_Scotch
+  Dependencies/OpenCMISS_Variables_SCOTCH
   Dependencies/OpenCMISS_Variables_SLEPc
   Dependencies/OpenCMISS_Variables_SuiteSparse
   Dependencies/OpenCMISS_Variables_SUNDIALS

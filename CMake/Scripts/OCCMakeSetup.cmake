@@ -19,7 +19,7 @@ if(OC_CMAKE_TRACE)
   #list(APPEND OC_CMAKE_FLAGS "--trace-expand")
 endif()
 if(OC_CMAKE_PARALLEL_BUILD)
-  list(APPEND OC_CMAKE_BUILD_FLAGS "--parallel ${OC_CMAKE_PARALLEL_JOBS}")
+  #list(APPEND OC_CMAKE_BUILD_FLAGS "--parallel ${OC_CMAKE_PARALLEL_JOBS}")
 endif()
  
 if(OC_CMAKE_DEBUG)

@@ -10,20 +10,72 @@ include(OCCMakeMiscellaneous)
 
 set(METIS_FOUND NO)
 
-message(STATUS "hello")
-
 if(OpenCMISS_FIND_SYSTEM_METIS)
   
-  OCCMakeMessage(STATUS "Trying to find METIS at the system level.")
+  OCCMakeMessage(STATUS "Trying to find METIS at the system level...")
   
-  set(_ORIGINAL_CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH}")
-  unset(CMAKE_MODULE_PATH)
+  # Try and find METIS header file
+  find_path(METIS_INCLUDE_DIRS "metis.h"
+    HINTS ${METIS_DIR} ENV METIS_DIR
+    PATH_SUFFIXES include
+    PATHS $ENV{HOME}/METIS
+    DOC "METIS include directory."
+  )
 
-  find_package(METIS)
+  if(EXISTS "${METIS_INCLUDE_DIRS}/metis.h")
+    # Found the header file, try and fine the library.
+    find_library(METIS_LIBRARY "METIS"
+      HINTS ${METIS_DIR} ENV METIS_DIR
+      PATH_SUFFIXES lib lib64
+      DOC "METIS library."
+    )
+    
+    if(EXISTS ${METIS_LIBRARY})
+      
+      # Should test if METIS is useable
+      
+      # Try and find METIS version and configuration information
+      file(READ ${METIS_INCLUDE_DIRS}/metis.h _METIS_CONFIG_H_CONTENTS)
+      string(REGEX REPLACE ".*#define[ \t]METIS_VER_MAJOR[ \t]+\"([0-9.]+)\".*" "\\1" METIS_VER_MAJOR ${_METIS_CONFIG_H_CONTENTS})
+      string(REGEX REPLACE ".*#define[ \t]METIS_VER_MINOR[ \t]+\"([0-9.]+)\".*" "\\1" METIS_VER_MINOR ${_METIS_CONFIG_H_CONTENTS})
+      string(REGEX REPLACE ".*#define[ \t]METIS_VER_SUBMINOR[ \t]+\"([0-9.]+)\".*" "\\1" METIS_VER_SUBMINOR ${_METIS_CONFIG_H_CONTENTS})
+      set(METIS_VERSION "${METIS_VER_MAJOR}.${METIS_VER_MINOR}.${METIS_VER_SUBMINOR}")
+      unset(_METIS_CONFIG_H_CONTENTS)
+    endif()
+ 
+    set(METIS_LIBRARIES "${METIS_LIBRARY}")
+      
+  endif()
 
-  set(CMAKE_MODULE_PATH "${_ORIGINAL_CMAKE_MODULE_PATH}")
-  unset(_ORIGINAL_CMAKE_MODULE_PATH)
-
+  include(FindPackageHandleStandardArgs)
+  find_package_handle_standard_args("METIS"
+    FOUND_VAR METIS_FOUND
+    REQUIRED_VARS METIS_LIBRARIES METIS_INCLUDE_DIRS
+    VERSION_VAR METIS_VERSION
+  )
+  
+  if(METIS_FOUND)
+    if(NOT TARGET METIS::METIS)
+      # If the METIS target hasn't already been processed add it
+      find_package(GKlib QUIET)
+      #find_package(OpenMP QUIET)
+      add_library(METIS::METIS UNKNOWN IMPORTED)
+      set_target_properties(METIS::METIS PROPERTIES
+	IMPORTED_LOCATION ${METIS_LIBRARIES}
+	INTERFACE_INCLUDE_DIRECTORIES "${METIS_INCLUDE_DIRS}"
+      )
+      # Add in dependencies
+      if(TARGET GKlib:GKlib)
+	target_link_libraries(METIS::METIS
+	  INTERFACE GKlib::GKlib)
+      endif()
+      if(TARGET OpenMP::OpenMP)
+	target_link_libraries(METIS::METIS
+	  INTERFACE OpenMP::OpenMP)
+      endif()
+    endif()
+  endif()
+  
 endif()
 
 if(NOT METIS_FOUND)
@@ -41,19 +93,18 @@ if(NOT METIS_FOUND)
     NO_CMAKE_SYSTEM_PACKAGE_REGISTRY
   )
   
+  if(TARGET METIS::METIS)
+    OCCMakeDebug("Found target METIS::METIS in METIS configuration." 1)
+    OCCMakeFoundTargetPropertiesToVariables(METIS::METIS METIS
+      IMPORTED_LOCATIONS
+      INTERFACE_INCLUDE_DIRECTORIES
+      INTERFACE_LINK_LIBRARIES
+    )
+    set(METIS_FOUND ON) 
+  endif()
+
   if(METIS_FOUND)
-    OCCMakeMessage(STATUS "Found METIS (version ${METIS_VERSION}) in the OpenCMISS build system.")
-    if(TARGET METIS::METIS)
-      get_property(_HAVE_MULTICONFIG_ENV GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
-      if(_HAVE_MULTICONFIG_ENV)
-	set(METIS_LIBRARIES ${METIS_LIBARAY_$<UPPER_CASE:$<CONFIG>>})
-      else()
-	string(TOUPPER ${CMAKE_BUILD_TYPE} _UPPER_BUILD_TYPE)
-	set(METIS_LIBRARIES ${METIS_LIBRARY_${_UPPER_BUILD_TYPE}})
-	unset(_UPPER_BUILD_TYPE)
-      endif()
-      unset(_HAVE_MULTICONFIG_ENV)
-    endif()
+    OCCMakeMessage(STATUS "Found METIS (version ${METIS_VERSION}) in the OpenCMISS build system.")    
   else()
     OCCMakeMessage(STATUS "Could not find METIS.")
   endif()
@@ -62,6 +113,6 @@ else()
 endif()
 
 if(METIS_FOUND)
+  OCCMakeDebug("METIS_INCLUDE_DIRS = '${METIS_INCLUDE_DIRS}'." 1)    
   OCCMakeDebug("METIS_LIBRARIES = '${METIS_LIBRARIES}'." 1)    
-  OCCMakeDebug("METIS_INCLUDE_DIRECTORIES = '${METIS_INCLUDE_DIRECTORIES}'." 1)    
 endif()

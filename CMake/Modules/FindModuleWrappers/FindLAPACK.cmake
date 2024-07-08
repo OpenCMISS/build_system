@@ -40,25 +40,19 @@ if(NOT LAPACK_FOUND)
     NO_CMAKE_SYSTEM_PACKAGE_REGISTRY
   )
 
-  # TODO: This should be done in the lapack config file. Remove when this is put in there.
   if(TARGET lapack)
-    OCCMakeDebug("Target LAPACK found in the LAPACK configuration." 1)
-    get_target_property(LAPACK_IMPORTED_CONFIGURATIONS lapack IMPORTED_CONFIGURATIONS)
-    foreach(config ${LAPACK_IMPORTED_CONFIGURATIONS})
-      get_target_property(LAPACK_LIBRARY_${config} lapack IMPORTED_LOCATION_${config})
-    endforeach()
-    add_library(LAPACK::LAPACK ALIAS lapack)
-    get_property(_HAVE_MULTICONFIG_ENV GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
-    if(_HAVE_MULTICONFIG_ENV)
-      set(LAPACK_LIBRARIES ${BLAS_LIBRARY_$<UPPER_CASE:$<CONFIG>>})
-    else()
-      string(TOUPPER ${CMAKE_BUILD_TYPE} _UPPER_BUILD_TYPE)
-      set(LAPACK_LIBRARIES ${LAPACK_LIBRARY_${_UPPER_BUILD_TYPE}})
-      unset(_UPPER_BUILD_TYPE)
+    OCCMakeDebug("Found target lapack in LAPACK configuration." 1)
+    OCCMakeFoundTargetPropertiesToVariables(lapack LAPACK
+      IMPORTED_LOCATIONS
+      INTERFACE_LINK_LIBRARIES
+    )
+    if(NOT TARGET LAPACK::LAPACK)
+      add_library(LAPACK::LAPACK ALIAS lapack)
     endif()
     set(LAPACK_FOUND ON)
-    unset(_HAVE_MULTICONFIG_ENV)
-    OCCMakeDebug("LAPACK_LIBRARIES = '${LAPACK_LIBRARIES}'." 1)
+  endif()
+  
+  if(LAPACK_FOUND)
     OCCMakeMessage(STATUS "Found LAPACK (version ${LAPACK_VERSION}) in the OpenCMISS build system.")
   else()
     OCCMakeMessage(STATUS "Could not find LAPACK.")
@@ -66,3 +60,9 @@ if(NOT LAPACK_FOUND)
 else()
   OCCMakeMessage(STATUS "Found LAPACK (version ${LAPACK_VERSION}) at the system level.")
 endif()
+
+if(LAPACK_FOUND)
+  OCCMakeDebug("LAPACK_INCLUDE_DIRS = '${LAPACK_INCLUDE_DIRS}'." 2)    
+  OCCMakeDebug("LAPACK_LIBRARIES = '${LAPACK_LIBRARIES}'." 2)    
+endif()
+  

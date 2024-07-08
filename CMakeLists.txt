@@ -30,12 +30,12 @@ set(OC_MINOR_VERSION "1" CACHE INTERNAL "OpenCMISS minor version")
 set(OC_PATCH_VERSION "0" CACHE INTERNAL "OpenCMISS patch version")
 set(OC_VERSION "${OC_MAJOR_VERSION}.${OC_MINOR_VERSION}.${OC_PATCH_VERSION}" CACHE INTERNAL "OpenCMISS version")
 
-set(CMAKE_PROJECT_OpenCMISS_INCLUDE_BEFORE "${CMAKE_CURRENT_SOURCE_DIR}/CMake/Scripts/OCPreProject.cmake")
+set(CMAKE_PROJECT_OpenCMISS-Build-System_INCLUDE_BEFORE "${CMAKE_CURRENT_SOURCE_DIR}/CMake/Scripts/OCPreProject.cmake")
 
-project(OpenCMISS
+project(OpenCMISS-Build-System
   LANGUAGES C CXX Fortran
   VERSION ${OC_VERSION}
-  DESCRIPTION "OpenCMISS computional environment"
+  DESCRIPTION "OpenCMISS computional environment build system"
   HOMEPAGE_URL "https://www.opencmiss.org/")  
 
 OCCMakeDebug("Current CMake version = ${CMAKE_VERSION}, minimum required CMake version = ${OC_CMAKE_MIN_VERSION}." 1)
@@ -151,8 +151,7 @@ else()
   if(OC_HAVE_MULTICONFIG_ENV)
     set(OC_CURRENT_CONFIG_DIRECTORY "${OC_BUILD_ROOT}/configs/${OC_MPI_ARCH_PATH}")
   else()
-    string(TOLOWER ${OC_BUILD_TYPE} _LOWERCASE_BUILD_TYPE)
-    set(OC_CURRENT_CONFIG_DIRECTORY "${OC_BUILD_ROOT}/configs/${OC_MPI_ARCH_PATH}/${_LOWERCASE_BUILD_TYPE}")
+    set(OC_CURRENT_CONFIG_DIRECTORY "${OC_BUILD_ROOT}/configs/${OC_MPI_ARCH_PATH}/${OC_BUILD_TYPE}")
   endif()
 endif()
 OCCMakeDebug("Using a configuration directory of '${OC_CURRENT_CONFIG_DIRECTORY}'" 1)
@@ -305,7 +304,7 @@ add_custom_target(build_configuration
   COMMENT "Building OpenCMISS configuration..."
 )
 
-add_custom_target(OpenCMISS
+add_custom_target(opencmiss_all
   ALL
   DEPENDS build_configuration
   WORKING_DIRECTORY ${OC_CURRENT_CONFIG_DIRECTORY}

@@ -55,7 +55,7 @@ set(OC_CMAKE_FIND_MODULE_WRAPPERS_FILES_LIST
   ${OC_BUILD_SYSTEM_ROOT}/CMake/Modules/FindModuleWrappers/FindSCALAPACK.cmake
   ${OC_BUILD_SYSTEM_ROOT}/CMake/Modules/FindModuleWrappers/FindScalasca.cmake
   ${OC_BUILD_SYSTEM_ROOT}/CMake/Modules/FindModuleWrappers/FindScoreP.cmake
-  ${OC_BUILD_SYSTEM_ROOT}/CMake/Modules/FindModuleWrappers/FindScotch.cmake
+  ${OC_BUILD_SYSTEM_ROOT}/CMake/Modules/FindModuleWrappers/FindSCOTCH.cmake
   ${OC_BUILD_SYSTEM_ROOT}/CMake/Modules/FindModuleWrappers/FindSLEPc.cmake
   ${OC_BUILD_SYSTEM_ROOT}/CMake/Modules/FindModuleWrappers/FindSuiteSparse.cmake
   ${OC_BUILD_SYSTEM_ROOT}/CMake/Modules/FindModuleWrappers/FindSUNDIALS.cmake

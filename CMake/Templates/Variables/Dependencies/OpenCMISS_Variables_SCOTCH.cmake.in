@@ -1,0 +1,43 @@
+#[=======================================================================[.rst:
+OpenCMISS SCOTCH Variables
+--------------------------
+
+Setup the variables to use SCOTCH with OpenCMISS.
+
+#]=======================================================================]
+
+set(OpenCMISS_FIND_SYSTEM_SCOTCH OFF CACHE BOOL "Find a system version of SCOTCH rather than an OpenCMISS version." FORCE)
+
+# SCOTCH repository options
+set(OpenCMISS_SCOTCH_VERSION 3.16.2 CACHE STRING "The version/tag of SCOTCH to use." FORCE)
+set(OpenCMISS_SCOTCH_GIT_HOST @OC_DEPENDENCIES_GIT_HOST@ CACHE STRING "The hostname of the SCOTCH Git repository." FORCE)
+set(OpenCMISS_SCOTCH_GIT_ORGANISATION @OC_DEPENDENCIES_GIT_ORGANISATION@ CACHE STRING "The organisation of the SCOTCH Git repository." FORCE)
+set(OpenCMISS_SCOTCH_GIT_BRANCH @OC_DEPENDENCIES_GIT_BRANCH@ CACHE STRING "The branch of the SCOTCH Git repository to use." FORCE)
+
+# SCOTCH configuration options
+set(OpenCMISS_SCOTCH_WITH_PTSCOTCH ON CACHE BOOL "Build SCOTCH with PTSCOTCH enabled." FORCE)
+set(OpenCMISS_SCOTCH_WITH_ESMUMPS ON CACHE BOOL "Build SCOTCH with ESMUMPS enabled." FORCE)
+set(OpenCMISS_SCOTCH_WITH_SCOTCHMETIS OFF CACHE BOOL "Build SCOTCH with METIS mode enabled." FORCE)
+set(OpenCMISS_SCOTCH_WITH_ZLIB ON CACHE BOOL "Build SCOTCH with ZLIB enabled." FORCE)
+set(OpenCMISS_SCOTCH_WITH_LZMA OFF CACHE BOOL "Build SCOTCH with LZMA enabled." FORCE)
+set(OpenCMISS_SCOTCH_WITH_BZip2 OFF CACHE BOOL "Build SCOTCH with BZip2 enabled." FORCE)
+
+##################################################################################################################
+#
+# SHOULD NOT NEED TO CHANGE ANYTHING BELOW HERE
+#
+##################################################################################################################
+
+# Debug information
+OCCMakeDebug("" 2)
+OCCMakeDebug("    OpenCMISS SCOTCH Dependency Configuration:" 2)
+OCCMakeDebug("      OpenCMISS_FIND_SYSTEM_SCOTCH = ${OpenCMISS_FIND_SYSTEM_SCOTCH}" 2)
+OCCMakeDebug("      OpenCMISS_SCOTCH_VERSION = ${OpenCMISS_SCOTCH_VERSION}" 2)
+OCCMakeDebug("      OpenCMISS_SCOTCH_GIT_HOST = ${OpenCMISS_SCOTCH_GIT_HOST}" 2)
+OCCMakeDebug("      OpenCMISS_SCOTCH_GIT_ORGANISATION = ${OpenCMISS_SCOTCH_GIT_ORGANISATION}" 2)
+OCCMakeDebug("      OpenCMISS_SCOTCH_GIT_BRANCH = ${OpenCMISS_SCOTCH_GIT_BRANCH}" 2)
+OCCMakeDebug("      OpenCMISS_SCOTCH_WITH_PTSCOTCH = ${OpenCMISS_SCOTCH_WITH_PTSCOTCH}" 2)
+OCCMakeDebug("      OpenCMISS_SCOTCH_WITH_ESMUMPS = ${OpenCMISS_SCOTCH_WITH_ESMUMPS}" 2)
+OCCMakeDebug("      OpenCMISS_SCOTCH_WITH_ZLIB = ${OpenCMISS_SCOTCH_WITH_ZLIB}" 2)
+OCCMakeDebug("      OpenCMISS_SCOTCH_WITH_LZMA = ${OpenCMISS_SCOTCH_WITH_LZMA}" 2)
+OCCMakeDebug("      OpenCMISS_SCOTCH_WITH_BZip2 = ${OpenCMISS_SCOTCH_WITH_BZip2}" 2)

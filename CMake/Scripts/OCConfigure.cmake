@@ -13,15 +13,15 @@ set(OC_KNOWN_DEPENDENCIES
   csim
   cube4
   FieldML-API
-  hdf5
-  hypre
+  HDF5
+  HYPRE
   lapack
   libcellml
-  libxml2
+  LibXml2
   llvm-project
   METIS
   mpich
-  mumps
+  MUMPS
   ompi
   opari2
   otf2
@@ -30,15 +30,15 @@ set(OC_KNOWN_DEPENDENCIES
   petsc
   scalapack
   scalasca
-  scotch
+  SCOTCH
   slepc
   SuiteSparse
   sundials
-  superlu
-  superlu_dist
-  superlu_mt
+  SuperLU
+  SuperLU_DIST
+  SuperLU_MT
   tau2
-  zlib
+  ZLIB
   CACHE INTERNAL "List of known dependencies and tools for OpenCMISS." FORCE
 )
 
@@ -64,25 +64,26 @@ if(OC_CMAKE_STAGE STREQUAL "configure")
   set(OC_MPI_BUILD_BASE_DIR "${OC_BUILD_ROOT}/${OC_MPI_ARCH_PATH}")
   set(OC_NOMPI_BUILD_BASE_DIR "${OC_BUILD_ROOT}/${OC_NOMPI_ARCH_PATH}")
   set(OC_MPI_INSTALL_BASE_DIR "${OC_INSTALL_ROOT}/${OC_MPI_ARCH_PATH}")
-  set(OC_NOMPI_BUILD_BASE_DIR "${OC_INSTALL_ROOT}/${OC_NOMPI_ARCH_PATH}")
+  set(OC_NOMPI_INSTALL_BASE_DIR "${OC_INSTALL_ROOT}/${OC_NOMPI_ARCH_PATH}")
   set(OC_DEPENDENCIES_SOURCE_BASE_DIR "${OC_DEPENDENCIES_SOURCE_ROOT}/dependencies")
   set(OC_DEPENDENCIES_MPI_BUILD_BASE_DIR "${OC_DEPENDENCIES_BUILD_ROOT}/${OC_MPI_ARCH_PATH}/dependencies")
   set(OC_DEPENDENCIES_NOMPI_BUILD_BASE_DIR "${OC_DEPENDENCIES_BUILD_ROOT}/${OC_NOMPI_ARCH_PATH}/dependencies")
   set(OC_DEPENDENCIES_MPI_INSTALL_BASE_DIR "${OC_DEPENDENCIES_INSTALL_ROOT}/${OC_MPI_ARCH_PATH}")
-  set(OC_DEPENDENCIES_NOMPI_BUILD_BASE_DIR "${OC_DEPENDENCIES_INSTALL_ROOT}/${OC_NOMPI_ARCH_PATH}")
+  set(OC_DEPENDENCIES_NOMPI_INSTALL_BASE_DIR "${OC_DEPENDENCIES_INSTALL_ROOT}/${OC_NOMPI_ARCH_PATH}")
+  OCCMakeDebug("" 1)
   OCCMakeDebug("Base directories for the configuration:" 1)
   OCCMakeDebug("  OpenCMISS:" 1)
   OCCMakeDebug("    Source:          '${OC_SOURCE_BASE_DIR}'" 1)
   OCCMakeDebug("    MPI Build:       '${OC_MPI_BUILD_BASE_DIR}'" 1)
   OCCMakeDebug("    Non MPI Build:   '${OC_NOMPI_BUILD_BASE_DIR}'" 1)
-  OCCMakeDebug("    MPI Install:     '${OC_MPI_BUILD_BASE_DIR}'" 1)
-  OCCMakeDebug("    Non MPI Install: '${OC_NOMPI_BUILD_BASE_DIR}'" 1)
+  OCCMakeDebug("    MPI Install:     '${OC_MPI_INSTALL_BASE_DIR}'" 1)
+  OCCMakeDebug("    Non MPI Install: '${OC_NOMPI_INSTALL_BASE_DIR}'" 1)
   OCCMakeDebug("  Dependencies:" 1)
   OCCMakeDebug("    Source:          '${OC_DEPENDENCIES_SOURCE_BASE_DIR}'" 1)
   OCCMakeDebug("    MPI Build:       '${OC_DEPENDENCIES_MPI_BUILD_BASE_DIR}'" 1)
   OCCMakeDebug("    Non MPI Build:   '${OC_DEPENDENCIES_NOMPI_BUILD_BASE_DIR}'" 1)
-  OCCMakeDebug("    MPI Install:     '${OC_DEPENDENCIES_MPI_BUILD_BASE_DIR}'" 1)
-  OCCMakeDebug("    Non MPI Install: '${OC_DEPENDENCIES_NOMPI_BUILD_BASE_DIR}'" 1)
+  OCCMakeDebug("    MPI Install:     '${OC_DEPENDENCIES_MPI_INSTALL_BASE_DIR}'" 1)
+  OCCMakeDebug("    Non MPI Install: '${OC_DEPENDENCIES_NOMPI_INSTALL_BASE_DIR}'" 1)
   
   # Work out any settings based on the variables
   
@@ -119,15 +120,6 @@ if(OC_CMAKE_STAGE STREQUAL "configure")
 
   # Python
 
-  # SWIG
-  if(OpenCMISS_WITH_Python_BINDINGS)
-    # We need SWIG
-    find_package(SWIG 4.0 COMPONENTS python)
-    if(SWIG_FOUND)
-      OCCMakeMessage(STATUS "SWIG found: ${SWIG_EXECUTABLE}")
-    endif()
-  endif()
-
   # Multithreading
   if(OC_MULTITHREADING_OPENMP)
     
@@ -150,6 +142,18 @@ if(OC_CMAKE_STAGE STREQUAL "configure")
   endif()
   set(OC_LANGUAGES "${_LANGUAGES}" CACHE STRING "OpenCMISS languages for building." FORCE)
 
+  OCCMakeDebug("  Languages:" 1)
+  OCCMakeDebug("    OC_LANGUAGES: '${OC_LANGUAGES}'" 1)
+
+  # Fix up MPI compiler wrapper for Intel/Intel
+  if(OC_TOOLCHAIN_INTEL)
+    if(OC_MPI_INTEL)
+      find_program(MPI_C_COMPILER NAMES mpiicx REQUIRED)
+      find_program(MPI_CXX_COMPILER NAMES mpiicpx REQUIRED)
+      find_program(MPI_Fortran_COMPILER NAMES mpiifx REQUIRED)
+    endif()
+  endif()
+  
   # Determine external defines.
 
   set(OC_EXTERNAL_CMAKE_ARGS "-DCMAKE_MODULE_PATH=${OC_INSTALL_ROOT}/share/CMake/Scripts${OC_CMAKE_SEPARATOR}${OC_INSTALL_ROOT}/share/CMake/Modules/FindModuleWrappers")
@@ -162,8 +166,10 @@ if(OC_CMAKE_STAGE STREQUAL "configure")
   endif()
   if(OpenCMISS_WITH_MPI)
     list(APPEND OC_EXTERNAL_CMAKE_ARGS "-DCMAKE_PREFIX_PATH=${OC_DEPENDENCIES_MPI_INSTALL_BASE_DIR}${OC_CMAKE_SEPARATOR}${OC_DEPENDENCIES_NOMPI_INSTALL_BASE_DIR}")
+    set(CMAKE_PREFIX_PATH ${OC_DEPENDENCIES_MPI_INSTALL_BASE_DIR} ${OC_DEPENDENCIES_NOMPI_INSTALL_BASE_DIR})
   else()
     list(APPEND OC_EXTERNAL_CMAKE_ARGS "-DCMAKE_PREFIX_PATH=${OC_DEPENDENCIES_NOMPI_INSTALL_BASE_DIR}")
+    set(CMAKE_PREFIX_PATH "${OC_DEPENDENCIES_NOMPI_INSTALL_BASE_DIR}")
   endif()
   foreach(_language ${OC_LANGUAGES})
     if(CMAKE_${_language}_COMPILER)
@@ -182,6 +188,7 @@ if(OC_CMAKE_STAGE STREQUAL "configure")
       endif()
     endif()
   endforeach()
+  unset(_language)
   
   # Determine what dependencies are required. To do this we go through
   # in reverse order to the dependencies tree.
@@ -195,8 +202,9 @@ if(OC_CMAKE_STAGE STREQUAL "configure")
   # ZLIB
   if(OpenCMISS_USE_ZLIB)
     # Using ZLIB
+    list(APPEND OC_DEPENDENDICES_LIST ZLIB)
     # Set ZLIB forward/backward dependencies
-    set(OC_ZLIB_FORWARD_DEPENDENCIES LibXml2 HDF5 Scotch CSIM LLVM)
+    set(OC_ZLIB_FORWARD_DEPENDENCIES LibXml2 HDF5 SCOTCH CSIM LLVM)
     set(OC_ZLIB_BACKWARD_DEPENDENCIES )
     # See if we can find ZLIB
     find_package(ZLIB)
@@ -217,12 +225,17 @@ if(OC_CMAKE_STAGE STREQUAL "configure")
 	"${OC_ZLIB_DEFINES}"
 	"${OC_ZLIB_BACKWARD_DEPENDENCIES}"
       )
+    else()
+      if(NOT TARGET ZLIB)
+	add_library(ZLIB ALIAS ZLIB::ZLIB)
+      endif()
     endif()
   endif()
 
   # LibXML2
   if(OpenCMISS_USE_LibXml2)
     # Using LibXML2
+    list(APPEND OC_DEPENDENDICES_LIST LibXml2)
     # Set LibXML2 forward/backward dependencies
     set(OC_LibXml2_FORWARD_DEPENDENCIES CSIM LLVM FieldML-API libCellML)
     if(OpenCMISS_LibXml2_WITH_ZLIB)
@@ -237,11 +250,13 @@ if(OC_CMAKE_STAGE STREQUAL "configure")
       set(OC_LibXml2_NAME "LibXml2")
       set(OC_LibXml2_REPO_NAME "libxml2")
       set(OC_LibXml2_DEFINES "-DBUILD_SHARED_LIBS=${OpenCMISS_DEPENDENCIES_SHARED_LIBRARIES}")
+      #For now no python, otherwise work out where the python site-packages should be installed.
+      list(APPEND OC_LibXml2_DEFINES "-DLIBXML2_WITH_PYTHON=OFF")
       if(OC_BUILD_TYPE_RELEASE)
 	list(APPEND OC_LibXml2_DEFINES "-DLIBXML2_WITH_DEBUG=OFF")
       endif()
       if(OC_BUILD_TYPE_DEBUG)
-	list(APPEND OC_LibXml2_DEFINES "-DLIBXML2_WITH_MEM_DEBUG=ON")
+	list(APPEND OC_LibXml2_DEFINES "-DLIBXML2_WITH_DEBUG=ON")
       endif()
       list(APPEND OC_LibXml2_DEFINES "-DLIBXML2_WITH_TESTS=${OpenCMISS_WITH_DEPENDENCIES_TESTS}")
       list(APPEND OC_LibXml2_DEFINES "-DLIBXML2_WITH_ZLIB=${OpenCMISS_LibXml2_WITH_ZLIB}")
@@ -258,12 +273,17 @@ if(OC_CMAKE_STAGE STREQUAL "configure")
 	"${OC_LibXml2_DEFINES}"
 	"${OC_LibXml2_BACKWARD_DEPENDENCIES}"
       )
+    else()
+      if(NOT TARGET LibXml2)
+	add_library(LibXml2 ALIAS LibXml2::LibXml2)
+      endif()
     endif()
   endif()
   
   # BLAS/LAPACK
   if(OpenCMISS_USE_BLAS_LAPACK)
     # Using BLAS/LAPACK
+    list(APPEND OC_DEPENDENDICES_LIST BLAS_LAPACK)
     # Set BLAS/LAPACK forward/backward dependencies
     set(OC_BLAS_LAPACK_FORWARD_DEPENDENCIES ParMETIS SuiteSparse MUMPS SuperLU SuperLU_MT SuperLU_DIST SUNDIALS HYPRE PETSc OpenCMISS)
     set(OC_BLAS_LAPACK_BACKWARD_DEPENDENCIES )
@@ -300,6 +320,7 @@ if(OC_CMAKE_STAGE STREQUAL "configure")
   # BLACS/SCALAPACK
   if(OpenCMISS_USE_BLACS_SCALAPACK)
     # Using BLACS/SCALAPACK
+    list(APPEND OC_DEPENDENDICES_LIST BLACS_SCALAPACK)
     # Set BLACS/SCALAPACK forward/backward dependencies
     set(OC_BLACS_SCALAPACK_FORWARD_DEPENDENCIES MUMPS)
     set(OC_BLACS_SCALAPACK_BACKWARD_DEPENDENCIES BLAS_LAPACK)
@@ -331,6 +352,7 @@ if(OC_CMAKE_STAGE STREQUAL "configure")
   # HDF5
   if(OpenCMISS_USE_HDF5)
     # Using HDF5
+    list(APPEND OC_DEPENDENDICES_LIST HDF5)    
     # Set HDF5 forward/backward dependencies
     set(OC_HDF5_FORWARD_DEPENDENCIES ParMETIS SuiteSparse MUMPS SuperLU SuperLU_MT SuperLU_DIST SUNDIALS HYPRE PETSc OpenCMISS)
     set(OC_HDF5_BACKWARD_DEPENDENCIES )
@@ -372,6 +394,7 @@ if(OC_CMAKE_STAGE STREQUAL "configure")
   # LLVM
   if(OpenCMISS_USE_LLVM)
     # Using LLVM
+    list(APPEND OC_DEPENDENDICES_LIST LLVM)
     # Set LLVM forward/backward dependencies
     set(OC_LLVM_FORWARD_DEPENDENCIES libCellML OpenCMISS)
     set(OC_LLVM_BACKWARD_DEPENDENCIES )
@@ -400,6 +423,7 @@ if(OC_CMAKE_STAGE STREQUAL "configure")
   # libCellML
   if(OpenCMISS_USE_libCellML)
     # Using libCellML
+    list(APPEND OC_DEPENDENDICES_LIST libCellML)
     # Set libCellML forward/backward dependencies
     set(OC_libCellML_FORWARD_DEPENDENCIES OpenCMISS)
     set(OC_libCellML_BACKWARD_DEPENDENCIES )
@@ -430,9 +454,10 @@ if(OC_CMAKE_STAGE STREQUAL "configure")
   # FieldML
   if(OpenCMISS_USE_FieldML)
     # Using FieldML
+    list(APPEND OC_DEPENDENDICES_LIST FieldML)
     # Set FieldML forward/backward dependencies
     set(OC_FieldML_FORWARD_DEPENDENCIES OpenCMISS)
-    set(OC_FieldML_BACKWARD_DEPENDENCIES LibXML2)
+    set(OC_FieldML_BACKWARD_DEPENDENCIES LibXml2)
     if(FieldML_WITH_HDF5)
       list(APPEND OC_FieldML_BACKWARD_DEPENDENCIES HDF5)
     endif()
@@ -461,48 +486,52 @@ if(OC_CMAKE_STAGE STREQUAL "configure")
     endif()
   endif()
   
-  # Scotch
-  if(OpenCMISS_USE_Scotch)
-    # Using Scotch
-    # Set Scotch forward/backward dependencies
-    set(OC_Scotch_FORWARD_DEPENDENCIES MUMPS PETSc OpenCMISS)
+  # SCOTCH
+  if(OpenCMISS_USE_SCOTCH)
+    # Using SCOTCH
+    list(APPEND OC_DEPENDENDICES_LIST SCOTCH)
+    # Set SCOTCH forward/backward dependencies
+    set(OC_SCOTCH_FORWARD_DEPENDENCIES MUMPS PETSc OpenCMISS)
     if(OpenCMISS_USE_ZLIB)
-      list(APPEND OC_Scotch_BACKWARD_DEPENDENCIES ZLIB)
+      list(APPEND OC_SCOTCH_BACKWARD_DEPENDENCIES ZLIB)
     else()
-      set(OC_Scotch_BACKWARD_DEPENDENCIES )
+      set(OC_SCOTCH_BACKWARD_DEPENDENCIES )
     endif()
-    # See if we can find Scotch
-    find_package(Scotch)
-    if(NOT Scotch_FOUND)
-      # Add and configure an OpenCMISS version of Scotch
-      set(OC_Scotch_NAME "Scotch")
-      set(OC_Scotch_REPO_NAME "scotch")
-      set(OC_Scotch_DEFINES "-DBUILD_SHARED_LIBS=${OpenCMISS_DEPENDENCIES_SHARED_LIBRARIES}")
-      list(APPEND OC_Scotch_DEFINES "-DINTSIZE=$<IF:$<BOOL:${OpenCMISS_LARGE_INDICES}>,64,32>")
-      list(APPEND OC_Scotch_DEFINES "-DBUILD_PTSCOTCH=${OpenCMISS_WITH_MPI}")
-      list(APPEND OC_Scotch_DEFINES "-DBUILD_LIBESMUMPS=${OpenCMISS_Scotch_WITH_ESMUMPS}")
-      list(APPEND OC_Scotch_DEFINES "-DBUILD_LIBSCOTCHMETIS=${OpenCMISS_Scotch_WITH_ScotchMETIS}")
-      list(APPEND OC_Scotch_DEFINES "-DUSE_ZLIB=${OpenCMISS_Scotch_WITH_ZLIB}")
-      list(APPEND OC_Scotch_DEFINES "-DUSE_LZMA=${OpenCMISS_Scotch_WITH_LZMA}")
-      list(APPEND OC_Scotch_DEFINES "-DUSE_BZ2=${OpenCMISS_Scotch_WITH_BZip2}")
+    # See if we can find SCOTCH
+    find_package(SCOTCH)
+    if(NOT SCOTCH_FOUND)
+      # Add and configure an OpenCMISS version of SCOTCH
+      set(OC_SCOTCH_NAME "SCOTCH")
+      set(OC_SCOTCH_REPO_NAME "scotch")
+      set(OC_SCOTCH_DEFINES "-DBUILD_SHARED_LIBS=${OpenCMISS_DEPENDENCIES_SHARED_LIBRARIES}")
+      list(APPEND OC_SCOTCH_DEFINES "-DINTSIZE=$<IF:$<BOOL:${OpenCMISS_LARGE_INDICES}>,64,32>")
+      list(APPEND OC_SCOTCH_DEFINES "-DBUILD_PTSCOTCH=${OpenCMISS_WITH_MPI}")
+      list(APPEND OC_SCOTCH_DEFINES "-DBUILD_LIBESMUMPS=${OpenCMISS_SCOTCH_WITH_ESMUMPS}")
+      list(APPEND OC_SCOTCH_DEFINES "-DBUILD_LIBSCOTCHMETIS=${OpenCMISS_SCOTCH_WITH_SCOTCHMETIS}")
+      list(APPEND OC_SCOTCH_DEFINES "-DINSTALL_METIS_HEADERS=${OpenCMISS_SCOTCH_WITH_SCOTCHMETIS}")
+      list(APPEND OC_SCOTCH_DEFINES "-DUSE_ZLIB=${OpenCMISS_SCOTCH_WITH_ZLIB}")
+      list(APPEND OC_SCOTCH_DEFINES "-DUSE_LZMA=${OpenCMISS_SCOTCH_WITH_LZMA}")
+      list(APPEND OC_SCOTCH_DEFINES "-DUSE_BZ2=${OpenCMISS_SCOTCH_WITH_BZip2}")
       OCAddExternal(
-	"${OC_Scotch_NAME}"
-	"${OC_Scotch_REPO_NAME}"
+	"${OC_SCOTCH_NAME}"
+	"${OC_SCOTCH_REPO_NAME}"
 	"${OC_DEPENDENCIES_SOURCE_BASE_DIR}"
 	""
 	"${OC_DEPENDENCIES_MPI_BUILD_BASE_DIR}"
 	"${OC_DEPENDENCIES_MPI_INSTALL_BASE_DIR}"
 	"${OC_EXTERNAL_ISNT_MAIN}"
 	"${OpenCMISS_WITH_MPI}"
-	"${OC_Scotch_DEFINES}"
-	"${OC_Scotch_BACKWARD_DEPENDENCIES}"
+	"${OC_SCOTCH_DEFINES}"
+	"${OC_SCOTCH_BACKWARD_DEPENDENCIES}"
       )
     endif()
   endif()
   
+  
   # ParMETIS/METIS/GKlib
   if(OpenCMISS_USE_ParMETIS_METIS_GKlib)
     # Using GKlib
+    list(APPEND OC_DEPENDENDICES_LIST GKlib)
     # Set GKlib forward/backward dependencies
     set(OC_GKlib_FORWARD_DEPENDENCIES METIS ParMETIS)
     set(OC_GKlib_BACKWARD_DEPENDENCIES )
@@ -530,6 +559,7 @@ if(OC_CMAKE_STAGE STREQUAL "configure")
    
     # METIS
     # Using METIS
+    list(APPEND OC_DEPENDENDICES_LIST METIS)
     # Set METIS forward/backward dependencies
     set(OC_METIS_FORWARD_DEPENDENCIES ParMETIS MUMPS SuiteSparse SuperLU PETSc OpenCMISS)
     set(OC_METIS_BACKWARD_DEPENDENCIES GKlib)
@@ -557,6 +587,7 @@ if(OC_CMAKE_STAGE STREQUAL "configure")
     
     # ParMETIS
     # Using ParMETIS
+    list(APPEND OC_DEPENDENDICES_LIST ParMETIS)
     # Set ParMETIS forward/backward dependencies
     set(OC_ParMETIS_FORWARD_DEPENDENCIES MUMPS SuiteSparse SuperLU_DIST PETSc OpenCMISS)
     set(OC_ParMETIS_BACKWARD_DEPENDENCIES GKlib METIS)
@@ -583,57 +614,11 @@ if(OC_CMAKE_STAGE STREQUAL "configure")
     endif()
   endif()
   
-  # MUMPS
-  if(OpenCMISS_USE_MUMPS)
-    # Using MUMPS
-    # Set MUMPS forward/backward dependencies
-    set(OC_MUMPS_FORWARD_DEPENDENCIES PETSc OpenCMISS)
-    set(OC_MUMPS_BACKWARD_DEPENDENCIES BLAS_LAPACK)
-    if(OpenCMISS_WITH_MPI)
-      if(OpenCMISS_MUMPS_WITH_ParMETIS)
-	list(APPEND OC_MUMPS_BACKWARD_DEPENDENCIES ParMETIS)
-      endif()
-      if(OpenCMISS_MUMPS_WITH_PTScotch)
-	list(APPEND OC_MUMPS_BACKWARD_DEPENDENCIES Scotch)
-      endif()
-    else()
-      if(OpenCMISS_MUMPS_WITH_METIS)
-	list(APPEND OC_MUMPS_BACKWARD_DEPENDENCIES ParMETIS)
-      endif()
-      if(OpenCMISS_MUMPS_WITH_Scotch)
-	list(APPEND OC_MUMPS_BACKWARD_DEPENDENCIES Scotch)
-      endif()
-    endif()
-    # See if we can find MUMPS
-    find_package(MUMPS)
-    if(NOT MUMPS_FOUND)
-      # Add and configure an OpenCMISS version of MUMPS
-      set(OC_MUMPS_NAME "MUMPS")
-      set(OC_MUMPS_REPO_NAME "mumps")
-      set(OC_MUMPS_DEFINES "-DBUILD_SHARED_LIBS=${OpenCMISS_DEPENDENCIES_SHARED_LIBRARIES}")
-      list(APPEND OC_MUMPS_DEFINES "-DMUMPS_WITH_METIS=${OpenCMISS_MUMPS_WITH_METIS}")
-      list(APPEND OC_MUMPS_DEFINES "-DMUMPS_WITH_PARMETIS=${OpenCMISS_MUMPS_WITH_ParMETIS}")
-      list(APPEND OC_MUMPS_DEFINES "-DMUMPS_WITH_SCOTCH=${OpenCMISS_MUMPS_WITH_Scotch}")
-      list(APPEND OC_MUMPS_DEFINES "-DMUMPS_WITH_PTSCOTCH=${OpenCMISS_MUMPS_WITH_PTScotch}")
-      OCAddExternal(
-	"${OC_MUMPS_NAME}"
-	"${OC_MUMPS_REPO_NAME}"
-	"${OC_DEPENDENCIES_SOURCE_BASE_DIR}"
-	""
-	"${OC_DEPENDENCIES_MPI_BUILD_BASE_DIR}"
-	"${OC_DEPENDENCIES_MPI_INSTALL_BASE_DIR}"
-	"${OC_EXTERNAL_ISNT_MAIN}"
-	"${OpenCMISS_WITH_MPI}"
-	"${OC_MUMPS_DEFINES}"
-	"${OC_MUMPS_BACKWARD_DEPENDENCIES}"
-      )
-    endif()
-  endif()
-  
   # SuiteSparse
   if(OpenCMISS_USE_SuiteSparse)
-    # Using MUMPS
-    # Set MUMPS forward/backward dependencies
+    # Using SuiteSparse
+    list(APPEND OC_DEPENDENDICES_LIST SuiteSparse)
+    # Set SuiteSparse forward/backward dependencies
     set(OC_SuiteSparse_FORWARD_DEPENDENCIES PETSc OpenCMISS)
     set(OC_SuiteSparse_BACKWARD_DEPENDENCIES BLAS_LAPACK)
     # See if we can find SuiteSparse
@@ -663,6 +648,7 @@ if(OC_CMAKE_STAGE STREQUAL "configure")
   # SuperLU
   if(OpenCMISS_USE_SuperLU)
     # Using SuperLU
+    list(APPEND OC_DEPENDENDICES_LIST SuperLU)
     # Set SuperLU forward/backward dependencies
     set(OC_SuperLU_FORWARD_DEPENDENCIES HYPRE PETSc OpenCMISS)
     set(OC_SuperLU_BACKWARD_DEPENDENCIES BLAS_LAPACK)
@@ -705,6 +691,7 @@ if(OC_CMAKE_STAGE STREQUAL "configure")
     # Using SuperLU_DIST
     # Set SuperLU_DIST forward/backward dependencies
     set(OC_SuperLU_DIST_FORWARD_DEPENDENCIES PETSc OpenCMISS)
+    list(APPEND OC_DEPENDENDICES_LIST SuperLU_DIST)
     set(OC_SuperLU_DIST_BACKWARD_DEPENDENCIES )
     if(OpenCMISS_SuperLU_DIST_WITH_LAPACK)
       list(APPEND OC_SuperLU_DIST_BACKWARD_DEPENDENCIES BLAS_LAPACK)
@@ -749,6 +736,7 @@ if(OC_CMAKE_STAGE STREQUAL "configure")
   # SuperLU_MT
   if(OpenCMISS_USE_SuperLU_MT)
     # Using SuperLU_MT
+    list(APPEND OC_DEPENDENDICES_LIST SuperLU_MT)
     # Set SuperLU_MT forward/backward dependencies
     set(OC_SuperLU_MT_FORWARD_DEPENDENCIES PETSc OpenCMISS)
     set(OC_SuperLU_MT_BACKWARD_DEPENDENCIES BLAS_LAPACK)
@@ -774,9 +762,58 @@ if(OC_CMAKE_STAGE STREQUAL "configure")
     endif()
   endif()
   
+  # MUMPS
+  if(OpenCMISS_USE_MUMPS)
+    # Using MUMPS
+    list(APPEND OC_DEPENDENDICES_LIST MUMPS)
+    # Set MUMPS forward/backward dependencies
+    set(OC_MUMPS_FORWARD_DEPENDENCIES PETSc OpenCMISS)
+    set(OC_MUMPS_BACKWARD_DEPENDENCIES BLAS_LAPACK)
+    if(OpenCMISS_WITH_MPI)
+      if(OpenCMISS_MUMPS_WITH_ParMETIS)
+	list(APPEND OC_MUMPS_BACKWARD_DEPENDENCIES ParMETIS)
+      endif()
+      if(OpenCMISS_MUMPS_WITH_PTSCOTCH)
+	list(APPEND OC_MUMPS_BACKWARD_DEPENDENCIES SCOTCH)
+      endif()
+    else()
+      if(OpenCMISS_MUMPS_WITH_METIS)
+	list(APPEND OC_MUMPS_BACKWARD_DEPENDENCIES ParMETIS)
+      endif()
+      if(OpenCMISS_MUMPS_WITH_SCOTCH)
+	list(APPEND OC_MUMPS_BACKWARD_DEPENDENCIES SCOTCH)
+      endif()
+    endif()
+    # See if we can find MUMPS
+    find_package(MUMPS)
+    if(NOT MUMPS_FOUND)
+      # Add and configure an OpenCMISS version of MUMPS
+      set(OC_MUMPS_NAME "MUMPS")
+      set(OC_MUMPS_REPO_NAME "mumps")
+      set(OC_MUMPS_DEFINES "-DBUILD_SHARED_LIBS=${OpenCMISS_DEPENDENCIES_SHARED_LIBRARIES}")
+      list(APPEND OC_MUMPS_DEFINES "-DMUMPS_WITH_METIS=${OpenCMISS_MUMPS_WITH_METIS}")
+      list(APPEND OC_MUMPS_DEFINES "-DMUMPS_WITH_PARMETIS=${OpenCMISS_MUMPS_WITH_ParMETIS}")
+      list(APPEND OC_MUMPS_DEFINES "-DMUMPS_WITH_SCOTCH=${OpenCMISS_MUMPS_WITH_SCOTCH}")
+      list(APPEND OC_MUMPS_DEFINES "-DMUMPS_WITH_PTSCOTCH=${OpenCMISS_MUMPS_WITH_PTSCOTCH}")
+      OCAddExternal(
+	"${OC_MUMPS_NAME}"
+	"${OC_MUMPS_REPO_NAME}"
+	"${OC_DEPENDENCIES_SOURCE_BASE_DIR}"
+	""
+	"${OC_DEPENDENCIES_MPI_BUILD_BASE_DIR}"
+	"${OC_DEPENDENCIES_MPI_INSTALL_BASE_DIR}"
+	"${OC_EXTERNAL_ISNT_MAIN}"
+	"${OpenCMISS_WITH_MPI}"
+	"${OC_MUMPS_DEFINES}"
+	"${OC_MUMPS_BACKWARD_DEPENDENCIES}"
+      )
+    endif()
+  endif()  
+  
   # HYPRE
   if(OpenCMISS_USE_HYPRE)
     # Using HYPRE
+    list(APPEND OC_DEPENDENDICES_LIST HYPRE)
     # Set HYPRE forward/backward dependencies
     set(OC_HYPRE_FORWARD_DEPENDENCIES PETSc OpenCMISS)
     set(OC_HYPRE_BACKWARD_DEPENDENCIES )
@@ -809,6 +846,7 @@ if(OC_CMAKE_STAGE STREQUAL "configure")
   # SUNDIALS
   if(OpenCMISS_USE_SUNDIALS)
     # Using SUNDIALS
+    list(APPEND OC_DEPENDENDICES_LIST SUNDIALS)
     # Set SUNDIALS forward/backward dependencies
     set(OC_SUNDIALS_FORWARD_DEPENDENCIES PETSc OpenCMISS)
     set(OC_SUNDIALS_BACKWARD_DEPENDENCIES )
@@ -837,6 +875,7 @@ if(OC_CMAKE_STAGE STREQUAL "configure")
   # PETSc
   if(OpenCMISS_USE_PETSc)
     # Using PETSc
+    list(APPEND OC_DEPENDENDICES_LIST PETSc)
     # Set PETSc forward/backward dependencies
     set(OC_PETSc_FORWARD_DEPENDENCIES SLEPc OpenCMISS)
     set(OC_PETSc_BACKWARD_DEPENDENCIES )
@@ -847,6 +886,36 @@ if(OC_CMAKE_STAGE STREQUAL "configure")
       set(OC_PETSc_NAME "PETSc")
       set(OC_PETSc_REPO_NAME "petsc")
       set(OC_PETSc_DEFINES "-DBUILD_SHARED_LIBS=${OpenCMISS_DEPENDENCIES_SHARED_LIBRARIES}")
+      list(APPEND OC_PETSc_DEFINES "-DPETSc_MPI_PREFIX=${OC_DEPENDENCIES_MPI_INSTALL_BASE_DIR}")
+      list(APPEND OC_PETSc_DEFINES "-DPETSc_NOMPI_PREFIX=${OC_DEPENDENCIES_NOMPI_INSTALL_BASE_DIR}")
+      list(APPEND OC_PETSc_DEFINES "-DPETSc_WITH_64_BIT_INDICIES=${OpenCMISS_LARGE_INDICES}")
+      foreach(_language ${OC_LANGUAGES})
+	if(CMAKE_${_language}_COMPILER)
+	  #list(APPEND OC_PETSc_DEFINES "-DPETSc_${_language}_COMPILER=${CMAKE_${_language}_COMPILER}")
+	  list(APPEND OC_PETSc_DEFINES "-DPETSc_${_language}_COMPILER=${MPI_${_language}_COMPILER}")
+	  if(OC_DEPENDENCIES_BUILD_TYPE_DEBUG)
+	    #list(APPEND OC_PETSc_DEFINES "-DPETSc_${_language}_FLAGS=${CMAKE_${_language}_FLAGS_DEBUG}")
+	    list(APPEND OC_PETSc_DEFINES "-DPETSc_${_language}_FLAGS=${MPI_${_language}_FLAGS_DEBUG}")
+	  else()
+	    #list(APPEND OC_PETSc_DEFINES "-DPETSc_${_language}_FLAGS=${CMAKE_${_language}_FLAGS_RELEASE}")
+	    list(APPEND OC_PETSc_DEFINES "-DPETSc_${_language}_FLAGS=${MPI_${_language}_FLAGS_RELEASE}")
+	  endif()
+	endif()
+      endforeach()
+      list(APPEND OC_PETSc_DEFINES "-DPETSc_WITH_BLAS_LAPACK=${OpenCMISS_PETSc_WITH_BLAS_LAPACK}")
+      list(APPEND OC_PETSc_DEFINES "-DPETSc_WITH_CUDA=${OpenCMISS_PETSc_WITH_CUDA}")
+      list(APPEND OC_PETSc_DEFINES "-DPETSc_WITH_HDF5=${OpenCMISS_PETSc_WITH_HDF5}")
+      list(APPEND OC_PETSc_DEFINES "-DPETSc_WITH_HYPRE=${OpenCMISS_PETSc_WITH_HYPRE}")
+      list(APPEND OC_PETSc_DEFINES "-DPETSc_WITH_METIS=${OpenCMISS_PETSc_WITH_METIS}")
+      list(APPEND OC_PETSc_DEFINES "-DPETSc_WITH_MPI=${OpenCMISS_WITH_MPI}")
+      list(APPEND OC_PETSc_DEFINES "-DPETSc_WITH_MUMPS=${OpenCMISS_PETSc_WITH_MUMPS}")
+      list(APPEND OC_PETSc_DEFINES "-DPETSc_WITH_ParMETIS=${OpenCMISS_PETSc_WITH_ParMETIS}")
+      list(APPEND OC_PETSc_DEFINES "-DPETSc_WITH_PTSCOTCH=${OpenCMISS_PETSc_WITH_PTSCOTCH}")
+      list(APPEND OC_PETSc_DEFINES "-DPETSc_WITH_SuiteSparse=${OpenCMISS_PETSc_WITH_SuiteSparse}")
+      list(APPEND OC_PETSc_DEFINES "-DPETSc_WITH_SUNDIALS=${OpenCMISS_PETSc_WITH_SUNDIALS}")
+      list(APPEND OC_PETSc_DEFINES "-DPETSc_WITH_SuperLU=${OpenCMISS_PETSc_WITH_SuperLU}")
+      list(APPEND OC_PETSc_DEFINES "-DPETSc_WITH_SuperLU_DIST=${OpenCMISS_PETSc_WITH_SuperLU_DIST}")
+      OCCMakeDebug("OC_PETSc_DEFINES = '${OC_PETSc_DEFINES}'" 1)      
       OCAddExternal(
 	"${OC_PETSc_NAME}"
 	"${OC_PETSc_REPO_NAME}"
@@ -859,12 +928,17 @@ if(OC_CMAKE_STAGE STREQUAL "configure")
 	"${OC_PETSc_DEFINES}"
 	"${OC_PETSc_BACKWARD_DEPENDENCIES}"
       )
+    else()
+      if(NOT TARGET PETSc)
+	add_library(PETSc ALIAS PETSc::PETSc)
+      endif()
     endif()
   endif()
   
   # SLEPc
   if(OpenCMISS_USE_SLEPc)
     # Using SLEPc
+    list(APPEND OC_DEPENDENDICES_LIST SLEPc)
     # Set SLEPc orward/backward dependencies
     set(OC_SLEPc_FORWARD_DEPENDENCIES OpenCMISS)
     set(OC_SLEPc_BACKWARD_DEPENDENCIES PETSc)
@@ -874,7 +948,7 @@ if(OC_CMAKE_STAGE STREQUAL "configure")
       # Add and configure an OpenCMISS version of SLEPc
       set(OC_SLEPc_NAME "SLEPc")
       set(OC_SLEPc_REPO_NAME "slepc")
-      set(OC_SLEPc_DEFINES "-DBUILD_SHARED_LIBS=${OpenCMISS_DEPENDENCIES_SHARED_LIBRARIES}")
+      set(OC_SLEPc_DEFINES "-DSLEPc_PREFIX=${OC_DEPENDENCIES_MPI_INSTALL_BASE_DIR}")
       OCAddExternal(
 	"${OC_SLEPc_NAME}"
 	"${OC_SLEPc_REPO_NAME}"
@@ -887,7 +961,57 @@ if(OC_CMAKE_STAGE STREQUAL "configure")
 	"${OC_SLEPc_DEFINES}"
 	"${OC_SLEPc_BACKWARD_DEPENDENCIES}"
       )
+    else()
+      
     endif()
   endif()
+
+  # OpenCMISS library
+  # Add and configure OpenCMISS
+  set(OC_OpenCMISS_NAME "OpenCMISS")
+  set(OC_OpenCMISS_REPO_NAME "iron")
+  set(OC_OpenCMISS_DEFINES "-DOpenCMISS_ROOT=${OC_SOURCE_BASE_DIR}/${OC_OpenCMISS_REPO_NAME}")
+  list(APPEND OC_OpenCMISS_DEFINES "-DOpenCMISS_BUILD_SHARED_LIBS=${OpenCMISS_SHARED_LIBRARIES}")
+  list(APPEND OC_OpenCMISS_DEFINES "-DOpenCMISS_BUILD_STATIC_LIBS=${OpenCMISS_STATIC_LIBRARIES}")
+  list(APPEND OC_OpenCMISS_DEFINES "-DOpenCMISS_WITH_SINGLE_PRECISION=$<STREQUAL:${OpenCMISS_REAL_PRECISION},SINGLE>")
+  list(APPEND OC_OpenCMISS_DEFINES "-DOpenCMISS_WITH_LARGE_INDICES=${OpenCMISS_LARGE_INDICES}")
+  list(APPEND OC_OpenCMISS_DEFINES "-DOpenCMISS_WITH_C_BINDINGS=${OpenCMISS_WITH_C_BINDINGS}")
+  list(APPEND OC_OpenCMISS_DEFINES "-DOpenCMISS_WITH_Python_BINDINGS=${OpenCMISS_WITH_Python_BINDINGS}")
+  list(APPEND OC_OpenCMISS_DEFINES "-DOpenCMISS_WITH_MPI=${OpenCMISS_WITH_MPI}")
+  list(APPEND OC_OpenCMISS_DEFINES "-DOpenCMISS_WITH_OpenMP=${OpenCMISS_WITH_OpenMP}")
+  list(APPEND OC_OpenCMISS_DEFINES "-DOpenCMISS_WITH_CUDA=${OpenCMISS_WITH_CUDA}")
+  list(APPEND OC_OpenCMISS_DEFINES "-DOpenCMISS_WITH_DIAGNOSTICS=${OpenCMISS_WITH_DIAGNOSTICS}")
+  list(APPEND OC_OpenCMISS_DEFINES "-DOpenCMISS_WITH_NO_CHECKS=${OpenCMISS_WITH_NO_CHECKS}")
+  list(APPEND OC_OpenCMISS_DEFINES "-DOpenCMISS_WITH_NO_PRECHECKS=${OpenCMISS_WITH_NO_PRECHECKS}")
+  list(APPEND OC_OpenCMISS_DEFINES "-DOpenCMISS_WITH_NO_POSTCHECKS=${OpenCMISS_WITH_NO_POSTCHECKS}")
+  list(APPEND OC_OpenCMISS_DEFINES "-DOpenCMISS_WITH_TESTS=${OpenCMISS_WITH_TESTS}")
+  list(APPEND OC_OpenCMISS_DEFINES "-DOpenCMISS_WITH_CellML=${OpenCMISS_USE_CellML}")
+  list(APPEND OC_OpenCMISS_DEFINES "-DOpenCMISS_CellML_VERSION=${OpenCMISS_CellML_VERSION}")  
+  list(APPEND OC_OpenCMISS_DEFINES "-DOpenCMISS_WITH_FieldML=${OpenCMISS_USE_FieldML}")
+  list(APPEND OC_OpenCMISS_DEFINES "-DOpenCMISS_FieldML_VERSION=${OpenCMISS_FieldML_VERSION}")  
+  list(APPEND OC_OpenCMISS_DEFINES "-DOpenCMISS_WITH_HYPRE=${OpenCMISS_USE_HYPRE}")
+  list(APPEND OC_OpenCMISS_DEFINES "-DOpenCMISS_HYPRE_VERSION=${OpenCMISS_HYPRE_VERSION}")  
+  list(APPEND OC_OpenCMISS_DEFINES "-DOpenCMISS_WITH_MUMPS=${OpenCMISS_USE_MUMPS}")
+  list(APPEND OC_OpenCMISS_DEFINES "-DOpenCMISS_MUMPS_VERSION=${OpenCMISS_MUMPS_VERSION}")  
+  list(APPEND OC_OpenCMISS_DEFINES "-DOpenCMISS_WITH_ParMETIS=${OpenCMISS_USE_ParMETIS_METIS_GKlib}")
+  list(APPEND OC_OpenCMISS_DEFINES "-DOpenCMISS_ParMETIS_VERSION=${OpenCMISS_ParMETIS_VERSION}")  
+  list(APPEND OC_OpenCMISS_DEFINES "-DOpenCMISS_WITH_PETSc=${OpenCMISS_USE_PETSc}")
+  list(APPEND OC_OpenCMISS_DEFINES "-DOpenCMISS_PETSc_VERSION=${OpenCMISS_PETSc_VERSION}")  
+  list(APPEND OC_OpenCMISS_DEFINES "-DOpenCMISS_WITH_SLEPc=${OpenCMISS_USE_SLEPc}")
+  list(APPEND OC_OpenCMISS_DEFINES "-DOpenCMISS_SLEPc_VERSION=${OpenCMISS_SLEPc_VERSION}")  
+  list(APPEND OC_OpenCMISS_DEFINES "-DOpenCMISS_WITH_SUNDIALS=${OpenCMISS_USE_SLEPc}")
+  list(APPEND OC_OpenCMISS_DEFINES "-DOpenCMISS_SUNDIALS_VERSION=${OpenCMISS_SUNDIALS_VERSION}")  
+  OCAddExternal(
+    "${OC_OpenCMISS_NAME}"
+    "${OC_OpenCMISS_REPO_NAME}"
+    "${OC_SOURCE_BASE_DIR}"
+    ""
+    "${OC_MPI_BUILD_BASE_DIR}"
+    "${OC_MPI_INSTALL_BASE_DIR}"
+    "${OC_EXTERNAL_IS_MAIN}"
+    "${OpenCMISS_WITH_MPI}"
+    "${OC_OpenCMISS_DEFINES}"
+    "${OC_DEPENDENCIES_LIST}"
+  )
   
 endif()
