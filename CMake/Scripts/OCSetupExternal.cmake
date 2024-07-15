@@ -117,7 +117,7 @@ function(OCAddExternal
   ExternalProject_Add(${EXTERNAL_NAME}
     LIST_SEPARATOR ${OC_CMAKE_SEPARATOR}
     # Directory options
-    #PREFIX "${_BUILD_DIR}"
+    PREFIX "${_BUILD_DIR}/prefix"
     SOURCE_DIR "${_SOURCE_DIR}"
     BINARY_DIR "${_BUILD_DIR}"
     INSTALL_DIR "${_INSTALL_DIR}"

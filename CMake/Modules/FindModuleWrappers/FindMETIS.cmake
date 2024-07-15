@@ -82,6 +82,8 @@ if(NOT METIS_FOUND)
   
   OCCMakeMessage(STATUS "Trying to find METIS in the OpenCMISS build system...")
   
+  #set(CMAKE_FIND_DEBUG_MODE TRUE)
+  
   find_package(METIS ${METIS_FIND_VERSION} CONFIG
     QUIET
     PATHS ${CMAKE_PREFIX_PATH}
@@ -92,6 +94,8 @@ if(NOT METIS_FOUND)
     NO_CMAKE_SYSTEM_PATH
     NO_CMAKE_SYSTEM_PACKAGE_REGISTRY
   )
+  
+  #set(CMAKE_FIND_DEBUG_MODE FALSE)
   
   if(TARGET METIS::METIS)
     OCCMakeDebug("Found target METIS::METIS in METIS configuration." 1)

@@ -26,10 +26,10 @@ is :path:`/<multithreading-type>`.  Otherwise, the path element is skipped.
 
 :mpi: Denotes the used MPI implementation along with the mpi build
 type.  The path element is composed as
-:path:`/<mnemonic>_<mpi-build-type>`, where
+:path:`/mpi-<mnemonic>-<mpi-build-type>`, where
 *mnemonic*/*mpi-build-type* contains the lower-case value of the
 :var:`OC_MPI_LIBRARY_NAME`/:var:`OC_MPI_BUILD_TYPE` variable,
-respectively. Moreover, a path element :path:`no_mpi` is used for any
+respectively. Moreover, a path element :path:`mpi-none` is used for any
 component that does not use MPI at all or if OC_MPI_LIBRARY_NAME is none.
 
 :buildtype: Path element for the current overall build type determined
@@ -39,7 +39,7 @@ own way of dealing with build types.
 
 For example, a typical architecture path looks like::
 
-x86_64_linux/gnu-C4.6-gnu-F4.6/openmpi_release/release
+x86_64_linux/gnu-C4.6-gnu-F4.6/mpi-openmpi-release/release
 
 This function returns two architecture paths, the first for mpi-unaware
 applications (NOMPI_ARCH_PATH) and the second for applications that link
@@ -57,13 +57,12 @@ function(OCGetArchitecturePath NOMPI_ARCH_PATH MPI_ARCH_PATH)
 
     OCGetArchitecturePathGivenCompilerPart(${_COMPILER_PART} _NOMPI_ARCH_PATH _MPI_ARCH_PATH)
 
- 
     # Append to desired variable
     set(${NOMPI_ARCH_PATH} "${_NOMPI_ARCH_PATH}" PARENT_SCOPE)
     set(${MPI_ARCH_PATH} "${_MPI_ARCH_PATH}" PARENT_SCOPE)
 
-    OCCMakeDebug("Using a MPI full architecture path of ${_MPI_ARCH_PATH}." 1)
-    OCCMakeDebug("Using a non MPI full architecture path of ${_NOMPI_ARCH_PATH}." 1)
+    OCCMakeDebug("Using a MPI full architecture path of '${_MPI_ARCH_PATH}'." 1)
+    OCCMakeDebug("Using a non MPI full architecture path of '${_NOMPI_ARCH_PATH}'." 1)
     
     # Clear variables
     unset(_COMPILER_PART)
@@ -84,44 +83,45 @@ function(OCGetArchitecturePathGivenCompilerPart COMPILER_ARCH_PATH ARCH_PATH_NOM
     # Don't get compiler part
 
     # Get instrumentation part
-    OCGetInstrumentationPartArchitecturePath(_INSTRUMENTATION_ARCH_PATH)
+    OCGetInstrumentationPartArchitecturePath(_INSTRUMENTATION_ARCH_PATH _NO_INSTRUMENTATION_ARCH_PATH)
 
     # Get multithreading part
-    OCGetMultithreadingPartArchitecturePath(_MULTITHREADING_ARCH_PATH)
+    OCGetMultithreadingPartArchitecturePath(_MULTITHREADING_ARCH_PATH _NO_MULTITHREADING_ARCH_PATH)
 
     # Get the MPI Part
-    OCGetMPIPartArchitecturePath(_MPI_ARCH_PATH)
+    OCGetMPIPartArchitecturePath(_MPI_ARCH_PATH _NO_MPI_ARCH_PATH)
 
     set(_ARCH_PATH_MPI "${_SYSTEM_ARCH_PATH}/${COMPILER_ARCH_PATH}${_INSTRUMENTATION_ARCH_PATH}${_MULTITHREADING_ARCH_PATH}/${_MPI_ARCH_PATH}")
-    set(_ARCH_PATH_NOMPI "${_SYSTEM_ARCH_PATH}/${COMPILER_ARCH_PATH}${_INSTRUMENTATION_ARCH_PATH}${_MULTITHREADING_ARCH_PATH}/no_mpi")
+    set(_ARCH_PATH_NOMPI "${_SYSTEM_ARCH_PATH}/${COMPILER_ARCH_PATH}${_INSTRUMENTATION_ARCH_PATH}${_MULTITHREADING_ARCH_PATH}/${_NO_MPI_ARCH_PATH}")
 
     # Append to desired variable
     set(${ARCH_PATH_MPI} ${_ARCH_PATH_MPI} PARENT_SCOPE)
     set(${ARCH_PATH_NOMPI} ${_ARCH_PATH_NOMPI} PARENT_SCOPE)
 
-    OCCMakeDebug("Using a MPI architecture path of ${_ARCH_PATH_MPI}." 1)
-    OCCMakeDebug("Using a non MPI architecture path of ${_ARCH_PATH_NOMPI}." 1)
-    
     # Clear variables
     unset(_SYSTEM_ARCH_PATH)
     unset(_COMPILER_ARCH_PATH)
     unset(_INTRUMENTATION_ARCH_PATH)
+    unset(_NO_INTRUMENTATION_ARCH_PATH)
     unset(_MULTITHREADING_ARCH_PATH)
+    unset(_NO_MULTITHREADING_ARCH_PATH)
     unset(_MPI_ARCH_PATH)
+    unset(_NO_MPI_ARCH_PATH)
     unset(_ARCH_PATH_MPI)
     unset(_ARCH_PATH_NOMPI)
     
 endfunction()
 
 # This function assembles the MPI part of the architecture path.
-# This part is made up of [OC_MPI_LIBRARY_NAME][OC_MPI_BUILD_TYPE]
+# This part is made up of mpi-[OC_MPI_LIBRARY_NAME][OC_MPI_BUILD_TYPE]
 # if building our own MPI otherwise it is made up of
-# [OC_MPI_LIBRARY_NAME]-system.
-function(OCGetMPIPartArchitecturePath MPI_ARCH_PATH)
+# mpi-[OC_MPI_LIBRARY_NAME]-system.
+function(OCGetMPIPartArchitecturePath MPI_ARCH_PATH NO_MPI_ARCH_PATH)
   
   # MPI version information
+  set(_NO_MPI_ARCH_PATH "mpi-none")
   if(OC_MPI_NONE)
-    set(_MPI_ARCH_PATH "no_mpi")
+    set(_MPI_ARCH_PATH "${_NO_MPI_ARCH_PATH}")
   else()
     # Add the build type of MPI to the architecture path - we obtain different libraries
     # for different mpi build types
@@ -131,73 +131,84 @@ function(OCGetMPIPartArchitecturePath MPI_ARCH_PATH)
       set(_LOWERCASE_MPI_BUILD_TYPE system)
     endif ()
     string(TOLOWER "${OC_MPI_LIBRARY_NAME}" _LOWERCASE_MPI_LIBRARY_NAME)
-    set(_MPI_ARCH_PATH "${_LOWERCASE_MPI_LIBRARY_NAME}-${_LOWERCASE_MPI_BUILD_TYPE}")
+    set(_MPI_ARCH_PATH "mpi-${_LOWERCASE_MPI_LIBRARY_NAME}-${_LOWERCASE_MPI_BUILD_TYPE}")
   endif()
   
   # Append to desired variable
   set(${MPI_ARCH_PATH} ${_MPI_ARCH_PATH} PARENT_SCOPE)
+  set(${NO_MPI_ARCH_PATH} ${_NO_MPI_ARCH_PATH} PARENT_SCOPE)
   
-  OCCMakeDebug("Using a MPI architecture path of ${_MPI_ARCH_PATH}." 2)
+  OCCMakeDebug("Using a MPI architecture path of '${_MPI_ARCH_PATH}'." 2)
+  OCCMakeDebug("Using a no MPI architecture path of '${_NO_MPI_ARCH_PATH}'." 2)
   
   # Clear variables
   unset(_LOWERCASE_MPI_BUILD_TYPE)
   unset(_LOWERCASE_MPI_LIBRARY_NAME)
   unset(_MPI_ARCH_PATH)
+  unset(_NO_MPI_ARCH_PATH)
   
 endfunction()
 
 # This function assembles the multithreading part of the architecture path.
 #
-function(OCGetMultithreadingPartArchitecturePath MULTITHREADING_ARCH_PATH)
+function(OCGetMultithreadingPartArchitecturePath MULTITHREADING_ARCH_PATH NO_MULTITHREADING_ARCH_PATH)
   
   # Multithreading
+  set(_NO_MULTITHREADING_ARCH_PATH )
   if(OC_MULTITHREADING_NONE)
-    set(_MULTITHREADING_ARCH_PATH )
+    set(_MULTITHREADING_ARCH_PATH "${_NO_MULTITHREADING_ARCH_PATH}")
   elseif(OC_MULTITHREADING_OPENACC)
     set(_MULTITHREADING_ARCH_PATH "/openacc")
   elseif(OC_MULTITHREADING_OPENMP)
     set(_MULTITHREADING_ARCH_PATH "/openmp")
   else()
-    set(_MULTITHREADING_ARCH_PATH )
+    set(_MULTITHREADING_ARCH_PATH "${_NO_MULTITHREADING_ARCH_PATH}")
     OCCMakeWarning("Unknown multithreading option. Ignoring.")
   endif()
     
   # Append to desired variable
   set(${MULTITHREADING_ARCH_PATH} "${_MULTITHREADING_ARCH_PATH}" PARENT_SCOPE)
+  set(${NO_MULTITHREADING_ARCH_PATH} "${_NO_MULTITHREADING_ARCH_PATH}" PARENT_SCOPE)
   
-  OCCMakeDebug("Using a multithreading architecture path of ${_MULTITHREADING_ARCH_PATH}." 2)
+  OCCMakeDebug("Using a multithreading architecture path of '${_MULTITHREADING_ARCH_PATH}'." 2)
+  OCCMakeDebug("Using a no multithreading architecture path of '${_NO_MULTITHREADING_ARCH_PATH}'." 2)
   
   # Clear variables
   unset(_MULTITHREADING_ARCH_PATH)
+  unset(_NO_MULTITHREADING_ARCH_PATH)
   
 endfunction()
 
 # This function assembles the instrumentation part of the architecture path.
 # This part is made up of [OC_INSTRUMENTATION]
 #
-function(OCGetInstrumentationPartArchitecturePath INSTRUMENTATION_ARCH_PATH)
+function(OCGetInstrumentationPartArchitecturePath INSTRUMENTATION_ARCH_PATH NO_INSTRUMENTATION_ARCH_PATH)
 
   # Instrumentation
+  set(_NO_INSTRUMENTATION_ARCH_PATH )
   if(OC_INSTRUMENTATION_GPROF)
     set(_INSTRUMENTATION_ARCH_PATH "/gprof")
   elseif(OC_INSTRUMENTATION_NONE)
-    set(_INSTRUMENTATION_ARCH_PATH )
+    set(_INSTRUMENTATION_ARCH_PATH "${_NO_INSTRUMENTATION_ARCH_PATH}")
   elseif(OC_INSTRUMENTATION_SCOREP)
     set(_INSTRUMENTATION_ARCH_PATH "/scorep")
   elseif(OC_INSTRUMENTATION_VTUNE)
     set(_INSTRUMENTATION_ARCH_PATH "/vtune")
   else()
-    set(_INSTRUMENTATION_ARCH_PATH )
+    set(_INSTRUMENTATION_ARCH_PATH "${_NO_INSTRUMENTATION_ARCH_PATH}")
     OCCMakeWarning("Unknown instrumentation option. Ignoring.")
   endif()
   
   # Append to desired variable
   set(${INSTRUMENTATION_ARCH_PATH} "${_INSTRUMENTATION_ARCH_PATH}" PARENT_SCOPE)
+  set(${NO_INSTRUMENTATION_ARCH_PATH} "${_NO_INSTRUMENTATION_ARCH_PATH}" PARENT_SCOPE)
   
-  OCCMakeDebug("Using an instrumentation architecture path of ${_INSTRUMENTATION_ARCH_PATH}." 2)
+  OCCMakeDebug("Using an instrumentation architecture path of '${_INSTRUMENTATION_ARCH_PATH}'." 2)
+  OCCMakeDebug("Using a no instrumentation architecture path of '${_NO_INSTRUMENTATION_ARCH_PATH}'." 2)
     
   # Clear variables
   unset(_INSTRUMENTATION_ARCH_PATH)
+  unset(_NO_INSTRUMENTATION_ARCH_PATH)
   
 endfunction()
 
@@ -208,7 +219,7 @@ function(OCGetSystemPartArchitecturePath SYSTEM_ARCH_PATH)
     
   # Architecture/System
   string(TOLOWER ${CMAKE_SYSTEM_NAME} _LOWERCASE_CMAKE_SYSTEM_NAME)
-  set(_SYSTEM_ARCH_PATH ${CMAKE_SYSTEM_PROCESSOR}_${_LOWERCASE_CMAKE_SYSTEM_NAME})
+  set(_SYSTEM_ARCH_PATH ${CMAKE_SYSTEM_PROCESSOR}-${_LOWERCASE_CMAKE_SYSTEM_NAME})
   
   # Bit/Adressing bandwidth
   #if(ABI)
@@ -218,7 +229,7 @@ function(OCGetSystemPartArchitecturePath SYSTEM_ARCH_PATH)
   # Append to desired variable
   set(${SYSTEM_ARCH_PATH} ${_SYSTEM_ARCH_PATH} PARENT_SCOPE)
     
-  OCCMakeDebug("Using a system architecture path of ${_SYSTEM_ARCH_PATH}." 2)
+  OCCMakeDebug("Using a system architecture path of '${_SYSTEM_ARCH_PATH}'." 2)
   
   # Clear variables
   unset(_SYSTEM_ARCH_PATH)
@@ -294,7 +305,7 @@ function(OCGetCompilerPartArchitecturePath COMPILER_ARCH_PATH)
   # Combine C and Fortran part into e.g. gnu-C4.8-intel-F4.5
   set(${COMPILER_ARCH_PATH} ${_COMBINED_COMPILER_ARCH_PATH} PARENT_SCOPE)
   
-  OCCMakeDebug("Using a compiler architecture path of ${_COMBINED_COMPILER_ARCH_PATH}." 2)
+  OCCMakeDebug("Using a compiler architecture path of '${_COMBINED_COMPILER_ARCH_PATH}'." 2)
   
   # Clear variables
   unset(_C_COMPILER_ARCH_PATH)
@@ -318,7 +329,7 @@ function(OCetBuildTypePathElem BUILD_TYPE_ARCH_PATH)
   endif()
   set(${BUILD_TYPE_ARCH_PATH} ${_BUILD_TYPE_ARCH_PATH} PARENT_SCOPE)
    
-  OCCMakeDebug("Using a build type architecture path of ${_BUILD_TYPE_ARCH_PATH}." 2)
+  OCCMakeDebug("Using a build type architecture path of '${_BUILD_TYPE_ARCH_PATH}'." 2)
   
   # Clear variables
   unset(_BUILD_TYPE_ARCH_PATH)

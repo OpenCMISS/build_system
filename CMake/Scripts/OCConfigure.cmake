@@ -483,6 +483,12 @@ if(OC_CMAKE_STAGE STREQUAL "configure")
 	"${OC_FieldML_DEFINES}"
 	"${OC_FieldML_BACKWARD_DEPENDENCIES}"
       )
+    else()
+      if(NOT TARGET FieldML)
+	if(TARGET fieldml-api)
+	  add_library(FieldML ALIAS fieldml-api)
+	endif()
+      endif()
     endif()
   endif()
   
@@ -555,6 +561,10 @@ if(OC_CMAKE_STAGE STREQUAL "configure")
 	"${OC_GKlib_DEFINES}"
 	"${OC_GKlib_BACKWARD_DEPENDENCIES}"
       )
+    else()
+      if(NOT TARGET GKlib)
+	add_library(GKlib ALIAS GKlib::GKlib)
+      endif()
     endif()
    
     # METIS
@@ -583,6 +593,10 @@ if(OC_CMAKE_STAGE STREQUAL "configure")
 	"${OC_METIS_DEFINES}"
 	"${OC_METIS_BACKWARD_DEPENDENCIES}"
       )
+    else()
+      if(NOT TARGET METIS)
+	add_library(METIS ALIAS METIS::METIS)
+      endif()
     endif()
     
     # ParMETIS
@@ -611,6 +625,10 @@ if(OC_CMAKE_STAGE STREQUAL "configure")
 	"${OC_ParMETIS_DEFINES}"
 	"${OC_ParMETIS_BACKWARD_DEPENDENCIES}"
       )
+    else()
+      if(NOT TARGET ParMETIS)
+	add_library(ParMETIS ALIAS ParMETIS::ParMETIS)
+      endif()
     endif()
   endif()
   

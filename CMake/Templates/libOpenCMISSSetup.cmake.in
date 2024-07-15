@@ -1,0 +1,39 @@
+# Provides the necessary logic to preconfigure a program using an OpenCMISS library.
+#
+
+# Make sure we have a sufficient cmake version before doing anything else
+cmake_minimum_required(VERSION @OC_CMAKE_MIN_VERSION@ FATAL_ERROR)
+
+# Compute the installation prefix relative to this file. It might be a mounted location or whatever.
+cmake_path(GET CMAKE_CURRENT_LIST_FILE PARENT_PATH OC_PRE_PREFIX)
+#cmake_path(ABSOLUTE_PATH _OC_PRE_PREFIX OUTPUT_VARIABLE OC_PRE_PREFIX})
+#unset(_OC_PRE_PREFIX)
+set(OC_CMAKE_SCRIPTS_DIR "${OC_PRE_PREFIX}/@OC_INSTALL_DATA_SUBDIR@/@OC_CMAKE_SCRIPTS_SUBDIR@")
+set(OC_CMAKE_MODULES_DIR "${OC_PRE_PREFIX}/@OC_INSTALL_DATA_SUBDIR@/@OC_CMAKE_MODULES_SUBDIR@")
+set(OC_CMAKE_FIND_MODULES_DIR "${OC_PRE_PREFIX}/@OC_INSTALL_DATA_SUBDIR@/@OC_CMAKE_FIND_MODULES_SUBDIR@")
+
+###########################################################################
+# Set compilers in the preconfig using the toolchain mnemoic
+
+# Set up misc functions
+include(${OC_CMAKE_SCRIPTS_DIR}/OCCMakeMiscellaneous.cmake)
+
+# Prepend OpenCMISS module path
+set(OpenCMISS_CMAKE_MODULE_PATH @OC_CMAKE_MODULE_PATH@)
+list(PREPEND CMAKE_MODULE_PATH ${OpenCMISS_CMAKE_MODULE_PATH})
+
+# Prepend OpenCMISS prefix path
+list(PREPEND CMAKE_PREFIX_PATH "${OC_CMAKE_FIND_MODULES_DIR}")
+
+OCCMakeDebug("Initialising OpenCMISS setup....'" 1)
+OCCMakeDebug("" 1)
+OCCMakeDebug("Using a CMAKE_MODULE_PATH of '${CMAKE_MODULE_PATH}'" 1)
+OCCMakeDebug("Using a CMAKE_PREFIX_PATH of '${CMAKE_PREFIX_PATH}'" 1)
+
+# Get OpenCMISS Toolchain
+include(${OC_CMAKE_SCRIPTS_DIR}/OCToolchains.cmake)
+OCSetToolchain("${OC_CMAKE_SCRIPTS_DIR}")
+
+# Tidy up
+unset(OC_CMAKE_SCRIPTS_DIR)
+unset(OC_PRE_PREFIX)
