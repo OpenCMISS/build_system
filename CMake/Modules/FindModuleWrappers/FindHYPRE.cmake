@@ -55,6 +55,17 @@ if(OpenCMISS_FIND_SYSTEM_HYPRE)
     REQUIRED_VARS HYPRE_LIBRARIES HYPRE_INCLUDE_DIRS
     VERSION_VAR HYPRE_VERSION
   )
+
+  if(HYPRE_FOUND)
+    if(NOT TARGET HYPRE::HYPRE)
+      # If the HYPRE target hasn't already been processed add it
+      add_library(HYPRE::HYPRE UNKNOWN IMPORTED)
+      set_target_properties(HYPRE::HYPRE PROPERTIES
+	IMPORTED_LOCATION ${HYPRE_LIBRARIES}
+	INTERFACE_INCLUDE_DIRECTORIES "${HYPRE_INCLUDE_DIRS}"
+      )
+    endif()    
+  endif()
   
 endif()
 

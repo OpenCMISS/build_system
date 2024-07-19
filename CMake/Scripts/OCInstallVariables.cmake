@@ -13,7 +13,7 @@ set(OC_VARIABLES_FILES_LIST
   OpenCMISS_Variables
   OpenCMISS_Variables_Dependencies
   Dependencies/OpenCMISS_Variables_BLAS_LAPACK
-  Dependencies/OpenCMISS_Variables_BLACS_SCALAPACK
+  Dependencies/OpenCMISS_Variables_BLACS_ScaLAPACK
   Dependencies/OpenCMISS_Variables_BZip2
   Dependencies/OpenCMISS_Variables_CellML
   Dependencies/OpenCMISS_Variables_CSim

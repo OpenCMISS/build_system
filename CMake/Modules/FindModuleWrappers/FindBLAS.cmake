@@ -44,6 +44,8 @@ if(NOT BLAS_FOUND)
   
   #set(CMAKE_FIND_DEBUG_MODE FALSE)
   
+  set(BLAS_LINKER_FLAGS )
+  set(BLAS_INCLUDE_DIRS )
   if(TARGET blas)
     OCCMakeDebug(STATUS "Found target blas in LAPACK configuration." 1)
     OCCMakeFoundTargetPropertiesToVariables(blas BLAS
@@ -66,6 +68,5 @@ else()
 endif()
 
 if(BLAS_FOUND)
-  OCCMakeDebug("BLAS_INCLUDE_DIRS = '${BLAS_INCLUDE_DIRS}'." 2)    
   OCCMakeDebug("BLAS_LIBRARIES = '${BLAS_LIBRARIES}'." 2)    
 endif()

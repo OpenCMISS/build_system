@@ -42,14 +42,28 @@ if(NOT LAPACK_FOUND)
 
   if(TARGET lapack)
     OCCMakeDebug("Found target lapack in LAPACK configuration." 1)
-    OCCMakeFoundTargetPropertiesToVariables(lapack LAPACK
-      IMPORTED_LOCATIONS
-      INTERFACE_LINK_LIBRARIES
-    )
-    if(NOT TARGET LAPACK::LAPACK)
-      add_library(LAPACK::LAPACK ALIAS lapack)
+    # Add in BLAS
+    find_package(BLAS QUIET)
+    if(BLAS_FOUND)
+      OCCMakeFoundTargetPropertiesToVariables(lapack LAPACK
+	IMPORTED_LOCATIONS
+	INTERFACE_LINK_LIBRARIES
+      )
+      # Add in dependencies
+      if(TARGET BLAS::BLAS)
+	target_link_libraries(lapack
+	  INTERFACE BLAS::BLAS
+	)
+      else()
+	target_link_libraries(lapack
+	  INTERFACE ${BLAS_LINKER_FLAGS} ${BLAS_LIBRARIES}
+	)	
+      endif()     
+      if(NOT TARGET LAPACK::LAPACK)
+	add_library(LAPACK::LAPACK ALIAS lapack)
+      endif()
+      set(LAPACK_FOUND ON)
     endif()
-    set(LAPACK_FOUND ON)
   endif()
   
   if(LAPACK_FOUND)

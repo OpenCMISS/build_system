@@ -59,7 +59,7 @@ set(OC_CMAKE_FIND_MODULE_WRAPPERS_FILES_LIST
   FindPAPI.cmake
   FindParMETIS.cmake
   FindPETSc.cmake
-  FindSCALAPACK.cmake
+  FindScaLAPACK.cmake
   FindScalasca.cmake
   FindScoreP.cmake
   FindSCOTCH.cmake
