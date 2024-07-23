@@ -9,7 +9,7 @@ Setup the variables to use SuperLU_DIST with OpenCMISS.
 set(OpenCMISS_FIND_SYSTEM_SuperLU_DIST OFF CACHE BOOL "Find a system version of SuperLU_DIST rather than an OpenCMISS version." FORCE)
 
 # SuperLU_DIST repository options
-set(OpenCMISS_SuperLU_DIST_VERSION 3.11.0 CACHE STRING "The version/tag of SuperLU_DIST to use." FORCE)
+set(OpenCMISS_SuperLU_DIST_VERSION 9.0.0 CACHE STRING "The version/tag of SuperLU_DIST to use." FORCE)
 set(OpenCMISS_SuperLU_DIST_GIT_HOST @OC_DEPENDENCIES_GIT_HOST@ CACHE STRING "The hostname of the SuperLU_DIST Git repository." FORCE)
 set(OpenCMISS_SuperLU_DIST_GIT_ORGANISATION @OC_DEPENDENCIES_GIT_ORGANISATION@ CACHE STRING "The organisation of the SuperLU_DIST Git repository." FORCE)
 set(OpenCMISS_SuperLU_DIST_GIT_BRANCH @OC_DEPENDENCIES_GIT_BRANCH@ CACHE STRING "The branch of the SuperLU_DIST Git repository to use." FORCE)

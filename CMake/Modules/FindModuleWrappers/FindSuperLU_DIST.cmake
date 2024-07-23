@@ -36,7 +36,7 @@ if(NOT SuperLU_DIST_FOUND)
     OCCMakeDebug("Found target superlu::superlu in SuperLU configuration." 1)
     OCCMakeFoundTargetPropertiesToVariables(superlu_dist::superlu_dist SuperLU_DIST
       IMPORTED_LOCATIONS
-      INTERFACE_INCLUDE_DIRECTORIES
+      INTERFACE_COMPILE_FEATURES
       INTERFACE_LINK_LIBRARIES
     )
     set(SuperLU_DIST_FOUND ON)

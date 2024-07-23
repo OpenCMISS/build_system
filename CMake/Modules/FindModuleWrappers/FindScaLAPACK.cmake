@@ -77,7 +77,7 @@ if(NOT ScaLAPACK_FOUND)
   
   OCCMakeMessage(STATUS "Trying to find ScaLAPACK in the OpenCMISS build system...")
     
-  set(CMAKE_FIND_DEBUG_MODE TRUE)
+  #set(CMAKE_FIND_DEBUG_MODE TRUE)
   
   find_package(SCALAPACK ${ScaLAPACK_FIND_VERSION} CONFIG
     QUIET
@@ -90,7 +90,7 @@ if(NOT ScaLAPACK_FOUND)
     NO_CMAKE_SYSTEM_PACKAGE_REGISTRY
   )
 
-  set(CMAKE_FIND_DEBUG_MODE FALSE)
+  #set(CMAKE_FIND_DEBUG_MODE FALSE)
   
   if(TARGET scalapack)
     OCCMakeDebug("Found target scalapack in the SCALAPACK configuration." 1)

@@ -9,14 +9,13 @@ Setup the variables to use MUMPS with OpenCMISS.
 set(OpenCMISS_FIND_SYSTEM_MUMPS OFF CACHE BOOL "Find a system version of MUMPS rather than an OpenCMISS version." FORCE)
 
 # MUMPS repository options
-set(OpenCMISS_MUMPS_VERSION 3.16.2 CACHE STRING "The version/tag of MUMPS to use." FORCE)
+set(OpenCMISS_MUMPS_VERSION 5.7.3 CACHE STRING "The version/tag of MUMPS to use." FORCE)
 set(OpenCMISS_MUMPS_GIT_HOST @OC_DEPENDENCIES_GIT_HOST@ CACHE STRING "The hostname of the MUMPS Git repository." FORCE)
 set(OpenCMISS_MUMPS_GIT_ORGANISATION @OC_DEPENDENCIES_GIT_ORGANISATION@ CACHE STRING "The organisation of the MUMPS Git repository." FORCE)
 set(OpenCMISS_MUMPS_GIT_BRANCH @OC_DEPENDENCIES_GIT_BRANCH@ CACHE STRING "The branch of the MUMPS Git repository to use." FORCE)
 
 # MUMPS configuration options
 set(OpenCMISS_MUMPS_BUILD_PRECISION ${OpenCMISS_DEPENDENCIES_BUILD_PRECISION} CACHE STRING "Build MUMPS with (S)ingle, (D)ouble, (C)omplex, and (Z)double complex precision." FORCE)
-set(OpenCMISS_MUMPS_WITH_METIS ON CACHE BOOL "Build MUMPS with METIS enabled." FORCE)
-set(OpenCMISS_MUMPS_WITH_ParMETIS ON CACHE BOOL "Build MUMPS with ParMETIS enabled." FORCE)
-set(OpenCMISS_MUMPS_WITH_PTScotch ON CACHE BOOL "Build MUMPS with PTSCOTCH enabled." FORCE)
-set(OpenCMISS_MUMPS_WITH_Scotch ON CACHE BOOL "Build MUMPS with SCOTCH enabled." FORCE)
+set(OpenCMISS_MUMPS_WITH_METIS "${OpenCMISS_USE_ParMETIS_METIS_GKlib}" CACHE BOOL "Build MUMPS with METIS enabled." FORCE)
+set(OpenCMISS_MUMPS_WITH_ParMETIS "${OpenCMISS_USE_ParMETIS_METIS_GKlib}" CACHE BOOL "Build MUMPS with ParMETIS enabled." FORCE)
+set(OpenCMISS_MUMPS_WITH_SCOTCH "${OpenCMISS_USE_SCOTCH}" CACHE BOOL "Build MUMPS with SCOTCH enabled." FORCE)

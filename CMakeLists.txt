@@ -77,11 +77,14 @@ include(GNUInstallDirs)
 set(OC_INSTALL_DATA_SUBDIR "${CMAKE_INSTALL_DATAROOTDIR}" CACHE PATH "Sub-directory under CMAKE_INSTALL_PREFIX for OpenCMISS data.")
 set(OC_BUILD_CONFIGS_SUBDIR "/configs" CACHE PATH "Sub-directory under the build root for OpenCMISS configuration data.")
 
-# Determine CMake module paths
+# Determine CMake module and prefix paths
 set(OC_CMAKE_MODULE_PATH )
+set(OC_CMAKE_PREFIX_PATH )
 if(OC_CMAKE_STAGE STREQUAL "setup")
   # Append the build system root scripts directory to the module path
   list(APPEND OC_CMAKE_MODULE_PATH ${OC_BUILD_SYSTEM_ROOT}/${OC_CMAKE_SCRIPTS_SUBDIR})
+  # Append the find module wrappers to the prefix path
+  list(APPEND OC_CMAKE_PREFIX_PATH ${OC_BUILD_SYSTEM_ROOT}/${OC_CMAKE_FIND_MODULES_SUBDIR})
 elseif(OC_CMAKE_STAGE STREQUAL "configure")
   if(DEFINED OpenCMISS_CURRENT_CONFIG_DIRECTORY)
     if(DEFINED OpenCMISS_INSTALL_ROOT)
@@ -92,6 +95,8 @@ elseif(OC_CMAKE_STAGE STREQUAL "configure")
       list(APPEND OC_CMAKE_MODULE_PATH "${OpenCMISS_INSTALL_ROOT}/${OC_INSTALL_DATA_SUBDIR}/${OC_CMAKE_FIND_MODULES_SUBDIR}")
       # Add in the configure variables directory
       list(APPEND OC_CMAKE_MODULE_PATH "${OpenCMISS_CURRENT_CONFIG_DIRECTORY}/Variables")
+      # Add in the find module wrappers to the 
+      list(APPEND OC_CMAKE_PREFIX_PATH "${OpenCMISS_INSTALL_ROOT}/${OC_INSTALL_DATA_SUBDIR}/${OC_CMAKE_FIND_MODULES_SUBDIR}")
     else()
       OCCMakeFatalError("Invalid build system setup. In the OpenCMISS configure cmake stage but no install root has been defined.")    
     endif()
@@ -99,16 +104,17 @@ elseif(OC_CMAKE_STAGE STREQUAL "configure")
     OCCMakeFatalError("Invalid build system setup. In the OpenCMISS configure cmake stage but no current config directory has been defined.")    
   endif()
 elseif(OC_CMAKE_STAGE STREQUAL "build")
-  if(DEFINED OpenCMISS_CURRENT_CONFIG_DIRECTORY)
-  else()
+  if(NOT DEFINED OpenCMISS_CURRENT_CONFIG_DIRECTORY)
     OCCMakeFatalError("Invalid build system setup. In the OpenCMISS build cmake stage but no current config directory has been defined.")    
   endif()
 else()
   OCCMakeFatalError("Invalid build system setup. Unknown OC_CMAKE_STAGE of '${OC_CMAKE_STAGE}'.")
 endif()
 
-# Append in OpenCMISS paths to the module path
+# Prepend in OpenCMISS paths to the module path
 list(PREPEND CMAKE_MODULE_PATH ${OC_CMAKE_MODULE_PATH})
+# Prepend in OpenCMISS paths to the prefix path
+list(PREPEND CMAKE_PREFIX_PATH ${OC_CMAKE_PREFIX_PATH})
 
 # Do a sanity test on the build system root
 list(GET CMAKE_MODULE_PATH 0 _MODULE_PATH_HEAD)
@@ -118,6 +124,7 @@ endif()
 unset(_MODULE_PATH_HEAD)
 
 OCCMakeDebug("Using an OC_CMAKE_MODULE_PATH of '${OC_CMAKE_MODULE_PATH}'" 1)
+OCCMakeDebug("Using an OC_CMAKE_PREFIX_PATH of '${OC_CMAKE_PREFIX_PATH}'" 1)
 
 # Define any CMake stuff
 include(OCCMakeSetup)
