@@ -6,11 +6,27 @@ Setup the variables to use METIS with OpenCMISS.
 
 #]=======================================================================]
 
-set(OpenCMISS_FIND_SYSTEM_METIS OFF)
+set(OpenCMISS_FIND_SYSTEM_METIS OFF CACHE BOOL "Find a system version of METIS rather than an OpenCMISS version." FORCE)
 
 # METIS repository options
-set(OpenCMISS_METIS_VERSION 5.1)
-set(OpenCMISS_METIS_BRANCH @OC_DEFAULT_BRANCH@)
-set(OpenCMISS_METIS_REPOSITORY @OC_DEPENDENCIES_DEFAULT_REPOSITORY@)
+set(OpenCMISS_METIS_VERSION 5.2.1 CACHE STRING "The version/tag of METIS to use." FORCE)
+set(OpenCMISS_METIS_GIT_HOST @OC_DEPENDENCIES_GIT_HOST@ CACHE STRING "The hostname of the METIS Git repository." FORCE)
+set(OpenCMISS_METIS_GIT_ORGANISATION @OC_DEPENDENCIES_GIT_ORGANISATION@ CACHE STRING "The organisation of the METIS Git repository." FORCE)
+set(OpenCMISS_METIS_GIT_BRANCH @OC_DEPENDENCIES_GIT_BRANCH@ CACHE STRING "The branch of the METIS Git repository to use." FORCE)
 
 # METIS configuration options
+
+##################################################################################################################
+#
+# SHOULD NOT NEED TO CHANGE ANYTHING BELOW HERE
+#
+##################################################################################################################
+
+# Debug information
+OCCMakeDebug("" 2)
+OCCMakeDebug("    OpenCMISS METIS Dependency Configuration:" 2)
+OCCMakeDebug("      OpenCMISS_FIND_SYSTEM_METIS = ${OpenCMISS_FIND_SYSTEM_METIS}" 2)
+OCCMakeDebug("      OpenCMISS_METIS_VERSION = ${OpenCMISS_METIS_VERSION}" 2)
+OCCMakeDebug("      OpenCMISS_METIS_GIT_HOST = ${OpenCMISS_METIS_GIT_HOST}" 2)
+OCCMakeDebug("      OpenCMISS_METIS_GIT_ORGANISATIOGKN = ${OpenCMISS_METIS_GIT_ORGANISATION}" 2)
+OCCMakeDebug("      OpenCMISS_METIS_GIT_BRANCH = ${OpenCMISS_METIS_GIT_BRANCH}" 2)

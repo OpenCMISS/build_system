@@ -9,9 +9,24 @@ Setup the variables to use SLEPc with OpenCMISS.
 set(OpenCMISS_FIND_SYSTEM_SLEPc OFF CACHE BOOL "Find a system version of SLEPc rather than an OpenCMISS version." FORCE)
 
 # SLEPc repository options
-set(OpenCMISS_SLEPc_VERSION 3.11.0 CACHE STRING "The version/tag of SLEPc to use." FORCE)
+set(OpenCMISS_SLEPc_VERSION 3.21.2 CACHE STRING "The version/tag of SLEPc to use." FORCE)
 set(OpenCMISS_SLEPc_GIT_HOST @OC_DEPENDENCIES_GIT_HOST@ CACHE STRING "The hostname of the SLEPc Git repository." FORCE)
 set(OpenCMISS_SLEPc_GIT_ORGANISATION @OC_DEPENDENCIES_GIT_ORGANISATION@ CACHE STRING "The organisation of the SLEPc Git repository." FORCE)
 set(OpenCMISS_SLEPc_GIT_BRANCH @OC_DEPENDENCIES_GIT_BRANCH@ CACHE STRING "The branch of the SLEPc Git repository to use." FORCE)
 
 # SLEPc configuration options
+
+##################################################################################################################
+#
+# SHOULD NOT NEED TO CHANGE ANYTHING BELOW HERE
+#
+##################################################################################################################
+
+# Debug information
+OCCMakeDebug("" 1)
+OCCMakeDebug("    OpenCMISS SLEPc Dependency Configuration:" 2)
+OCCMakeDebug("      OpenCMISS_FIND_SYSTEM_SLEPc = ${OpenCMISS_FIND_SYSTEM_SLEPc}" 2)
+OCCMakeDebug("      OpenCMISS_SLEPc_VERSION = ${OpenCMISS_SLEPc_VERSION}" 2)
+OCCMakeDebug("      OpenCMISS_SLEPc_GIT_HOST = ${OpenCMISS_SLEPc_GIT_HOST}" 2)
+OCCMakeDebug("      OpenCMISS_SLEPc_GIT_ORGANISATION = ${OpenCMISS_SLEPc_GIT_ORGANISATION}" 2)
+OCCMakeDebug("      OpenCMISS_SLEPc_GIT_BRANCH = ${OpenCMISS_SLEPc_GIT_BRANCH}" 2)

@@ -39,11 +39,27 @@ if(NOT LIBXML2_FOUND)
     NO_CMAKE_SYSTEM_PACKAGE_REGISTRY
   )
   
+  if(TARGET LibXml2::LibXml2)
+    OCCMakeDebug("Found target LibXml2::LibXml2 in LibXml2 configuration." 1)
+    OCCMakeFoundTargetPropertiesToVariables(LibXml2::LibXml2 LibXml2
+      IMPORTED_LOCATIONS
+      INTERFACE_INCLUDE_DIRECTORIES
+      INTERFACE_COMPILE_DEFINITIONS
+      INTERFACE_LINK_LIBRARIES
+    )
+    set(LibXml2_FOUND ON)
+  endif()
+  
+  if(LibXml2_FOUND)
+    OCCMakeMessage(STATUS "Found LibXml2 (version ${LibXml2_VERSION}) in the OpenCMISS build system.")
+  else()
+    OCCMakeMessage(STATUS "Could not find LibXml2.")
+  endif()
+else()
+  OCCMakeMessage(STATUS "Found LibXml2 (version ${LibXml2_VERSION}) at the system level.")
 endif()
 
 if(LibXml2_FOUND)
-  set(LibXml2_FOUND ${LibXml2_FOUND})
-  OCCMakeDebug("Found LibXml2 (version ${LIBXML2_VERSION_STRING})." 1)
-else()
-  OCCMakeDebug("Could not find LibXml2." 1)
+  OCCMakeDebug("LibXml2_INCLUDE_DIRS = '${LibXml2_INCLUDE_DIRS}'." 2)    
+  OCCMakeDebug("LibXml2_LIBRARIES = '${LibXml2_LIBRARIES}'." 2)    
 endif()

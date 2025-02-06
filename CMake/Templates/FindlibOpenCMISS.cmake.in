@@ -1,0 +1,237 @@
+#[=======================================================================[.rst:
+FindOpenCMISS
+-------------
+
+Find the OpenCMISS (Open Continuum Mechanics, Image analysis, Signal processing
+  and System Identification) library. OpenCMSIS is a library for bioengineering
+applications using Finite Elements, Boundary Elements and other numerical methods.
+
+see https://www.opencmiss.org/
+
+LICENSE
+
+Contributor(s): Chris Bradley.
+
+Input Variables
+^^^^^^^^^^^^^^^
+
+The following variables may be set to influence this module's behavior:
+
+``OpenCMISS_INSTALL_ROOT``
+  Path to the install directory of the OpenCMISS package.
+
+``OpenCMISS_DEPENDENCIES_INSTALL_ROOT``
+  Path to the install directory of the OpenCMISS dependencies. If not
+  specified it is assumed to be same as the OpenCMISS_INSTALL_ROOT.
+
+``OpenCMISS_TOOLCHAIN``
+  The requested toolchain used for the OpenCMISS libraries.
+
+``OpenCMISS_MPI``
+  The requested MPI used for the OpenCMISS libraries.
+
+``OpenCMISS_STATIC``
+  If set to ON find he statically compiled OpenCMISS libraries.
+
+  The following components may be specified.
+
+  ``Fortran``
+  For the Fortran language bindings libraries.
+
+  ``C``
+  For the C language bindings librar
+
+Imported targets
+^^^^^^^^^^^^^^^^
+
+This module defines the following :prop_tgt:`IMPORTED` targets:
+
+``OpenCMISS::OpenCMISS_Fortran``
+
+  The Fortran binding libraries to use for OpenCMISS, if found.
+
+``OpenCMISS::OpenCMISS_C``
+
+  The C binding libraries to use for OpenCMISS, if found.
+
+Result Variables
+^^^^^^^^^^^^^^^^
+
+This module defines the following variables:
+
+``OpenCMISS_FOUND``
+  OpenCMISS librares for all requested components found.
+``OpenCMISS_Fortran_FOUND``
+  OpenCMISS libraries for the Fortran bindings have been found.
+``OpenCMISS_C_FOUND``
+  OpenCMISS libraries for the Fortran bindings have been found.
+``OpenCMISS_LINKER_FLAGS``
+  list of required linker flags (excluding ``-l`` and ``-L``).
+``OpenCMISS_LIBRARIES``
+  list of libraries (using full path name) to link against
+  to use libOpenCMISS
+``OpenCMISS_INCLUDE_DIR``
+  list of include directories to compile against
+
+#]=======================================================================]
+
+set(OpenCMISS_FOUND OFF)
+
+# Make sure we have a sufficient cmake version before doing anything else
+# cmake_minimum_required(VERSION @OpenCMISS_CMAKE_MIN_VERSION@ FATAL_ERROR)
+
+cmake_policy(SET CMP0144 NEW)
+
+if(NOT DEFINED OpenCMISS_INSTALL_ROOT)
+  if(DEFINED ENV{OpenCMISS_INSTALL_ROOT})
+    set(_OC_INSTALL_ROOT "$ENV{OpenCMISS_INSTALL_ROOT}")
+  else()
+    cmake_path(GET CMAKE_CURRENT_LIST_FILE PARENT_PATH OC_MOD_PREFIX)
+    set(_OC_INSTALL_ROOT "${OC_MOD_PREFIX}/../../../..")
+  endif()
+else()
+  set(_OC_INSTALL_ROOT "${OpenCMISS_INSTALL_ROOT}")
+endif()
+if(NOT DEFINED OpenCMISS_DEPENDENCIES_INSTALL_ROOT)
+  if(DEFINED ENV{OpenCMISS_DEPENDENCIES_INSTALL_ROOT})
+    set(_OC_DEPENDENCIES_INSTALL_ROOT "$ENV{OpenCMISS_DEPENDENCIES_INSTALL_ROOT}")
+  else()
+    set(_OC_DEPENDENCIES_INSTALL_ROOT "${OpenCMISS_INSTALL_ROOT}")
+  endif()
+else()
+  set(_OC_DEPENDENCIES_INSTALL_ROOT "${OpenCMISS_DEPENDENCIES_INSTALL_ROOT}")
+endif()
+
+# Store current paths, module, prefix etc.
+set(_OC_PREVIOUS_MODULE_PATH ${CMAKE_MODULE_PATH})
+set(_OC_PREVIOUS_PREFIX_PATH ${CMAKE_PREFIX_PATH})
+
+# Set paths to OpenCMISS install paths
+
+set(_OC_CMAKE_SCRIPTS_SUBDIR "@OC_INSTALL_DATA_SUBDIR@/@OC_CMAKE_SCRIPTS_SUBDIR@")
+set(_OC_CMAKE_MODULES_SUBDIR "@OC_INSTALL_DATA_SUBDIR@/@OC_CMAKE_MODULES_SUBDIR@")
+set(_OC_CMAKE_FIND_MODULES_SUBDIR "@OC_INSTALL_DATA_SUBDIR@/@OC_FIND_MODULES_SUBDIR@")
+
+set(_OC_CMAKE_MODULES_PATH )
+foreach(_root_path OC OC_DEPENDENCIES)
+  list(APPEND _OC_CMAKE_MODULE_PATH "${_${_root_path}_INSTALL_ROOT}/${_OC_CMAKE_FIND_MODULES_SUBDIR}")
+  list(APPEND _OC_CMAKE_MODULE_PATH "${_${_root_path}_INSTALL_ROOT}/${_OC_CMAKE_MODULES_SUBDIR}")
+  list(APPEND _OC_CMAKE_MODULE_PATH "${_${_root_path}_INSTALL_ROOT}/${_OC_CMAKE_SCRIPTS_SUBDIR}")
+endforeach()
+list(REMOVE_DUPLICATES _OC_CMAKE_MODULE_PATH)
+list(PREPEND CMAKE_MODULES_PATH "${_OC_CMAKE_MODULES_PATH}")
+
+# Start of script
+
+# Set up misc functions
+include(OCCMakeMiscellaneous)
+
+OCCMakeDebug("Trying to find libOpenCMISS..." 1)
+
+# Include the various options
+
+# Determine OS etc.
+include(OCOperatingSystems)
+# Ensure that the build type is set
+include(OCBuildTypes)    
+# Ensure that the MPI is set
+include(OCMPI)
+# Ensure that the instrumentation is set
+include(OCInstrumentation)    
+# Ensure that the multithreading is set
+include(OCMultithreading)    
+# Set up the architecture path
+include(OCArchitecturePath)
+OCGetArchitecturePath(OC_NOMPI_ARCH_PATH OC_MPI_ARCH_PATH)
+
+# USe GNU install directories
+include(GNUInstallDirs)        
+
+## Set the prefix path to find the OpenCMISS config file
+set(_OC_CMAKE_PREFIX_PATH ${_OC_INSTALL_ROOT}/${OC_MPI_ARCH_PATH} ${_OC_INSTALL_ROOT}/${OC_NOMPI_ARCH_PATH})
+#set(_OC_CMAKE_PREFIX_PATH ${_OC_INSTALL_ROOT}/${OC_MPI_ARCH_PATH}/${CMAKE_BUILD_TYPE} ${_OC_INSTALL_ROOT}/${OC_NOMPI_ARCH_PATH}/${CMAKE_BUILD_TYPE})
+set(CMAKE_PREFIX_PATH "${_OC_CMAKE_PREFIX_PATH}")
+
+OCCMakeDebug("Using a CMAKE_PREFIX_PATH of '${CMAKE_PREFIX_PATH}'" 1)
+
+# Try and find the OpenCMISS config package
+
+# set(CMAKE_FIND_DEBUG_MODE TRUE)
+
+if(DEFINED libOpenCMISS_FIND_VERSION)
+  if(DEFINED libOpenCMISS_FIND_COMPONENTS)
+    find_package(OpenCMISS ${libOpenCMISS_FIND_VERSION} QUIET
+      CONFIG
+      COMPONENTS ${libOpenCMISS_FIND_COMPONENTS}
+      PATHS "${CMAKE_PREFIX_PATH}"
+      NO_CMAKE_ENVIRONMENT_PATH
+      NO_SYSTEM_ENVIRONMENT_PATH
+      NO_CMAKE_BUILDS_PATH
+      NO_CMAKE_PACKAGE_REGISTRY
+      NO_CMAKE_SYSTEM_PATH
+      NO_CMAKE_SYSTEM_PACKAGE_REGISTRY
+    )
+  else()
+    find_package(OpenCMISS ${libOpenCMISS_FIND_VERSION} QUIET
+      CONFIG
+      PATHS "${CMAKE_PREFIX_PATH}"
+      NO_CMAKE_ENVIRONMENT_PATH
+      NO_SYSTEM_ENVIRONMENT_PATH
+      NO_CMAKE_BUILDS_PATH
+      NO_CMAKE_PACKAGE_REGISTRY
+      NO_CMAKE_SYSTEM_PATH
+      NO_CMAKE_SYSTEM_PACKAGE_REGISTRY
+    )
+  endif()
+else()
+  if(DEFINED libOpenCMISS_FIND_COMPONENTS)
+    find_package(OpenCMISS QUIET
+      CONFIG
+      COMPONENTS ${libOpenCMISS_FIND_COMPONENTS}
+      PATHS "${CMAKE_PREFIX_PATH}"
+      NO_CMAKE_ENVIRONMENT_PATH
+      NO_SYSTEM_ENVIRONMENT_PATH
+      NO_CMAKE_BUILDS_PATH
+      NO_CMAKE_PACKAGE_REGISTRY
+      NO_CMAKE_SYSTEM_PATH
+      NO_CMAKE_SYSTEM_PACKAGE_REGISTRY
+    )
+  else()
+    find_package(OpenCMISS QUIET
+      CONFIG
+      PATHS "${CMAKE_PREFIX_PATH}"
+      NO_CMAKE_ENVIRONMENT_PATH
+      NO_SYSTEM_ENVIRONMENT_PATH
+      NO_CMAKE_BUILDS_PATH
+      NO_CMAKE_PACKAGE_REGISTRY
+      NO_CMAKE_SYSTEM_PATH
+      NO_CMAKE_SYSTEM_PACKAGE_REGISTRY
+    )
+  endif()
+endif()
+
+# set(CMAKE_FIND_DEBUG_MODE FALSE)
+
+if(TARGET OpenCMISS::OpenCMISS_Fortran)
+  add_library(OpenCMISS::libOpenCMISS_Fortran ALIAS OpenCMISS::OpenCMISS_Fortran)
+endif()
+if(TARGET OpenCMISS::OpenCMISS_C)
+  add_library(OpenCMISS::libOpenCMISS_C ALIAS OpenCMISS::OpenCMISS_C)
+endif()
+
+# Restore current paths, module, prefix etc.
+
+set(CMAKE_PREFIX_PATH $_OC_PREVIOUS_PREFIX_PATH)
+set(CMAKE_MODULE_PATH $_OC_PREVIOUS_MODULE_PATH)
+
+# Clean-up
+
+unset(_OC_CMAKE_MODULES_PATH)
+unset(_OC_CMAKE_FIND_MODULES_SUBDIR)
+unset(_OC_CMAKE_MODULES_SUBDIR)
+unset(_OC_CMAKE_SCRIPTS_SUBDIR)
+
+unset(_OC_CMAKE_PREVIOUS_PREFIX_PATH)
+unset(_OC_CMAKE_PREVIOUS_MODULE_PATH)
+
+  

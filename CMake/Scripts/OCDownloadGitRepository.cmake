@@ -84,52 +84,57 @@ if(Git_FOUND)
     ### SHOULD THIS JUST NOT DO ANYTHING AND DO THIS AS PART OF AN UPDATE STEP?
     
     ### SHOULD THIS CHECK TO ENSURE THAT THERE IS NOTHING TO COMMIT???
+
+    #COMMENT FOR NOW UNTIL WORKING
     
     OCCMakeDebug("Source directory of '${OC_GIT_SOURCE_DIR}' already exists for the git repository." 2)
     #Try a pull
     set(_GIT_ARGUMENT "pull ${OC_GIT_REPO} ${OC_GIT_BRANCH}")
     OCCMakeDebug("Git pull command: '${GIT_EXECUTABLE} ${_GIT_ARGUMENT}'." 1)
-    execute_process(
-      COMMAND "${GIT_EXECUTABLE}" "${_GIT_ARGUMENT}"
-      WORKING_DIRECTORY "${OC_GIT_SOURCE_DIR}"
-      RESULT_VARIABLE _OC_GIT_RESULT
-      OUTPUT_VARIABLE _OC_GIT_OUTPUT
-      ERROR_VARIABLE _OC_GIT_ERROR
-    )
-    if(_OC_GIT_RESULT EQUAL "0")
-      #Update any submodules
-      set(_GIT_ARGUMENT "submodule update --remote")
-      OCCMakeDebug("Git submodule command: '${GIT_EXECUTABLE} ${_GIT_ARGUMENT}'." 1)
-      execute_process(
-	COMMAND "${GIT_EXECUTABLE}" "${_GIT_ARGUMENT}"
-	WORKING_DIRECTORY "${OC_GIT_SOURCE_DIR}"
-	RESULT_VARIABLE _OC_GIT_RESULT
-	OUTPUT_VARIABLE _OC_GIT_OUTPUT
-	ERROR_VARIABLE _OC_GIT_ERROR
-      )
-      if(NOT _OC_GIT_RESULT EQUAL "0")
-	OCCMakeWarning("Git submodule update error, '${_OC_GIT_RESULT}'.")
-      endif()
-    else()
-      OCCMakeWarning("Git pull error, '${_OC_GIT_RESULT}'.")
-    endif()
+    #execute_process(
+    #  COMMAND "${GIT_EXECUTABLE}" "${_GIT_ARGUMENT}"
+    #  WORKING_DIRECTORY "${OC_GIT_SOURCE_DIR}"
+    #  RESULT_VARIABLE _OC_GIT_RESULT
+    #  OUTPUT_VARIABLE _OC_GIT_OUTPUT
+    #  ERROR_VARIABLE _OC_GIT_ERROR
+    #)
+    #if(_OC_GIT_RESULT EQUAL "0")
+    #  #Update any submodules
+    #  set(_GIT_ARGUMENT "submodule update --remote")
+    #  OCCMakeDebug("Git submodule command: '${GIT_EXECUTABLE} ${_GIT_ARGUMENT}'." 1)
+    #  execute_process(
+    #	COMMAND "${GIT_EXECUTABLE}" "${_GIT_ARGUMENT}"
+    #	WORKING_DIRECTORY "${OC_GIT_SOURCE_DIR}"
+    #	RESULT_VARIABLE _OC_GIT_RESULT
+    #	OUTPUT_VARIABLE _OC_GIT_OUTPUT
+    #	ERROR_VARIABLE _OC_GIT_ERROR
+    #  )
+    #  if(NOT _OC_GIT_RESULT EQUAL "0")
+    #	OCCMakeWarning("Git submodule update error, '${_OC_GIT_RESULT}'.")
+    #  endif()
+    #else()
+    #  OCCMakeWarning("Git pull error, '${_OC_GIT_RESULT}'.")
+    #endif()
   else()
     #Source directory does not exist. Do a clone. 
     OCCMakeDebug("Source directory of '${OC_GIT_SOURCE_DIR}' does not exist for the git repository." 2)
     #Try and clone
     set(_GIT_ARGUMENT "clone ${OC_GIT_URL} --recursive ${OC_GIT_SOURCE_DIR}")
     OCCMakeDebug("Git clone command: '${GIT_EXECUTABLE} ${_GIT_ARGUMENT}'." 1)
+
+    #COMMENT FOR NOW UNTIL WOKRING
+    
     execute_process(
-      COMMAND ${GIT_EXECUTABLE} clone ${OC_GIT_URL} --recursive ${OC_GIT_SOURCE_DIR}
-      WORKING_DIRECTORY "${OC_GIT_WORKING_DIR}"
-      RESULT_VARIABLE _OC_GIT_RESULT
-      OUTPUT_VARIABLE _OC_GIT_OUTPUT
-      ERROR_VARIABLE _OC_GIT_ERROR
+     COMMAND ${GIT_EXECUTABLE} clone ${OC_GIT_URL} --recursive ${OC_GIT_SOURCE_DIR}
+     WORKING_DIRECTORY "${OC_GIT_WORKING_DIR}"
+     RESULT_VARIABLE _OC_GIT_RESULT
+     OUTPUT_VARIABLE _OC_GIT_OUTPUT
+     ERROR_VARIABLE _OC_GIT_ERROR
     )
     if(NOT _OC_GIT_RESULT EQUAL "0")
-      OCCMakeWarning("Git clone result: '${_OC_GIT_RESULT}'")
-      OCCMakeWarning("          output: '${_OC_GIT_OUTPUT}'")
-      OCCMakeWarning("           error: '${_OC_GIT_ERROR}'")
+     OCCMakeWarning("Git clone result: '${_OC_GIT_RESULT}'")
+     OCCMakeWarning("          output: '${_OC_GIT_OUTPUT}'")
+     OCCMakeWarning("           error: '${_OC_GIT_ERROR}'")
     endif()
     if(DEFINED OC_DEVELOPER)
       #Set upstream repos etc. 
@@ -142,56 +147,56 @@ if(Git_FOUND)
     OCCMakeDebug("Checking out the branch '${OC_GIT_BRANCH}'." 2)
     set(_GIT_ARGUMENT "fetch --all")
     OCCMakeDebug("Git fetch command: '${GIT_EXECUTABLE} ${_GIT_ARGUMENT}'." 1)
-    execute_process(
-      COMMAND "${GIT_EXECUTABLE}" "${_GIT_ARGUMENT}"
-      WORKING_DIRECTORY "${OC_GIT_SOURCE_DIR}"
-      RESULT_VARIABLE _OC_GIT_RESULT
-      OUTPUT_VARIABLE _OC_GIT_OUTPUT
-      ERROR_VARIABLE _OC_GIT_ERROR
-    )
-    if(NOT _OC_GIT_RESULT EQUAL "0")
-      OCCMakeWarning("Git fetch error, '${_OC_GIT_RESULT}'.")
-    endif()
-    set(_GIT_ARGUMENT "checkout ${OC_GIT_REPO} ${OC_GIT_BRANCH}")
-    OCCMakeDebug("Git checkout command: '${GIT_EXECUTABLE} ${_GIT_ARGUMENT}'." 1)
-    execute_process(
-      COMMAND "${GIT_EXECUTABLE}" "${_GIT_ARGUMENT}"
-      WORKING_DIRECTORY "${OC_GIT_SOURCE_DIR}"
-      RESULT_VARIABLE _OC_GIT_RESULT
-      OUTPUT_VARIABLE _OC_GIT_OUTPUT
-      ERROR_VARIABLE _OC_GIT_ERROR
-    )
-    if(NOT _OC_GIT_RESULT EQUAL "0")
-      OCCMakeWarning("Git checkout error, '${_OC_GIT_RESULT}'.")
-    endif()
+    # execute_process(
+    #   COMMAND "${GIT_EXECUTABLE}" "${_GIT_ARGUMENT}"
+    #   WORKING_DIRECTORY "${OC_GIT_SOURCE_DIR}"
+    #   RESULT_VARIABLE _OC_GIT_RESULT
+    #   OUTPUT_VARIABLE _OC_GIT_OUTPUT
+    #   ERROR_VARIABLE _OC_GIT_ERROR
+    # )
+    # if(NOT _OC_GIT_RESULT EQUAL "0")
+    #   OCCMakeWarning("Git fetch error, '${_OC_GIT_RESULT}'.")
+    # endif()
+    # set(_GIT_ARGUMENT "checkout ${OC_GIT_REPO} ${OC_GIT_BRANCH}")
+    # OCCMakeDebug("Git checkout command: '${GIT_EXECUTABLE} ${_GIT_ARGUMENT}'." 1)
+    # execute_process(
+    #   COMMAND "${GIT_EXECUTABLE}" "${_GIT_ARGUMENT}"
+    #   WORKING_DIRECTORY "${OC_GIT_SOURCE_DIR}"
+    #   RESULT_VARIABLE _OC_GIT_RESULT
+    #   OUTPUT_VARIABLE _OC_GIT_OUTPUT
+    #   ERROR_VARIABLE _OC_GIT_ERROR
+    # )
+    # if(NOT _OC_GIT_RESULT EQUAL "0")
+    #   OCCMakeWarning("Git checkout error, '${_OC_GIT_RESULT}'.")
+    # endif()
     
   else()
     #We are NOT in developer mode so checkout the specified tag
     OCCMakeDebug("Checking out the tag '${OC_GIT_TAG}'." 2)
     set(_GIT_ARGUMENT "fetch --all --tags --prune")
     OCCMakeDebug("Git fetch command: '${_GIT_ARGUMENT}'." 1)
-    execute_process(
-      COMMAND "${GIT_EXECUTABLE}" "${_GIT_ARGUMENT}"
-      WORKING_DIRECTORY "${OC_GIT_SOURCE_DIR}"
-      RESULT_VARIABLE _OC_GIT_RESULT
-      OUTPUT_VARIABLE _OC_GIT_OUTPUT
-      ERROR_VARIABLE _OC_GIT_ERROR
-    )
-    if(NOT _OC_GIT_RESULT EQUAL "0")
-      OCCMakeWarning("Git fetch error, '${_OC_GIT_RESULT}'.")
-    endif()  
-    set(_GIT_ARGUMENT "checkout tags/${OC_GIT_TAG} -b ${OC_GIT_BRANCH}")
-    OCCMakeDebug("Git checkout command: '${GIT_EXECUTABLE} ${_GIT_ARGUMENT}'." 1)
-    execute_process(
-      COMMAND "${GIT_EXECUTABLE}" "${_GIT_ARGUMENT}"
-      WORKING_DIRECTORY "${OC_GIT_SOURCE_DIR}"
-      RESULT_VARIABLE _OC_GIT_RESULT
-      OUTPUT_VARIABLE _OC_GIT_OUTPUT
-      ERROR_VARIABLE _OC_GIT_ERROR
-    )
-    if(NOT _OC_GIT_RESULT EQUAL "0")
-      OCCMakeWarning("Git checkout error, '${_OC_GIT_RESULT}'.")
-    endif()  
+    # execute_process(
+    #   COMMAND "${GIT_EXECUTABLE}" "${_GIT_ARGUMENT}"
+    #   WORKING_DIRECTORY "${OC_GIT_SOURCE_DIR}"
+    #   RESULT_VARIABLE _OC_GIT_RESULT
+    #   OUTPUT_VARIABLE _OC_GIT_OUTPUT
+    #   ERROR_VARIABLE _OC_GIT_ERROR
+    # )
+    # if(NOT _OC_GIT_RESULT EQUAL "0")
+    #   OCCMakeWarning("Git fetch error, '${_OC_GIT_RESULT}'.")
+    # endif()  
+    # set(_GIT_ARGUMENT "checkout tags/${OC_GIT_TAG} -b ${OC_GIT_BRANCH}")
+    # OCCMakeDebug("Git checkout command: '${GIT_EXECUTABLE} ${_GIT_ARGUMENT}'." 1)
+    # execute_process(
+    #   COMMAND "${GIT_EXECUTABLE}" "${_GIT_ARGUMENT}"
+    #   WORKING_DIRECTORY "${OC_GIT_SOURCE_DIR}"
+    #   RESULT_VARIABLE _OC_GIT_RESULT
+    #   OUTPUT_VARIABLE _OC_GIT_OUTPUT
+    #   ERROR_VARIABLE _OC_GIT_ERROR
+    # )
+    # if(NOT _OC_GIT_RESULT EQUAL "0")
+    #   OCCMakeWarning("Git checkout error, '${_OC_GIT_RESULT}'.")
+    # endif()  
   endif()
   
 else()

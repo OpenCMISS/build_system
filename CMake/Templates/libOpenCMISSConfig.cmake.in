@@ -1,0 +1,151 @@
+# Provides the necessary logic to find an OpenCMISS libraries installation.
+#
+# Provides the targets "OpenCMISS::libOpenCMISS_Fortran" and "OpenCMISS::libOpenCMISS_C"
+# that can be consumed e.g.
+#
+# target_link_libraries(mytarget [PRIVATE|PUBLIC] OpenCMISS::libOpenCMISS_Fortran)
+#
+# Developer note:
+# This script essentially defines an INTERFACE target opencmisslibs which is
+# then poulated with all the top level libraries configured in OpenCMISS.
+
+# Provides the necessary logic to find an OpenCMISS libraries installation.
+#
+# Provides the target "opencmisslibs" that can be consumed like
+# target_link_libraries(mytarget [PRIVATE|PUBLIC] opencmisslibs)
+#
+# Developer note:
+# This script essentially defines an INTERFACE target opencmisslibs which is
+# then poulated with all the top level libraries configured in OpenCMISS.
+
+if (NOT TARGET OpenCMISS::libOpenCMISS_Fortran)
+  
+    # Make sure we have a sufficient cmake version before doing anything else
+    cmake_minimum_required(VERSION @OpenCMISS_CMAKE_MIN_VERSION@ FATAL_ERROR)
+
+    # Compute the installation prefix relative to this file. It might be a mounted location or whatever.
+    set(OpenCMISS_IMPORT_PREFIX "${CMAKE_CURRENT_LIST_FILE}")
+    OCToAbsolutePaths(OpenCMISS_IMPORT_PREFIX)
+ 
+    #############################################################################
+    # Helper functions
+    # Debug verbose helper
+    function(messaged TEXT)
+        #message(STATUS "OpenCMISS Libraries (${_OPENCMISS_IMPORT_PREFIX}/opencmisslibs-config.cmake): ${TEXT}")
+    endfunction()
+    function(messageo TEXT)
+        message(STATUS "OpenCMISS Libraries: ${TEXT}")
+    endfunction()
+    function(toAbsolutePaths LIST_VARNAME)
+        set(RES )
+        foreach(entry ${${LIST_VARNAME}})
+            get_filename_component(abs_entry "${entry}" ABSOLUTE)
+            list(APPEND RES "${abs_entry}")
+        endforeach()
+        set(${LIST_VARNAME} ${RES} PARENT_SCOPE)
+    endfunction()
+
+    set(SUPPORT_EMAIL @OC_BUILD_SUPPORT_EMAIL@)
+
+    # Append the OpenCMISS module path to the current module path
+    set(OpenCMISS_CMAKE_MODULE_PATH @OC_CMAKE_MODULE_PATH@)
+    toAbsolutePaths(OpenCMISS_CMAKE_MODULE_PATH)
+    list(PREPEND CMAKE_MODULE_PATH ${OpenCMISS_CMAKE_MODULE_PATH})
+
+    # Determine OS etc.
+    include(OCOperatingSystems)
+    # Ensure that the build type is set
+    include(OCBuildTypes)    
+    # Ensure that the MPI is set
+    include(OCMPI)
+    # Ensure that the instrumentation is set
+    include(OCInstrumentation)    
+    # Ensure that the multithreading is set
+    include(OCMultithreading)    
+    # Set up the architecture path
+    include(OCArchitecturePath)
+    OCGetArchitecturePath(OC_NOMPI_ARCH_PATH OC_MPI_ARCH_PATH)
+    
+
+    set(_CONTEXT_PATH "${_OPENCMISS_IMPORT_PREFIX}${ARCHPATHNOMPI}")
+
+    # Include the context settings info
+    include(${_CONTEXT_PATH}/context.cmake)
+
+    ###########################################################################
+    # Validate
+    include(OCToolchainCompilers)
+    getToolchain(CURRENT_TOOLCHAIN)
+    if (NOT CURRENT_TOOLCHAIN STREQUAL CONTEXT_OPENCMISS_TOOLCHAIN)
+        message(FATAL_ERROR "Mismatch between the current context toolchain (${CONTEXT_OPENCMISS_TOOLCHAIN}) and the toolchain in use (${CURRENT_TOOLCHAIN}).")
+    endif ()
+
+    # Add the prefix path so the config files can be found
+    toAbsolutePaths(CONTEXT_OPENCMISS_PREFIX_PATH_IMPORT)
+    list(APPEND CMAKE_PREFIX_PATH ${CONTEXT_OPENCMISS_PREFIX_PATH_IMPORT})
+    set(OPENCMISS_MPI_BUILD_TYPE ${CONTEXT_OPENCMISS_MPI_BUILD_TYPE})
+
+    messaged("CMAKE_MODULE_PATH=${CMAKE_MODULE_PATH}\nCMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}")
+
+    ###########################################################################
+    # Misc
+    # For shared libs (default), use the correct install RPATH to enable binaries to find the shared libs.
+    # See http://www.cmake.org/Wiki/CMake_RPATH_handling
+    toAbsolutePaths(CONTEXT_OPENCMISS_LIBRARY_PATH_IMPORT)
+    set(CMAKE_INSTALL_RPATH ${CONTEXT_OPENCMISS_LIBRARY_PATH_IMPORT})
+    set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+
+    toAbsolutePaths(CONTEXT_OPENCMISS_BINARIES_PATH_IMPORT)
+    set(OPENCMISS_BINARIES_PATH ${CONTEXT_OPENCMISS_BINARIES_PATH_IMPORT})
+
+    ###########################################################################
+    # Convenience targets
+    #
+    # Add the opencmisslibs library (INTERFACE type is new since 3.0)
+    add_library(OpenCMISS::libOpenCMISS INTERFACE)
+
+    # Avoid cases where people write libopencmiss/LIBOPENCMISS etc.
+    set(_TMP)
+    foreach(_ENTRY ${libOpenCMISS_FIND_COMPONENTS})
+        string(TOLOWER ${_ENTRY} _ENTRY)
+        list(APPEND _TMP ${_ENTRY})
+    endforeach()
+    set(OpenCMISSLibs_FIND_COMPONENTS ${_TMP})
+    unset(_TMP)
+    unset(_ENTRY)
+
+    # if(iron IN_LIST OpenCMISSLibs_FIND_COMPONENTS OR NOT OpenCMISSLibs_FIND_COMPONENTS)
+    #     # Add top level libraries of OpenCMISS framework if configured
+    #     # Validate MPI for the found context
+    #     if (NOT OPENCMISS_MPI_IMPLEMENTATION STREQUAL CONTEXT_OPENCMISS_MPI_IMPLEMENTATION)
+    #         message(FATAL_ERROR "Mismatch between the current context MPI (${CONTEXT_OPENCMISS_MPI_IMPLEMENTATION}) and the MPI found (${OPENCMISS_MPI_IMPLEMENTATION}).")
+    #     endif ()
+    #     message(STATUS "Looking for OpenCMISS-Iron ...")
+    #     find_package(IRON ${IRON_VERSION} QUIET)
+    #     if (IRON_FOUND)
+    #         target_link_libraries(opencmisslibs INTERFACE iron)
+
+    #         # Add the C bindings target if built
+    #         if (TARGET iron_c)
+    #             target_link_libraries(opencmisslibs INTERFACE iron_c)
+    #         endif()
+
+    #         # On some platforms (windows), we do not have the mpi.mod file or it could not be compatible for inclusion
+    #         # This variable is set by the FindMPI.cmake module in OPENCMISS_INSTALL_DIR/cmake/OpenCMISSExtraFindModules
+    #         if (NOT MPI_Fortran_MODULE_COMPATIBLE)
+    #             add_definitions(-DNOMPIMOD)
+    #         endif()
+
+    #         message(STATUS "Looking for OpenCMISS-Iron ... Success")
+    #     elseif (OpenCMISSLibs_FIND_REQUIRED)
+    #         message(FATAL_ERROR "OpenCMISS libraries installation at ${_OPENCMISS_IMPORT_PREFIX} does not contain Iron")
+    #     else ()
+    #         message(STATUS "Looking for OpenCMISS-Iron ... Not found")
+    #     endif ()
+    # endif()
+
+    # Be a tidy kiwi
+    unset(_OPENCMISS_IMPORT_PREFIX)
+    unset(_CONTEXT_PATH)
+endif ()
+

@@ -1,0 +1,34 @@
+#[=======================================================================[.rst:
+OpenCMISS BLACS/ScaLAPACK Variables
+-----------------------------------
+
+Setup the variables to use BLACS/ScaLAPACK with OpenCMISS.
+
+#]=======================================================================]
+
+set(OpenCMISS_FIND_SYSTEM_BLACS_ScaLAPACK OFF CACHE BOOL "Find a system version of BLACS/ScaLAPACK rather than an OpenCMISS version." FORCE)
+
+# BLACS/ScaLAPACK repository options
+set(OpenCMISS_BLACS_ScaLAPACK_VERSION 2.2.1 CACHE STRING "The version/tag of BLACS/ScaLAPACK to use." FORCE)
+set(OpenCMISS_BLACS_ScaLAPACK_GIT_HOST @OC_DEPENDENCIES_GIT_HOST@ CACHE STRING "The hostname of the BLACS/ScaLAPACK Git repository." FORCE)
+set(OpenCMISS_BLACS_ScaLAPACK_GIT_ORGANISATION @OC_DEPENDENCIES_GIT_ORGANISATION@ CACHE STRING "The organisation of the BLACS/ScaLAPACK Git repository." FORCE)
+set(OpenCMISS_BLACS_ScaLAPACK_GIT_BRANCH @OC_DEPENDENCIES_GIT_BRANCH@ CACHE STRING "The branch of the BLACS/ScaLAPACK Git repository to use." FORCE)
+
+# BLACS/ScaLAPACK configuration options
+set(OpenCMISS_BLACS_ScaLAPACK_BUILD_TESTS ${OpenCMISS_WITH_DEPENDENCIES_TESTS} CACHE BOOL "Build BLACS/ScaLAPACK with tests enabled." FORCE)
+
+##################################################################################################################
+#
+# SHOULD NOT NEED TO CHANGE ANYTHING BELOW HERE
+#
+##################################################################################################################
+
+# Debug information
+OCCMakeDebug("" 1)
+OCCMakeDebug("    OpenCMISS BLAS/LAPACK Dependency Configuration:" 2)
+OCCMakeDebug("      OpenCMISS_FIND_SYSTEM_BLACS_ScaLAPACK = ${OpenCMISS_FIND_SYSTEM_BLACS_ScaLAPACK}" 2)
+OCCMakeDebug("      OpenCMISS_BLACS_ScaLAPACK_VERSION = ${OpenCMISS_BLACS_ScaLAPACK_VERSION}" 2)
+OCCMakeDebug("      OpenCMISS_BLACS_ScaLAPACK_GIT_HOST = ${OpenCMISS_BLACS_ScaLAPACK_GIT_HOST}" 2)
+OCCMakeDebug("      OpenCMISS_BLACS_ScaLAPACK_GIT_ORGANISATION = ${OpenCMISS_BLACS_ScaLAPACK_GIT_ORGANISATION}" 2)
+OCCMakeDebug("      OpenCMISS_BLACS_ScaLAPACK_GIT_BRANCH = ${OpenCMISS_BLACS_ScaLAPACK_GIT_BRANCH}" 2)
+OCCMakeDebug("      OpenCMISS_BLACS_ScaLAPACK_BUILD_TESTS = ${OpenCMISS_BLACS_ScaLAPACK_BUILD_TESTS}" 2)

@@ -25,17 +25,23 @@ cmake_minimum_required(VERSION ${OC_CMAKE_MIN_VERSION} FATAL_ERROR)
 
 # Set the version of the OpenCMISS
 
-set(OC_MAJOR_VERSION "0" CACHE INTERNAL "OpenCMISS major version")
-set(OC_MINOR_VERSION "1" CACHE INTERNAL "OpenCMISS minor version")
-set(OC_PATCH_VERSION "0" CACHE INTERNAL "OpenCMISS patch version")
-set(OC_VERSION "${OC_MAJOR_VERSION}.${OC_MINOR_VERSION}.${OC_PATCH_VERSION}" CACHE INTERNAL "OpenCMISS version")
+set(OC_BUILD_SYSTEM_MAJOR_VERSION "0" CACHE INTERNAL "OpenCMISS Build System major version")
+set(OC_BUILD_SYSTEM_MINOR_VERSION "9" CACHE INTERNAL "OpenCMISS Build System minor version")
+set(OC_BUILD_SYSTEM_PATCH_VERSION "0" CACHE INTERNAL "OpenCMISS Build System patch version")
+set(OC_BUILD_SYSTEM_VERSION "${OC_BUILD_SYSTEM_MAJOR_VERSION}.${OC_BUILD_SYSTEM_MINOR_VERSION}.${OC_BUILD_SYSTEM_PATCH_VERSION}" CACHE INTERNAL "OpenCMISS Build System version")
 
-set(CMAKE_PROJECT_OpenCMISS_INCLUDE_BEFORE "${CMAKE_CURRENT_SOURCE_DIR}/CMake/Scripts/OCPreProject.cmake")
+set(OC_CMAKE_SUBDIR "CMake")
+set(OC_CMAKE_SCRIPTS_SUBDIR "${OC_CMAKE_SUBDIR}/Scripts")
+set(OC_CMAKE_MODULES_SUBDIR "${OC_CMAKE_SUBDIR}/Modules")
+set(OC_CMAKE_FIND_MODULES_SUBDIR "${OC_CMAKE_MODULES_SUBDIR}/FindModuleWrappers")
+set(OC_CMAKE_TEMPLATES_SUBDIR "${OC_CMAKE_SUBDIR}/Templates")
 
-project(OpenCMISS
+set(CMAKE_PROJECT_OpenCMISS-Build-System_INCLUDE_BEFORE "${CMAKE_CURRENT_SOURCE_DIR}/${OC_CMAKE_SCRIPTS_SUBDIR}/OCPreProject.cmake")
+
+project(OpenCMISS-Build-System
   LANGUAGES C CXX Fortran
-  VERSION ${OC_VERSION}
-  DESCRIPTION "OpenCMISS computional environment"
+  VERSION ${OC_BUILD_SYSTEM_VERSION}
+  DESCRIPTION "OpenCMISS computional environment build system"
   HOMEPAGE_URL "https://www.opencmiss.org/")  
 
 OCCMakeDebug("Current CMake version = ${CMAKE_VERSION}, minimum required CMake version = ${OC_CMAKE_MIN_VERSION}." 1)
@@ -66,20 +72,31 @@ if(NOT DEFINED OC_BUILD_SYSTEM_ROOT)
   endif()
 endif()
 
-# Determine CMake module paths
+# Options for paths
+include(GNUInstallDirs)
+set(OC_INSTALL_DATA_SUBDIR "${CMAKE_INSTALL_DATAROOTDIR}" CACHE PATH "Sub-directory under CMAKE_INSTALL_PREFIX for OpenCMISS data.")
+set(OC_BUILD_CONFIGS_SUBDIR "/configs" CACHE PATH "Sub-directory under the build root for OpenCMISS configuration data.")
+
+# Determine CMake module and prefix paths
+set(OC_CMAKE_MODULE_PATH )
+set(OC_CMAKE_PREFIX_PATH )
 if(OC_CMAKE_STAGE STREQUAL "setup")
   # Append the build system root scripts directory to the module path
-  list(APPEND CMAKE_MODULE_PATH ${OC_BUILD_SYSTEM_ROOT}/CMake/Scripts)
+  list(APPEND OC_CMAKE_MODULE_PATH ${OC_BUILD_SYSTEM_ROOT}/${OC_CMAKE_SCRIPTS_SUBDIR})
+  # Append the find module wrappers to the prefix path
+  list(APPEND OC_CMAKE_PREFIX_PATH ${OC_BUILD_SYSTEM_ROOT}/${OC_CMAKE_FIND_MODULES_SUBDIR})
 elseif(OC_CMAKE_STAGE STREQUAL "configure")
   if(DEFINED OpenCMISS_CURRENT_CONFIG_DIRECTORY)
     if(DEFINED OpenCMISS_INSTALL_ROOT)
       # Append the install root scripts directory to the module path
-      list(APPEND CMAKE_MODULE_PATH "${OpenCMISS_INSTALL_ROOT}/share/CMake/Scripts")
+      list(APPEND OC_CMAKE_MODULE_PATH "${OpenCMISS_INSTALL_ROOT}/${OC_INSTALL_DATA_SUBDIR}/${OC_CMAKE_SCRIPTS_SUBDIR}")
       # Add in the modules and find module wrappers
-      list(APPEND CMAKE_MODULE_PATH "${OpenCMISS_INSTALL_ROOT}/share/CMake/Modules")
-      list(APPEND CMAKE_MODULE_PATH "${OpenCMISS_INSTALL_ROOT}/share/CMake/Modules/FindModuleWrappers")
+      list(APPEND OC_CMAKE_MODULE_PATH "${OpenCMISS_INSTALL_ROOT}/${OC_INSTALL_DATA_SUBDIR}/${OC_CMAKE_MODULES_SUBDIR}")
+      list(APPEND OC_CMAKE_MODULE_PATH "${OpenCMISS_INSTALL_ROOT}/${OC_INSTALL_DATA_SUBDIR}/${OC_CMAKE_FIND_MODULES_SUBDIR}")
       # Add in the configure variables directory
-      list(APPEND CMAKE_MODULE_PATH "${OpenCMISS_CURRENT_CONFIG_DIRECTORY}/Variables")
+      list(APPEND OC_CMAKE_MODULE_PATH "${OpenCMISS_CURRENT_CONFIG_DIRECTORY}/Variables")
+      # Add in the find module wrappers to the 
+      list(APPEND OC_CMAKE_PREFIX_PATH "${OpenCMISS_INSTALL_ROOT}/${OC_INSTALL_DATA_SUBDIR}/${OC_CMAKE_FIND_MODULES_SUBDIR}")
     else()
       OCCMakeFatalError("Invalid build system setup. In the OpenCMISS configure cmake stage but no install root has been defined.")    
     endif()
@@ -87,19 +104,27 @@ elseif(OC_CMAKE_STAGE STREQUAL "configure")
     OCCMakeFatalError("Invalid build system setup. In the OpenCMISS configure cmake stage but no current config directory has been defined.")    
   endif()
 elseif(OC_CMAKE_STAGE STREQUAL "build")
-  if(DEFINED OpenCMISS_CURRENT_CONFIG_DIRECTORY)
-  else()
+  if(NOT DEFINED OpenCMISS_CURRENT_CONFIG_DIRECTORY)
     OCCMakeFatalError("Invalid build system setup. In the OpenCMISS build cmake stage but no current config directory has been defined.")    
   endif()
 else()
   OCCMakeFatalError("Invalid build system setup. Unknown OC_CMAKE_STAGE of '${OC_CMAKE_STAGE}'.")
 endif()
+
+# Prepend in OpenCMISS paths to the module path
+list(PREPEND CMAKE_MODULE_PATH ${OC_CMAKE_MODULE_PATH})
+# Prepend in OpenCMISS paths to the prefix path
+list(PREPEND CMAKE_PREFIX_PATH ${OC_CMAKE_PREFIX_PATH})
+
 # Do a sanity test on the build system root
 list(GET CMAKE_MODULE_PATH 0 _MODULE_PATH_HEAD)
 if(NOT EXISTS "${_MODULE_PATH_HEAD}/OCArchitecturePath.cmake")
   OCCMakeFatalError("Incorrect build system setup. Could not find OCArchitecturePath.cmake in '${_MODULE_PATH_HEAD}'.")
 endif()
 unset(_MODULE_PATH_HEAD)
+
+OCCMakeDebug("Using an OC_CMAKE_MODULE_PATH of '${OC_CMAKE_MODULE_PATH}'" 1)
+OCCMakeDebug("Using an OC_CMAKE_PREFIX_PATH of '${OC_CMAKE_PREFIX_PATH}'" 1)
 
 # Define any CMake stuff
 include(OCCMakeSetup)
@@ -108,7 +133,7 @@ include(OCCMakeSetup)
 include(OCRootPaths)
 
 # This is the support email for general enquiries and support about building OpenCMISS using the CMake build system.
-set(OC_BUILD_SUPPORT_EMAIL "users@opencmiss.org")
+set(OC_BUILD_SUPPORT_EMAIL "developers@opencmiss.org")
 
 #include(OCBuildSetup)
 
@@ -140,7 +165,7 @@ include(OCMultithreading)
 include(OCArchitecturePath)
 OCGetArchitecturePath(OC_NOMPI_ARCH_PATH OC_MPI_ARCH_PATH)
 
-OCCMakeDebug("OC_CMAKE_FLAGS = '${OC_CMAKE_FLAGS}'," 1)
+OCCMakeDebug("Using OC_CMAKE_FLAGS of '${OC_CMAKE_FLAGS}'" 1)
 
 # Create the setup target
 
@@ -149,10 +174,9 @@ if(DEFINED OpenCMISS_CURRENT_CONFIG_DIRECTORY)
   set(OC_CURRENT_CONFIG_DIRECTORY "${OpenCMISS_CURRENT_CONFIG_DIRECTORY}")
 else()
   if(OC_HAVE_MULTICONFIG_ENV)
-    set(OC_CURRENT_CONFIG_DIRECTORY "${OC_BUILD_ROOT}/configs/${OC_MPI_ARCH_PATH}")
+    set(OC_CURRENT_CONFIG_DIRECTORY "${OC_BUILD_ROOT}${OC_BUILD_CONFIGS_SUBDIR}/${OC_MPI_ARCH_PATH}")
   else()
-    string(TOLOWER ${OC_BUILD_TYPE} _LOWERCASE_BUILD_TYPE)
-    set(OC_CURRENT_CONFIG_DIRECTORY "${OC_BUILD_ROOT}/configs/${OC_MPI_ARCH_PATH}/${_LOWERCASE_BUILD_TYPE}")
+    set(OC_CURRENT_CONFIG_DIRECTORY "${OC_BUILD_ROOT}${OC_BUILD_CONFIGS_SUBDIR}/${OC_MPI_ARCH_PATH}/${OC_BUILD_TYPE}")
   endif()
 endif()
 OCCMakeDebug("Using a configuration directory of '${OC_CURRENT_CONFIG_DIRECTORY}'" 1)
@@ -160,7 +184,7 @@ OCCMakeDebug("Using a configuration directory of '${OC_CURRENT_CONFIG_DIRECTORY}
 # Determine the module paths for the current configuration
 # TODO: on the configuration and build steps change the module path from the build-system to install?
 set(OC_CURRENT_CONFIG_MODULE_PATH "${OC_CURRENT_CONFIG_DIRECTORY}/Variables")
-list(APPEND OC_CURRENT_CONFIG_MODULE_PATH "${CMAKE_MODULE_PATH}")
+list(PREPEND OC_CURRENT_CONFIG_MODULE_PATH "${CMAKE_MODULE_PATH}")
 
 # Create configuration arguments from the -DOpenCMISS_xxx definitions
 set(OC_CURRENT_CONFIG_ARGUMENTS "-DOC_BUILD_SYSTEM_ROOT=${OC_BUILD_SYSTEM_ROOT}")
@@ -213,9 +237,8 @@ endif()
 list(APPEND OC_CURRENT_CONFIG_ARGUMENTS "-DOpenCMISS_MULTITHREADING=${OC_MULTITHREADING}")
 list(APPEND OC_CURRENT_CONFIG_ARGUMENTS "-DOpenCMISS_CURRENT_CONFIG_DIRECTORY=${OC_CURRENT_CONFIG_DIRECTORY}")
 
-set(OC_VARIABLES_CMAKE_ARGUMENTS -DOC_CMAKE_DEBUG=${OC_CMAKE_DEBUG}
-  -DOC_CMAKE_DEBUG_LEVEL=${OC_CMAKE_DEBUG_LEVEL}
-  -DOC_CMAKE_TRACE=${OC_CMAKE_TRACE}
+set(OC_VARIABLES_CMAKE_ARGUMENTS
+  ${OC_CMAKE_DEFINES}
   -DOC_BUILD_SYSTEM_ROOT=${OC_BUILD_SYSTEM_ROOT}
   -DOC_CURRENT_CONFIG_DIRECTORY=${OC_CURRENT_CONFIG_DIRECTORY}
   -DOC_GIT_HOST=${OC_GIT_HOST} 
@@ -241,13 +264,18 @@ add_custom_target(setup_directories
 )
 
 add_custom_target(setup_build_system_files
-  COMMAND ${CMAKE_COMMAND} ${OC_CMAKE_FLAGS}
-  -DOC_CMAKE_DEBUG=${OC_CMAKE_DEBUG}
-  -DOC_CMAKE_DEBUG_LEVEL=${OC_CMAKE_DEBUG_LEVEL}
-  -DOC_CMAKE_TRACE=${OC_CMAKE_TRACE}
+  COMMAND ${CMAKE_COMMAND} ${OC_CMAKE_FLAGS} ${OC_CMAKE_DEFINES}
   -DOC_BUILD_SYSTEM_ROOT=${OC_BUILD_SYSTEM_ROOT}
+  -DOC_CURRENT_CONFIG_DIRECTORY=${OC_CURRENT_CONFIG_DIRECTORY}
   -DOC_INSTALL_ROOT=${OC_INSTALL_ROOT}
-  -P ${OC_BUILD_SYSTEM_ROOT}/CMake/Scripts/OCInstallBuildSystem.cmake
+  -DOC_INSTALL_DATA_SUBDIR=${OC_INSTALL_DATA_SUBDIR}
+  -DOC_CMAKE_SCRIPTS_SUBDIR=${OC_CMAKE_SCRIPTS_SUBDIR}
+  -DOC_CMAKE_MODULES_SUBDIR=${OC_CMAKE_MODULES_SUBDIR}
+  -DOC_CMAKE_FIND_MODULES_SUBDIR=${OC_CMAKE_FIND_MODULES_SUBDIR}
+  -DOC_CMAKE_TEMPLATES_SUBDIR=${OC_CMAKE_TEMPLATES_SUBDIR}
+  -DOC_CMAKE_MIN_VERSION=${OC_CMAKE_MIN_VERSION}
+  -DOC_CMAKE_MODULE_PATH="${OC_CMAKE_MODULE_PATH}"
+  -P ${OC_BUILD_SYSTEM_ROOT}/${OC_CMAKE_SCRIPTS_SUBDIR}/OCInstallBuildSystem.cmake
   DEPENDS setup_directories
   WORKING_DIRECTORY ${OC_ROOT}
   COMMENT "Setting up OpenCMISS build system files..."
@@ -270,16 +298,10 @@ add_custom_target(create_config_directories
 add_custom_target(create_config_files
   COMMAND ${CMAKE_COMMAND} ${OC_CMAKE_FLAGS}
   ${OC_VARIABLES_CMAKE_ARGUMENTS}
-  -P ${OC_BUILD_SYSTEM_ROOT}/CMake/Scripts/OCInstallVariables.cmake
+  -P ${OC_BUILD_SYSTEM_ROOT}/${OC_CMAKE_SCRIPTS_SUBDIR}/OCInstallVariables.cmake
   DEPENDS create_config_directories
   WORKING_DIRECTORY ${OC_CURRENT_CONFIG_DIRECTORY}
   COMMENT "Creating configuration files..."
-)
-
-add_custom_target(create_config
-  DEPENDS create_config_files
-  WORKING_DIRECTORY ${OC_CURRENT_CONFIG_DIRECTORY}
-  COMMENT "Creating configuration..."
 )
 
 add_custom_target(create_configuration
@@ -305,7 +327,7 @@ add_custom_target(build_configuration
   COMMENT "Building OpenCMISS configuration..."
 )
 
-add_custom_target(OpenCMISS
+add_custom_target(opencmiss_all
   ALL
   DEPENDS build_configuration
   WORKING_DIRECTORY ${OC_CURRENT_CONFIG_DIRECTORY}

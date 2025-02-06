@@ -9,10 +9,24 @@ Setup the variables to use ParMETIS with OpenCMISS.
 set(OpenCMISS_FIND_SYSTEM_ParMETIS OFF CACHE BOOL "Find a system version of ParMETIS rather than an OpenCMISS version." FORCE)
 
 # ParMETIS repository options
-set(OpenCMISS_ParMETIS_VERSION 3.11.0 CACHE STRING "The version/tag of ParMETIS to use." FORCE)
+set(OpenCMISS_ParMETIS_VERSION 4.0.3 CACHE STRING "The version/tag of ParMETIS to use." FORCE)
 set(OpenCMISS_ParMETIS_GIT_HOST @OC_DEPENDENCIES_GIT_HOST@ CACHE STRING "The hostname of the ParMETIS Git repository." FORCE)
 set(OpenCMISS_ParMETIS_GIT_ORGANISATION @OC_DEPENDENCIES_GIT_ORGANISATION@ CACHE STRING "The organisation of the ParMETIS Git repository." FORCE)
 set(OpenCMISS_ParMETIS_GIT_BRANCH @OC_DEPENDENCIES_GIT_BRANCH@ CACHE STRING "The branch of the ParMETIS Git repository to use." FORCE)
 
 # ParMETIS configuration options
 
+##################################################################################################################
+#
+# SHOULD NOT NEED TO CHANGE ANYTHING BELOW HERE
+#
+##################################################################################################################
+
+# Debug information
+OCCMakeDebug("" 2)
+OCCMakeDebug("    OpenCMISS ParMETIS Dependency Configuration:" 2)
+OCCMakeDebug("      OpenCMISS_FIND_SYSTEM_ParMETIS = ${OpenCMISS_FIND_SYSTEM_ParMETIS}" 2)
+OCCMakeDebug("      OpenCMISS_ParMETIS_VERSION = ${OpenCMISS_ParMETIS_VERSION}" 2)
+OCCMakeDebug("      OpenCMISS_ParMETIS_GIT_HOST = ${OpenCMISS_ParMETIS_GIT_HOST}" 2)
+OCCMakeDebug("      OpenCMISS_ParMETIS_GIT_ORGANISATION = ${OpenCMISS_ParMETIS_GIT_ORGANISATION}" 2)
+OCCMakeDebug("      OpenCMISS_ParMETIS_GIT_BRANCH = ${OpenCMISS_ParMETIS_GIT_BRANCH}" 2)

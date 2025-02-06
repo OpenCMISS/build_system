@@ -9,9 +9,33 @@ Setup the variables to use SUNDIALS with OpenCMISS.
 set(OpenCMISS_FIND_SYSTEM_SUNDIALS OFF CACHE BOOL "Find a system version of SUNDIALS rather than an OpenCMISS version." FORCE)
 
 # SUNDIALS repository options
-set(OpenCMISS_SUNDIALS_VERSION 3.11.0 CACHE STRING "The version/tag of SUNDIALS to use." FORCE)
+set(OpenCMISS_SUNDIALS_VERSION 7.1.1 CACHE STRING "The version/tag of SUNDIALS to use." FORCE)
 set(OpenCMISS_SUNDIALS_GIT_HOST @OC_DEPENDENCIES_GIT_HOST@ CACHE STRING "The hostname of the SUNDIALS Git repository." FORCE)
 set(OpenCMISS_SUNDIALS_GIT_ORGANISATION @OC_DEPENDENCIES_GIT_ORGANISATION@ CACHE STRING "The organisation of the SUNDIALS Git repository." FORCE)
 set(OpenCMISS_SUNDIALS_GIT_BRANCH @OC_DEPENDENCIES_GIT_BRANCH@ CACHE STRING "The branch of the SUNDIALS Git repository to use." FORCE)
 
 # SUNDIALS configuration options
+set(OpenCMISS_SUNDIALS_WITH_BLAS_LAPACK "${OpenCMISS_WITH_BLAS_LAPACK}" CACHE BOOL "Build SUNDIALS with BLAS/LAPACK enabled." FORCE)
+set(OpenCMISS_SUNDIALS_WITH_HYPRE "${OpenCMISS_WITH_HYPRE}" CACHE BOOL "Build SUNDIALS with HYPRE enabled." FORCE)
+set(OpenCMISS_SUNDIALS_WITH_SuperLU_DIST "${OpenCMISS_WITH_SuperLU_DIST}" CACHE BOOL "Build SUNDIALS with SuperLU_DIST enabled." FORCE)
+set(OpenCMISS_SUNDIALS_WITH_SuperLU_MT "${OpenCMISS_WITH_SuperLU_MT}" CACHE BOOL "Build SUNDIALS with SuperLU_MT enabled." FORCE)
+
+
+##################################################################################################################
+#
+# SHOULD NOT NEED TO CHANGE ANYTHING BELOW HERE
+#
+##################################################################################################################
+
+# Debug information
+OCCMakeDebug("" 1)
+OCCMakeDebug("    OpenCMISS SUNDIALS Dependency Configuration:" 2)
+OCCMakeDebug("      OpenCMISS_FIND_SYSTEM_SUNDIALS = ${OpenCMISS_FIND_SYSTEM_SUNDIALS}" 2)
+OCCMakeDebug("      OpenCMISS_SUNDIALS_VERSION = ${OpenCMISS_SUNDIALS_VERSION}" 2)
+OCCMakeDebug("      OpenCMISS_SUNDIALS_GIT_HOST = ${OpenCMISS_SUNDIALS_GIT_HOST}" 2)
+OCCMakeDebug("      OpenCMISS_SUNDIALS_GIT_ORGANISATION = ${OpenCMISS_SUNDIALS_GIT_ORGANISATION}" 2)
+OCCMakeDebug("      OpenCMISS_SUNDIALS_GIT_BRANCH = ${OpenCMISS_SUNDIALS_GIT_BRANCH}" 2)
+OCCMakeDebug("      OpenCMISS_SUNDIALS_WITH_BLAS_LAPACK = ${OpenCMISS_SUNDIALS_WITH_BLAS_LAPACK}" 2)
+OCCMakeDebug("      OpenCMISS_SUNDIALS_WITH_HYPRE = ${OpenCMISS_SUNDIALS_WITH_HYPRE}" 2)
+OCCMakeDebug("      OpenCMISS_SUNDIALS_WITH_SuperLU_DIST = ${OpenCMISS_SUNDIALS_WITH_SuperLU_DIST}" 2)
+OCCMakeDebug("      OpenCMISS_SUNDIALS_WITH_SuperLU_MT = ${OpenCMISS_SUNDIALS_WITH_SuperLU_MT}" 2)

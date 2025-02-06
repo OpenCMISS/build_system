@@ -125,6 +125,17 @@ if(NOT ZLIB_FOUND)
   
   set(CMAKE_FIND_DEBUG_MODE FALSE)
   
+  if(TARGET ZLIB::ZLIB)
+    OCCMakeDebug("Found target ZLIB::ZLIB in ZLIB configuration." 1)
+    OCCMakeFoundTargetPropertiesToVariables(ZLIB::ZLIB ZLIB
+      IMPORTED_LOCATIONS
+      INTERFACE_INCLUDE_DIRECTORIES
+      INTERFACE_COMPILE_DEFINITIONS
+      INTERFACE_LINK_LIBRARIES
+    )
+    set(ZLIB_FOUND ON)
+  endif()
+  
   if(ZLIB_FOUND)
     OCCMakeMessage(STATUS "Found ZLIB (version ${ZLIB_VERSION}) in the OpenCMISS build system.")
   else()
@@ -134,3 +145,7 @@ else()
   OCCMakeMessage(STATUS "Found ZLIB (version ${ZLIB_VERSION}) at the system level.")
 endif()
 
+if(ZLIB_FOUND)
+  OCCMakeDebug("ZLIB_INCLUDE_DIRS = '${ZLIB_INCLUDE_DIRS}'." 2)    
+  OCCMakeDebug("ZLIB_LIBRARIES = '${ZLIB_LIBRARIES}'." 2)    
+endif()

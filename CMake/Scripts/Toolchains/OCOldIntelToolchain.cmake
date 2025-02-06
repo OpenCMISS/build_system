@@ -6,6 +6,6 @@ OpenCMISS script to set the old Intel toolchain compilers.
 
 #]=======================================================================]
 
-find_program(CMAKE_C_COMPILER NAMES icc REQUIRED)
-find_program(CMAKE_CXX_COMPILER NAMES icpc REQUIRED)
-find_program(CMAKE_Fortran_COMPILER NAMES ifort REQUIRED)
+find_program(OC_CMAKE_C_COMPILER icc REQUIRED NO_CACHE)
+find_program(OC_CMAKE_CXX_COMPILER icpc REQUIRED NO_CACHE)
+find_program(OC_CMAKE_Fortran_COMPILER ifort REQUIRED NO_CACHE)

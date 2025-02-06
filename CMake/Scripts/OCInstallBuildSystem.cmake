@@ -6,78 +6,107 @@ OpenCMISS CMake script to install all the build system files.
 
 #]=======================================================================]
 
-include(${OC_BUILD_SYSTEM_ROOT}/CMake/Scripts/OCCMakeMiscellaneous.cmake)
+include(${OC_BUILD_SYSTEM_ROOT}/${OC_CMAKE_SCRIPTS_SUBDIR}/OCCMakeMiscellaneous.cmake)
 
 set(OC_CMAKE_SCRIPTS_FILES_LIST
-  ${OC_BUILD_SYSTEM_ROOT}/CMake/Scripts/OCArchitecturePath.cmake
-  ${OC_BUILD_SYSTEM_ROOT}/CMake/Scripts/OCBuildTypes.cmake
-  ${OC_BUILD_SYSTEM_ROOT}/CMake/Scripts/OCCMakeFindUtilities.cmake
-  ${OC_BUILD_SYSTEM_ROOT}/CMake/Scripts/OCCMakeMiscellaneous.cmake
-  ${OC_BUILD_SYSTEM_ROOT}/CMake/Scripts/OCCMakeSetup.cmake
-  ${OC_BUILD_SYSTEM_ROOT}/CMake/Scripts/OCConfigure.cmake
-  ${OC_BUILD_SYSTEM_ROOT}/CMake/Scripts/OCDownloadGitRepository.cmake
-  ${OC_BUILD_SYSTEM_ROOT}/CMake/Scripts/OCGitHub.cmake
-  ${OC_BUILD_SYSTEM_ROOT}/CMake/Scripts/OCInstrumentation.cmake
-  ${OC_BUILD_SYSTEM_ROOT}/CMake/Scripts/OCMPI.cmake
-  ${OC_BUILD_SYSTEM_ROOT}/CMake/Scripts/OCMultithreading.cmake
-  ${OC_BUILD_SYSTEM_ROOT}/CMake/Scripts/OCOperatingSystems.cmake
-  ${OC_BUILD_SYSTEM_ROOT}/CMake/Scripts/OCRepositories.cmake
-  ${OC_BUILD_SYSTEM_ROOT}/CMake/Scripts/OCRootPaths.cmake
-  ${OC_BUILD_SYSTEM_ROOT}/CMake/Scripts/OCSetupExternal.cmake
-  ${OC_BUILD_SYSTEM_ROOT}/CMake/Scripts/OCUpdateGitRepository.cmake
-  )
+  OCArchitecturePath.cmake
+  OCBuildTypes.cmake
+  OCCMakeFindUtilities.cmake
+  OCCMakeMiscellaneous.cmake
+  OCCMakeSetup.cmake
+  OCConfigure.cmake
+  OCDownloadGitRepository.cmake
+  OCGitHub.cmake
+  OCInstrumentation.cmake
+  OCMPI.cmake
+  OCMultithreading.cmake
+  OCOperatingSystems.cmake
+  OCRepositories.cmake
+  OCRootPaths.cmake
+  OCSetupExternal.cmake
+  OCToolchains.cmake
+  OCUpdateGitRepository.cmake
+)
+set(OC_CMAKE_TOOLCHAIN_FILES_LIST
+  OCGNUToolchain.cmake
+  OCIntelToolchain.cmake
+  OCLLVMToolchain.cmake
+  OCMSVCToolchain.cmake
+)
 set(OC_CMAKE_MODULES_FILES_LIST
   )
 set(OC_CMAKE_FIND_MODULE_WRAPPERS_FILES_LIST
-  ${OC_BUILD_SYSTEM_ROOT}/CMake/Modules/FindModuleWrappers/FindBLAS.cmake
-  ${OC_BUILD_SYSTEM_ROOT}/CMake/Modules/FindModuleWrappers/FindBZip2.cmake
-  ${OC_BUILD_SYSTEM_ROOT}/CMake/Modules/FindModuleWrappers/FindCellML.cmake
-  ${OC_BUILD_SYSTEM_ROOT}/CMake/Modules/FindModuleWrappers/FindClang.cmake
-  ${OC_BUILD_SYSTEM_ROOT}/CMake/Modules/FindModuleWrappers/FindCOLAMD.cmake
-  ${OC_BUILD_SYSTEM_ROOT}/CMake/Modules/FindModuleWrappers/FindCSim.cmake
-  ${OC_BUILD_SYSTEM_ROOT}/CMake/Modules/FindModuleWrappers/FindCube4.cmake
-  ${OC_BUILD_SYSTEM_ROOT}/CMake/Modules/FindModuleWrappers/FindFieldML.cmake
-  ${OC_BUILD_SYSTEM_ROOT}/CMake/Modules/FindModuleWrappers/FindGit.cmake
-  ${OC_BUILD_SYSTEM_ROOT}/CMake/Modules/FindModuleWrappers/FindGKlib.cmake
-  ${OC_BUILD_SYSTEM_ROOT}/CMake/Modules/FindModuleWrappers/FindHDF5.cmake
-  ${OC_BUILD_SYSTEM_ROOT}/CMake/Modules/FindModuleWrappers/FindHYPRE.cmake
-  ${OC_BUILD_SYSTEM_ROOT}/CMake/Modules/FindModuleWrappers/FindLAPACK.cmake
-  ${OC_BUILD_SYSTEM_ROOT}/CMake/Modules/FindModuleWrappers/FindlibCellML.cmake
-  ${OC_BUILD_SYSTEM_ROOT}/CMake/Modules/FindModuleWrappers/FindLibXml2.cmake
-  ${OC_BUILD_SYSTEM_ROOT}/CMake/Modules/FindModuleWrappers/FindLLVM.cmake
-  ${OC_BUILD_SYSTEM_ROOT}/CMake/Modules/FindModuleWrappers/FindMETIS.cmake
-  ${OC_BUILD_SYSTEM_ROOT}/CMake/Modules/FindModuleWrappers/FindMUMPS.cmake
-  ${OC_BUILD_SYSTEM_ROOT}/CMake/Modules/FindModuleWrappers/FindOPARI2.cmake
-  ${OC_BUILD_SYSTEM_ROOT}/CMake/Modules/FindModuleWrappers/FindOTF2.cmake
-  ${OC_BUILD_SYSTEM_ROOT}/CMake/Modules/FindModuleWrappers/FindPAPI.cmake
-  ${OC_BUILD_SYSTEM_ROOT}/CMake/Modules/FindModuleWrappers/FindParMETIS.cmake
-  ${OC_BUILD_SYSTEM_ROOT}/CMake/Modules/FindModuleWrappers/FindPETSc.cmake
-  ${OC_BUILD_SYSTEM_ROOT}/CMake/Modules/FindModuleWrappers/FindSCALAPACK.cmake
-  ${OC_BUILD_SYSTEM_ROOT}/CMake/Modules/FindModuleWrappers/FindScalasca.cmake
-  ${OC_BUILD_SYSTEM_ROOT}/CMake/Modules/FindModuleWrappers/FindScoreP.cmake
-  ${OC_BUILD_SYSTEM_ROOT}/CMake/Modules/FindModuleWrappers/FindScotch.cmake
-  ${OC_BUILD_SYSTEM_ROOT}/CMake/Modules/FindModuleWrappers/FindSLEPc.cmake
-  ${OC_BUILD_SYSTEM_ROOT}/CMake/Modules/FindModuleWrappers/FindSuiteSparse.cmake
-  ${OC_BUILD_SYSTEM_ROOT}/CMake/Modules/FindModuleWrappers/FindSUNDIALS.cmake
-  ${OC_BUILD_SYSTEM_ROOT}/CMake/Modules/FindModuleWrappers/FindSuperLU.cmake
-  ${OC_BUILD_SYSTEM_ROOT}/CMake/Modules/FindModuleWrappers/FindSuperLU_DIST.cmake
-  ${OC_BUILD_SYSTEM_ROOT}/CMake/Modules/FindModuleWrappers/FindSuperLU_MT.cmake
-  ${OC_BUILD_SYSTEM_ROOT}/CMake/Modules/FindModuleWrappers/FindSZip.cmake
-  ${OC_BUILD_SYSTEM_ROOT}/CMake/Modules/FindModuleWrappers/FindZLIB.cmake
+  FindBLAS.cmake
+  FindBZip2.cmake
+  FindCellML.cmake
+  FindClang.cmake
+  FindCOLAMD.cmake
+  FindCSim.cmake
+  FindCube4.cmake
+  FindFieldML.cmake
+  FindGit.cmake
+  FindGKlib.cmake
+  FindHDF5.cmake
+  FindHYPRE.cmake
+  FindLAPACK.cmake
+  FindlibCellML.cmake
+  FindLibXml2.cmake
+  FindLLVM.cmake
+  FindMETIS.cmake
+  FindMUMPS.cmake
+  FindOPARI2.cmake
+  FindOTF2.cmake
+  FindPAPI.cmake
+  FindParMETIS.cmake
+  FindPETSc.cmake
+  FindScaLAPACK.cmake
+  FindScalasca.cmake
+  FindScoreP.cmake
+  FindSCOTCH.cmake
+  FindSLEPc.cmake
+  FindSuiteSparse.cmake
+  FindSUNDIALS.cmake
+  FindSuperLU.cmake
+  FindSuperLU_DIST.cmake
+  FindSuperLU_MT.cmake
+  FindSZip.cmake
+  FindZLIB.cmake
 )
 
 foreach(_INSTALL_FILE ${OC_CMAKE_SCRIPTS_FILES_LIST})
-  file(INSTALL "${_INSTALL_FILE}"
-    DESTINATION ${OC_INSTALL_ROOT}/share/CMake/Scripts
+  file(INSTALL ${OC_BUILD_SYSTEM_ROOT}/${OC_CMAKE_SCRIPTS_SUBDIR}/${_INSTALL_FILE}
+    DESTINATION ${OC_INSTALL_ROOT}/${OC_INSTALL_DATA_SUBDIR}/${OC_CMAKE_SCRIPTS_SUBDIR}
+  )
+endforeach()
+foreach(_INSTALL_FILE ${OC_CMAKE_TOOLCHAIN_FILES_LIST})
+  file(INSTALL ${OC_BUILD_SYSTEM_ROOT}/${OC_CMAKE_SCRIPTS_SUBDIR}/Toolchains/${_INSTALL_FILE}
+    DESTINATION ${OC_INSTALL_ROOT}/${OC_INSTALL_DATA_SUBDIR}/${OC_CMAKE_SCRIPTS_SUBDIR}/Toolchains
   )
 endforeach()
 #foreach(_INSTALL_FILE "${OC_CMAKE_MODULES_FILES_LIST}")
-#  file(INSTALL "${_INSTALL_FILE}"
-#    DESTINATION ${OC_INSTALL_ROOT}/share/CMake/Modules
+#  file(INSTALL ${OC_BUILD_SYSTEM_ROOT}/${OC_CMAKE_MODULES_SUBDIR}/${_INSTALL_FILE}
+#    DESTINATION ${OC_INSTALL_ROOT}/${OC_INSTALL_DATA_SUBDIR}/${OC_CMAKE_MODULES_SUBDIR}
 #  )
 #endforeach()
 foreach(_INSTALL_FILE ${OC_CMAKE_FIND_MODULE_WRAPPERS_FILES_LIST})
-  file(INSTALL "${_INSTALL_FILE}"
-    DESTINATION ${OC_INSTALL_ROOT}/share/CMake/Modules/FindModuleWrappers
+  file(INSTALL ${OC_BUILD_SYSTEM_ROOT}/${OC_CMAKE_FIND_MODULES_SUBDIR}/${_INSTALL_FILE}
+    DESTINATION ${OC_INSTALL_ROOT}/${OC_INSTALL_DATA_SUBDIR}/${OC_CMAKE_FIND_MODULES_SUBDIR}
   )
 endforeach()
+# Write the libOpenCMISS setup script
+configure_file(${OC_BUILD_SYSTEM_ROOT}/${OC_CMAKE_TEMPLATES_SUBDIR}/libOpenCMISSSetup.cmake.in
+  ${CMAKE_CURRENT_BINARY_DIR}/libOpenCMISSSetup.cmake
+  @ONLY
+)
+file(INSTALL ${CMAKE_CURRENT_BINARY_DIR}/libOpenCMISSSetup.cmake
+  DESTINATION ${OC_INSTALL_ROOT}
+)
+# Write the find libOpenCMISS script
+configure_file(${OC_BUILD_SYSTEM_ROOT}/${OC_CMAKE_TEMPLATES_SUBDIR}/FindlibOpenCMISS.cmake.in
+  ${CMAKE_CURRENT_BINARY_DIR}/FindlibOpenCMISS.cmake
+  @ONLY
+)
+file(INSTALL ${CMAKE_CURRENT_BINARY_DIR}/FindlibOpenCMISS.cmake
+  DESTINATION ${OC_INSTALL_ROOT}/${OC_INSTALL_DATA_SUBDIR}/${OC_CMAKE_FIND_MODULES_SUBDIR}
+)
+

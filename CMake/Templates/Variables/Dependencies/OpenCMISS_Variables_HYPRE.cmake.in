@@ -18,3 +18,19 @@ set(OpenCMISS_HYPRE_GIT_BRANCH @OC_DEPENDENCIES_GIT_BRANCH@ CACHE STRING "The br
 set(OpenCMISS_HYPRE_WITH_SuperLU ON CACHE BOOL "Build Hypre with SuperLU enabled." FORCE)
 set(OpenCMISS_HYPRE_WITH_SuperLU_DIST ON CACHE BOOL "Build Hypre with SuperLU_DIST enabled." FORCE)
 
+##################################################################################################################
+#
+# SHOULD NOT NEED TO CHANGE ANYTHING BELOW HERE
+#
+##################################################################################################################
+
+# Debug information
+OCCMakeDebug("" 1)
+OCCMakeDebug("    OpenCMISS HYPRE Dependency Configuration:" 2)
+OCCMakeDebug("      OpenCMISS_FIND_SYSTEM_HYPRE = ${OpenCMISS_FIND_SYSTEM_HYPRE}" 2)
+OCCMakeDebug("      OpenCMISS_HYPRE_VERSION = ${OpenCMISS_HYPRE_VERSION}" 2)
+OCCMakeDebug("      OpenCMISS_HYPRE_GIT_HOST = ${OpenCMISS_HYPRE_GIT_HOST}" 2)
+OCCMakeDebug("      OpenCMISS_HYPRE_GIT_ORGANISATION = ${OpenCMISS_HYPRE_GIT_ORGANISATION}" 2)
+OCCMakeDebug("      OpenCMISS_HYPRE_GIT_BRANCH = ${OpenCMISS_HYPRE_GIT_BRANCH}" 2)
+OCCMakeDebug("      OpenCMISS_HYPRE_WITH_SuperLU = ${OpenCMISS_HYPRE_WITH_SuperLU}" 2)
+OCCMakeDebug("      OpenCMISS_HYPRE_WITH_SuperLU_DIST = ${OpenCMISS_HYPRE_WITH_SuperLU_DIST}" 2)

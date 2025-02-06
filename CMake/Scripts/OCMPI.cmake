@@ -53,8 +53,6 @@ else()
   endif()
 endif()
 
-OCCMakeDebug("_LOWERCASE_MPI = '${_LOWERCASE_MPI}'." 1)
-
 if(_LOWERCASE_MPI STREQUAL "mpich")
   set(OC_MPI_LIBRARY_NAME "MPICH" CACHE STRING "OpenCMISS MPI library name." FORCE)
   set(OC_MPI_MPICH ON)
@@ -91,8 +89,8 @@ else()
   OCCMakeWarning("The specified MPI library build type of ${_LOWERCASE_MPI_BUILD_TYPE} is unknown. Defaulting to none.")
 endif()
 
-OCCMakeDebug("Using a MPI library of ${OC_MPI_LIBRARY_NAME}." 1)
-OCCMakeDebug("Using a MPI build type of ${OC_MPI_BUILD_TYPE}." 1)
+OCCMakeDebug("Using a MPI library of '${OC_MPI_LIBRARY_NAME}'." 1)
+OCCMakeDebug("Using a MPI build type of '${OC_MPI_BUILD_TYPE}'." 1)
 
 unset(_LOWERCASE_MPI)
 unset(_LOWERCASE_MPI_BUILD_TYPE)
