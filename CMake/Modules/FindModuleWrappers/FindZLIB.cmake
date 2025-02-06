@@ -110,7 +110,7 @@ if(NOT ZLIB_FOUND)
   
   OCCMakeMessage(STATUS "Trying to find ZLIB in the OpenCMISS build system...")
 
-  #set(CMAKE_FIND_DEBUG_MODE TRUE)
+  set(CMAKE_FIND_DEBUG_MODE TRUE)
   
   find_package(ZLIB ${ZLIB_FIND_VERSION} CONFIG
     QUIET
@@ -123,7 +123,7 @@ if(NOT ZLIB_FOUND)
     NO_CMAKE_SYSTEM_PACKAGE_REGISTRY
   )
   
-  #set(CMAKE_FIND_DEBUG_MODE FALSE)
+  set(CMAKE_FIND_DEBUG_MODE FALSE)
   
   if(TARGET ZLIB::ZLIB)
     OCCMakeDebug("Found target ZLIB::ZLIB in ZLIB configuration." 1)
