@@ -124,18 +124,18 @@ if(Git_FOUND)
 
     #COMMENT FOR NOW UNTIL WOKRING
     
-    #execute_process(
-    #  COMMAND ${GIT_EXECUTABLE} clone ${OC_GIT_URL} --recursive ${OC_GIT_SOURCE_DIR}
-    #  WORKING_DIRECTORY "${OC_GIT_WORKING_DIR}"
-    #  RESULT_VARIABLE _OC_GIT_RESULT
-    #  OUTPUT_VARIABLE _OC_GIT_OUTPUT
-    #  ERROR_VARIABLE _OC_GIT_ERROR
-    #)
-    #if(NOT _OC_GIT_RESULT EQUAL "0")
-    #  OCCMakeWarning("Git clone result: '${_OC_GIT_RESULT}'")
-    #  OCCMakeWarning("          output: '${_OC_GIT_OUTPUT}'")
-    #  OCCMakeWarning("           error: '${_OC_GIT_ERROR}'")
-    #endif()
+    execute_process(
+     COMMAND ${GIT_EXECUTABLE} clone ${OC_GIT_URL} --recursive ${OC_GIT_SOURCE_DIR}
+     WORKING_DIRECTORY "${OC_GIT_WORKING_DIR}"
+     RESULT_VARIABLE _OC_GIT_RESULT
+     OUTPUT_VARIABLE _OC_GIT_OUTPUT
+     ERROR_VARIABLE _OC_GIT_ERROR
+    )
+    if(NOT _OC_GIT_RESULT EQUAL "0")
+     OCCMakeWarning("Git clone result: '${_OC_GIT_RESULT}'")
+     OCCMakeWarning("          output: '${_OC_GIT_OUTPUT}'")
+     OCCMakeWarning("           error: '${_OC_GIT_ERROR}'")
+    endif()
     if(DEFINED OC_DEVELOPER)
       #Set upstream repos etc. 
     endif()
