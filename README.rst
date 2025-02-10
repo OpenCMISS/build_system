@@ -30,7 +30,7 @@ The build system is 99% done so this documentation is interim, more detailed doc
    mkdir dependencies
 
 5. There is a small bug in the git repository handling. Until I get a chance to fix the bug the git commands are disabled
-   and we will just get the repositories manually. It only has to be done once. This will eventually change.::
+   and we will just get the repositories manually. It only has to be done once. This will eventually change::
 
    git clone https://github.com/OpenCMISS/libOpenCMISS.git
    mkdir dependencies
