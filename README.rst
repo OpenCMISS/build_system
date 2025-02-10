@@ -15,7 +15,8 @@ The build system is 99% done so this documentation is interim, more detailed doc
 		
      sudo git install git cmake gfortran pkg-config bison flex libmpich-dev liblapack-dev libblas-dev
 
-..     
+...
+
    - For Fedora
 
 .. code-block:: bash
