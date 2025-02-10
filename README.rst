@@ -15,7 +15,7 @@ The build system is 99% done so this documentation is interim, more detailed doc
    On Ubuntu
 
 .. code-block:: bash
-   
+
    sudo apt install gcc-14 g++-14 gfortran-14
    sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-14 140 
    sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-14 140 
