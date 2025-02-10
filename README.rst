@@ -9,34 +9,40 @@ The build system is 99% done so this documentation is interim, more detailed doc
 
 2. Install necessary pre-requisite packages.
 
-   - For Ubuntu::
+   - For Ubuntu
 
+.. code-block:: bash
+		
      sudo git install git cmake gfortran pkg-config bison flex libmpich-dev liblapack-dev libblas-dev
 
-   - For Fedora::
+   - For Fedora
 
+.. code-block:: bash
+		
      sudo git dnf install cmake gcc-gfortran pkgconf bison flex mpich-devel lapack-devel blas-devel
 
-3. Create a directory for OpenCMISS and change directory into it e.g.,::
+3. Create a directory for OpenCMISS and change directory into it e.g.,
 
+.. code-block:: bash
+		
    mkdir ~/OpenCMISS
    cd ~/OpenCMISS
 
-4. Create some sub-directories::
+4. Create some sub-directories.
 
+.. code-block:: bash
+		
    mkdir setup
    mkdir src
    cd src
    mkdir dependencies
 
 5. There is a small bug in the git repository handling. Until I get a chance to fix the bug the git commands are disabled
-   and we will just get the repositories manually. It only has to be done once. This will eventually change
+   and we will just get the repositories manually. It only has to be done once. This will eventually change.
    
-
 .. code-block:: bash
       
    git clone https://github.com/OpenCMISS/libOpenCMISS.git
-   mkdir dependencies
    cd dependencies
    git clone https://github.com/OpenCMISS-Dependencies2/FieldML-API.git
    cd FieldML-API
@@ -108,21 +114,27 @@ The build system is 99% done so this documentation is interim, more detailed doc
    git checkout opencmiss_develop
    cd ../../..
   
-6. Create the build system files::
+6. Create the build system files
 
+.. code-block:: bash
+		
    cd setup
    cmake -DOpenCMISS_ROOT=~/OpenCMISS -DOpenCMISS_TOOLCHAIN=gnu -DOpenCMISS_MPI=mpich ../build_system/.
    make create_configuration
 
-7. Check the variables are OK, for example for GNU 13.2 with mpich, ::
+7. Check the variables are OK, for example for GNU 13.2 with mpich, 
 
+.. code-block:: bash
+		
    cd ~/OpenCMISS/build/configs/x86_64-linux/gnu-C13.2-gnu-F13.2/mpi-mpich-system/Release
 
    
 in the Variables directory are the variables that control this configuration of OpenCMISS. Edit if required or just use the current defaults
 
-8. Build OpenCMISS::
+8. Build OpenCMISS
 
+.. code-block:: bash
+		
    make
 
    
