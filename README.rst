@@ -51,7 +51,14 @@ The build system is 99% done so this documentation is interim, more detailed doc
       cd ~/OpenCMISS
 
 
-5. Create some sub-directories.
+5. Clone the build system
+
+   .. code-block:: bash
+         
+      git clone https://github.com/OpenCMISS/build_system.git
+
+
+6. Create some sub-directories.
 
    .. code-block:: bash
          
@@ -61,7 +68,7 @@ The build system is 99% done so this documentation is interim, more detailed doc
       mkdir dependencies
 
 
-6. There is a small bug in the git repository handling. Until I get a chance to fix the bug the git commands are disabled
+7. There is a small bug in the git repository handling. Until I get a chance to fix the bug the git commands are disabled
    and we will just get the repositories manually. It only has to be done once. This will eventually change.
    
    .. code-block:: bash
@@ -139,7 +146,7 @@ The build system is 99% done so this documentation is interim, more detailed doc
       cd ../../..
 
 
-7. Create the build system files
+8. Create the build system files
 
    .. code-block:: bash
          
@@ -148,7 +155,7 @@ The build system is 99% done so this documentation is interim, more detailed doc
       make create_configuration
 
 
-8. Check the variables are OK, for example for GNU 13.2 with mpich, 
+9. Check the variables are OK, for example for GNU 13.2 with mpich, 
 
    .. code-block:: bash
          
@@ -157,7 +164,7 @@ The build system is 99% done so this documentation is interim, more detailed doc
    
 in the Variables directory are the variables that control this configuration of OpenCMISS. Edit if required or just use the current defaults
 
-9. Build OpenCMISS
+10. Build OpenCMISS
 
    .. code-block:: bash
          
