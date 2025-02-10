@@ -12,32 +12,32 @@ The build system is 99% done so this documentation is interim, more detailed doc
 
    For example, install GCC 14.
 
-   - On Ubuntu
+2a. On Ubuntu
 
-         .. code-block:: bash
+   .. code-block:: bash
 
-         sudo apt install gcc-14 g++-14 gfortran-14
-         sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-14 140 
-         sudo update-alternatives --install /usr/bin/gfortran gfortran /usr/bin/gfortran-14 140
-         gcc -v
-         g++ -v
-         gfortran -v
+   sudo apt install gcc-14 g++-14 gfortran-14
+   sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-14 140 
+   sudo update-alternatives --install /usr/bin/gfortran gfortran /usr/bin/gfortran-14 140
+   gcc -v
+   g++ -v
+   gfortran -v
 
 
 3. Install necessary pre-requisite packages.
 
-   - For Ubuntu
+3a. For Ubuntu
 
-         .. code-block:: bash
+   .. code-block:: bash
                
-         sudo apt install git cmake gfortran pkg-config bison flex libmpich-dev liblapack-dev libblas-dev python3-dev python3-numpy swig doxygen graphviz
+   sudo apt install git cmake gfortran pkg-config bison flex libmpich-dev liblapack-dev libblas-dev python3-dev python3-numpy swig doxygen graphviz
 
 
-   - For Fedora
+3b. For Fedora
 
-         .. code-block:: bash
+   .. code-block:: bash
                
-         sudo git dnf install cmake gcc-gfortran pkgconf bison flex mpich-devel lapack-devel blas-devel python3-devel python3-numpy swig doxygen graphviz
+   sudo git dnf install cmake gcc-gfortran pkgconf bison flex mpich-devel lapack-devel blas-devel python3-devel python3-numpy swig doxygen graphviz
 
 4. Create a directory for OpenCMISS and change directory into it e.g.,
 
