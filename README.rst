@@ -27,7 +27,11 @@ The build system is 99% done so this documentation is interim, more detailed doc
             gfortran -v
 
 
-3. Install necessary pre-requisite packages.
+   ii. install Intel oneAPI. Following the instructions to install the Intel oneAPI base 
+   toolkit (https://www.intel.com/content/www/us/en/developer/tools/oneapi/base-toolkit.html) and 
+   HPC toolkit (https://www.intel.com/content/www/us/en/developer/tools/oneapi/hpc-toolkit.html)
+
+3. Install necessary pre-requisite packages are installed.
 
    i. For Ubuntu
 
@@ -155,11 +159,11 @@ The build system is 99% done so this documentation is interim, more detailed doc
       make create_configuration
 
 
-9. Check the variables are OK, for example for GNU 13.2 with mpich, 
+9. Check the variables are OK, for example for GNU 14.2 with mpich, 
 
    .. code-block:: bash
          
-      cd ~/OpenCMISS/build/configs/x86_64-linux/gnu-C13.2-gnu-F13.2/mpi-mpich-system/Release
+      cd ~/OpenCMISS/build/configs/x86_64-linux/gnu-C14.2-gnu-F14.2/mpi-mpich-system/Release
 
    
 in the Variables directory are the variables that control this configuration of OpenCMISS. Edit if required or just use the current defaults
@@ -168,7 +172,15 @@ in the Variables directory are the variables that control this configuration of 
 
    .. code-block:: bash
          
-      make
+     make
+
+11. Once OpenCMISS has been successfully build and installed, any updates to the OpenCMISS code in the ~/OpenCMISS/src/libOpenCMISS
+ directory can be compiled and installed by 
+
+   .. code-block:: bash
+
+      cd ~/OpenCMISS/build/x86_64-linux/gnu-C14.2-gnu-F14.2/mpi-mpich-system/OpenCMISS/Release
+      make install
 
    
    
