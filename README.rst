@@ -29,7 +29,7 @@ The build system is 99% done so this documentation is interim, more detailed doc
 
    ii. install Intel oneAPI. Following the instructions to install the Intel oneAPI base 
    toolkit (https://www.intel.com/content/www/us/en/developer/tools/oneapi/base-toolkit.html) and 
-   HPC toolkit (https://www.intel.com/content/www/us/en/developer/tools/oneapi/hpc-toolkit.html)
+   HPC toolkit (https://www.intel.com/content/www/us/en/developer/tools/oneapi/hpc-toolkit.html).
 
 3. Install necessary pre-requisite packages are installed.
 
@@ -55,7 +55,7 @@ The build system is 99% done so this documentation is interim, more detailed doc
       cd ~/OpenCMISS
 
 
-5. Clone the build system
+5. Clone the build system.
 
    .. code-block:: bash
          
@@ -150,7 +150,7 @@ The build system is 99% done so this documentation is interim, more detailed doc
       cd ../../..
 
 
-8. Create the build system files
+8. Create the build system files.
 
    .. code-block:: bash
          
@@ -159,23 +159,20 @@ The build system is 99% done so this documentation is interim, more detailed doc
       make create_configuration
 
 
-9. Check the variables are OK, for example for GNU 14.2 with mpich, 
+9. Check the variables are OK, for example for GNU 14.2 with mpich, e.g., in the Variables directory of the directory below are the variables that control this configuration of OpenCMISS. Edit if required or just use the current defaults
 
    .. code-block:: bash
          
       cd ~/OpenCMISS/build/configs/x86_64-linux/gnu-C14.2-gnu-F14.2/mpi-mpich-system/Release
 
    
-in the Variables directory are the variables that control this configuration of OpenCMISS. Edit if required or just use the current defaults
-
-10. Build OpenCMISS
+10. Build OpenCMISS.
 
    .. code-block:: bash
-         
-     make
 
-11. Once OpenCMISS has been successfully build and installed, any updates to the OpenCMISS code in the ~/OpenCMISS/src/libOpenCMISS
- directory can be compiled and installed by 
+      make
+
+11. Once OpenCMISS has been successfully build and installed, any updates to the OpenCMISS code in the ~/OpenCMISS/src/libOpenCMISS directory can be compiled and installed by 
 
    .. code-block:: bash
 
