@@ -33,7 +33,7 @@ The build system is 99% done so this documentation is interim, more detailed doc
    and we will just get the repositories manually. It only has to be done once. This will eventually change
    
 
-   .. code-block::
+.. code-block:: bash
       
    git clone https://github.com/OpenCMISS/libOpenCMISS.git
    mkdir dependencies
@@ -107,9 +107,7 @@ The build system is 99% done so this documentation is interim, more detailed doc
    cd zlib
    git checkout opencmiss_develop
    cd ../../..
-
-   ...
-   
+  
 6. Create the build system files::
 
    cd setup
