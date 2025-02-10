@@ -36,11 +36,12 @@ The build system is 99% done so this documentation is interim, more detailed doc
          sudo apt install git cmake gfortran pkg-config bison flex libmpich-dev liblapack-dev libblas-dev python3-dev python3-numpy swig doxygen graphviz
 
 
-   ii. For Fedora
+   i. For Fedora
 
       .. code-block:: bash
                   
          sudo git dnf install cmake gcc-gfortran pkgconf bison flex mpich-devel lapack-devel blas-devel python3-devel python3-numpy swig doxygen graphviz
+
 
 4. Create a directory for OpenCMISS and change directory into it e.g.,
 
@@ -58,6 +59,7 @@ The build system is 99% done so this documentation is interim, more detailed doc
       mkdir src
       cd src
       mkdir dependencies
+
 
 6. There is a small bug in the git repository handling. Until I get a chance to fix the bug the git commands are disabled
    and we will just get the repositories manually. It only has to be done once. This will eventually change.
@@ -135,7 +137,8 @@ The build system is 99% done so this documentation is interim, more detailed doc
       cd zlib
       git checkout opencmiss_develop
       cd ../../..
-  
+
+
 7. Create the build system files
 
    .. code-block:: bash
@@ -143,6 +146,7 @@ The build system is 99% done so this documentation is interim, more detailed doc
       cd setup
       cmake -DOpenCMISS_ROOT=~/OpenCMISS -DOpenCMISS_TOOLCHAIN=gnu -DOpenCMISS_MPI=mpich ../build_system/.
       make create_configuration
+
 
 8. Check the variables are OK, for example for GNU 13.2 with mpich, 
 
