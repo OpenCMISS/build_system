@@ -10,31 +10,33 @@ The build system is 99% done so this documentation is interim, more detailed doc
 2. Check compiler version. The GCC 13 compilers have a compiler bug (https://gcc.gnu.org/bugzilla/show_bug.cgi?id=103931)
    that means they may not compile the OpenCMISS source. Ensure that you have a compiler that works.
 
-   For example, install GCC 14.
+   For example:
+   
+   i. install GCC 14.
 
+      i. On Ubuntu
 
-   a. On Ubuntu
+         .. code-block:: bash
 
-      .. code-block:: bash
-
-         sudo apt install gcc-14 g++-14 gfortran-14
-         sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-14 140 
-         sudo update-alternatives --install /usr/bin/gfortran gfortran /usr/bin/gfortran-14 140
-         gcc -v
-         g++ -v
-         gfortran -v
+            sudo apt install gcc-14 g++-14 gfortran-14
+            sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-14 140 
+            sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-14 140 
+            sudo update-alternatives --install /usr/bin/gfortran gfortran /usr/bin/gfortran-14 140
+            gcc -v
+            g++ -v
+            gfortran -v
 
 
 3. Install necessary pre-requisite packages.
 
-   a. For Ubuntu
+   i. For Ubuntu
 
       .. code-block:: bash
                   
          sudo apt install git cmake gfortran pkg-config bison flex libmpich-dev liblapack-dev libblas-dev python3-dev python3-numpy swig doxygen graphviz
 
 
-   b. For Fedora
+   ii. For Fedora
 
       .. code-block:: bash
                   
