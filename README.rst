@@ -5,16 +5,16 @@ Basic instructions for building the OpenCMISS computational library.
 
 The build system is 99% done so this documentation is interim, more detailed documentation will follow.
 
-1. Install Linux OS or VM etc.
+#. Install Linux OS or VM etc.
 
-2. Check compiler version. The GCC 13 compilers have a compiler bug (https://gcc.gnu.org/bugzilla/show_bug.cgi?id=103931)
+#. Check compiler version. The GCC 13 compilers have a compiler bug (https://gcc.gnu.org/bugzilla/show_bug.cgi?id=103931)
    that means they may not compile the OpenCMISS source. Ensure that you have a compiler that works.
 
    For example:
    
-   i. install GCC 14.
+   * Install GCC 14.
 
-      i. On Ubuntu
+      * On Ubuntu
 
          .. code-block:: bash
 
@@ -27,23 +27,27 @@ The build system is 99% done so this documentation is interim, more detailed doc
             gfortran -v
 
 
-3. Install necessary pre-requisite packages.
+   * Install Intel oneAPI. Following the instructions to install the Intel oneAPI base 
+   toolkit (https://www.intel.com/content/www/us/en/developer/tools/oneapi/base-toolkit.html) and 
+   HPC toolkit (https://www.intel.com/content/www/us/en/developer/tools/oneapi/hpc-toolkit.html).
 
-   i. For Ubuntu
+#. Install necessary pre-requisite packages are installed.
+
+   * For Ubuntu
 
       .. code-block:: bash
                   
          sudo apt install git cmake gfortran pkg-config bison flex libmpich-dev liblapack-dev libblas-dev python3-dev python3-numpy swig doxygen graphviz
 
 
-   i. For Fedora
+   * For Fedora
 
       .. code-block:: bash
                   
          sudo git dnf install cmake gcc-gfortran pkgconf bison flex mpich-devel lapack-devel blas-devel python3-devel python3-numpy swig doxygen graphviz
 
 
-4. Create a directory for OpenCMISS and change directory into it e.g.,
+#. Create a directory for OpenCMISS and change directory into it e.g.,
 
    .. code-block:: bash
          
@@ -51,7 +55,14 @@ The build system is 99% done so this documentation is interim, more detailed doc
       cd ~/OpenCMISS
 
 
-5. Create some sub-directories.
+#. Clone the build system.
+
+   .. code-block:: bash
+         
+      git clone https://github.com/OpenCMISS/build_system.git
+
+
+#. Create some sub-directories.
 
    .. code-block:: bash
          
@@ -61,7 +72,7 @@ The build system is 99% done so this documentation is interim, more detailed doc
       mkdir dependencies
 
 
-6. There is a small bug in the git repository handling. Until I get a chance to fix the bug the git commands are disabled
+#. There is a small bug in the git repository handling. Until I get a chance to fix the bug the git commands are disabled
    and we will just get the repositories manually. It only has to be done once. This will eventually change.
    
    .. code-block:: bash
@@ -139,29 +150,61 @@ The build system is 99% done so this documentation is interim, more detailed doc
       cd ../../..
 
 
-7. Create the build system files
+#. Create the build system files.
+
+   * GNU/mpich configuration.
+
+      .. code-block:: bash
+            
+         cd setup
+         cmake -DOpenCMISS_ROOT=~/OpenCMISS -DOpenCMISS_TOOLCHAIN=gnu -DOpenCMISS_MPI=mpich ../build_system/.
+         make create_configuration
+
+   * Intel configuration.
+
+         .. code-block:: bash
+            
+         cd setup
+         cmake -DOpenCMISS_ROOT=~/OpenCMISS -DOpenCMISS_TOOLCHAIN=intel -DOpenCMISS_MPI=intel ../build_system/.
+         make create_configuration
+
+#. Check the variables are OK, e.g., in the Variables directory of the directory below are the variables that control this configuration of OpenCMISS. Edit if required or just use the current defaults
+
+
+   * GNU/mpich configuration
+
+      .. code-block:: bash
+            
+         cd ~/OpenCMISS/build/configs/x86_64-linux/gnu-C14.2-gnu-F14.2/mpi-mpich-system/Release
+
+   * Intel configuraiton
+
+      .. code-block:: bash
+            
+         cd ~/OpenCMISS/build/configs/x86_64-linux/intel-C2025.0-intel-F2025.0/mpi-intel-system/Release
+
+
+#. Build OpenCMISS.
 
    .. code-block:: bash
-         
-      cd setup
-      cmake -DOpenCMISS_ROOT=~/OpenCMISS -DOpenCMISS_TOOLCHAIN=gnu -DOpenCMISS_MPI=mpich ../build_system/.
-      make create_configuration
 
-
-8. Check the variables are OK, for example for GNU 13.2 with mpich, 
-
-   .. code-block:: bash
-         
-      cd ~/OpenCMISS/build/configs/x86_64-linux/gnu-C13.2-gnu-F13.2/mpi-mpich-system/Release
-
-   
-in the Variables directory are the variables that control this configuration of OpenCMISS. Edit if required or just use the current defaults
-
-9. Build OpenCMISS
-
-   .. code-block:: bash
-         
       make
+
+#. Once OpenCMISS has been successfully build and installed, any updates to the OpenCMISS code in the ~/OpenCMISS/src/libOpenCMISS directory can be compiled and installed by 
+
+   * GNU/mpich configuration
+
+      .. code-block:: bash
+
+         cd ~/OpenCMISS/build/x86_64-linux/gnu-C14.2-gnu-F14.2/mpi-mpich-system/OpenCMISS/Release
+         make install
+
+  * Intel configuration
+
+      .. code-block:: bash
+
+         cd ~/OpenCMISS/build/x86_64-linux/intel-C2025.0-intel-F2025.0/mpi-intel-system/OpenCMISS/Release
+         make install
 
    
    
