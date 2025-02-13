@@ -20,7 +20,7 @@ function(OCAddExternal
     EXTERNAL_DEFINES
     EXTERNAL_DEPENDENCIES
   )
-
+  
   OCCMakeMessage(STATUS "Adding external project '${EXTERNAL_NAME}' to the OpenCMISS build system.")
 
   string(TOLOWER ${EXTERNAL_NAME} _LOWER_EXTERNAL_NAME)  
