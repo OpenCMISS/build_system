@@ -14,17 +14,17 @@ The build system is 99% done so this documentation is interim, more detailed doc
    
    * Install GCC 14.
 
-   * On Ubuntu
+      * On Ubuntu
 
-   .. code-block:: bash
+      .. code-block:: bash
 
-      sudo apt install gcc-14 g++-14 gfortran-14
-      sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-14 140 
-      sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-14 140 
-      sudo update-alternatives --install /usr/bin/gfortran gfortran /usr/bin/gfortran-14 140
-      gcc -v
-      g++ -v
-      gfortran -v
+         sudo apt install gcc-14 g++-14 gfortran-14
+         sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-14 140 
+         sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-14 140 
+         sudo update-alternatives --install /usr/bin/gfortran gfortran /usr/bin/gfortran-14 140
+         gcc -v
+         g++ -v
+         gfortran -v
 
 
    * Install Intel oneAPI. Following the instructions to install the Intel oneAPI base toolkit (https://www.intel.com/content/www/us/en/developer/tools/oneapi/base-toolkit.html) and HPC toolkit (https://www.intel.com/content/www/us/en/developer/tools/oneapi/hpc-toolkit.html).
