@@ -30,15 +30,15 @@ The build system is 99% done so this documentation is interim, more detailed doc
    * Install Intel oneAPI. Following the instructions to install the Intel oneAPI base toolkit (https://www.intel.com/content/www/us/en/developer/tools/oneapi/base-toolkit.html) and HPC toolkit (https://www.intel.com/content/www/us/en/developer/tools/oneapi/hpc-toolkit.html).
 
 
-
 #. Install necessary pre-requisite packages are installed.
 
    * For Ubuntu
 
-   .. code-block:: bash      
+   .. code-block:: bash
+                  
       sudo apt install git cmake gfortran pkg-config bison flex libmpich-dev liblapack-dev libblas-dev python3-dev python3-numpy swig doxygen graphviz
 
-
+      
    * For Fedora
 
    .. code-block:: bash
