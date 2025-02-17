@@ -156,34 +156,33 @@ The build system is 99% done so this documentation is interim, more detailed doc
 
    * GNU/mpich configuration.
 
-      .. code-block:: bash
+   .. code-block:: bash
             
-         cd setup
-         cmake -DOpenCMISS_ROOT=~/OpenCMISS -DOpenCMISS_TOOLCHAIN=gnu -DOpenCMISS_MPI=mpich ../build_system/.
-         make create_configuration
+      cd setup
+      cmake -DOpenCMISS_ROOT=~/OpenCMISS -DOpenCMISS_TOOLCHAIN=gnu -DOpenCMISS_MPI=mpich ../build_system/.
+      make create_configuration
 
    * Intel configuration.
 
-         .. code-block:: bash
+      .. code-block:: bash
             
-         cd setup
-         cmake -DOpenCMISS_ROOT=~/OpenCMISS -DOpenCMISS_TOOLCHAIN=intel -DOpenCMISS_MPI=intel ../build_system/.
-         make create_configuration
+      cd setup
+      cmake -DOpenCMISS_ROOT=~/OpenCMISS -DOpenCMISS_TOOLCHAIN=intel -DOpenCMISS_MPI=intel ../build_system/.
+      make create_configuration
 
 #. Check the variables are OK, e.g., in the Variables directory of the directory below are the variables that control this configuration of OpenCMISS. Edit if required or just use the current defaults
 
-
    * GNU/mpich configuration
 
-      .. code-block:: bash
-            
-         cd ~/OpenCMISS/build/configs/x86_64-linux/gnu-C14.2-gnu-F14.2/mpi-mpich-system/Release
+   .. code-block:: bash
+                  
+      cd ~/OpenCMISS/build/configs/x86_64-linux/gnu-C14.2-gnu-F14.2/mpi-mpich-system/Release
 
    * Intel configuraiton
 
-      .. code-block:: bash
-            
-         cd ~/OpenCMISS/build/configs/x86_64-linux/intel-C2025.0-intel-F2025.0/mpi-intel-system/Release
+   .. code-block:: bash
+                  
+      cd ~/OpenCMISS/build/configs/x86_64-linux/intel-C2025.0-intel-F2025.0/mpi-intel-system/Release
 
 
 #. Build OpenCMISS.
@@ -192,18 +191,20 @@ The build system is 99% done so this documentation is interim, more detailed doc
 
       make
 
+   NOTE: there is a bug in which it wants to keep recompiling. Once it has build OpenCMISS and it tries to build again just kill the build
+
 #. Once OpenCMISS has been successfully build and installed, any updates to the OpenCMISS code in the ~/OpenCMISS/src/libOpenCMISS directory can be compiled and installed by 
 
    * GNU/mpich configuration
 
-         .. code-block:: bash
+      .. code-block:: bash
 
          cd ~/OpenCMISS/build/x86_64-linux/gnu-C14.2-gnu-F14.2/mpi-mpich-system/OpenCMISS/Release
          make install
 
-  * Intel configuration
+   * Intel configuration
 
-         .. code-block:: bash
+      .. code-block:: bash
 
          cd ~/OpenCMISS/build/x86_64-linux/intel-C2025.0-intel-F2025.0/mpi-intel-system/OpenCMISS/Release
          make install
