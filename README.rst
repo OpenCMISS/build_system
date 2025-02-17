@@ -16,20 +16,22 @@ The build system is 99% done so this documentation is interim, more detailed doc
 
       * On Ubuntu
 
-         .. code-block:: bash
+      .. code-block:: bash
 
-            sudo apt install gcc-14 g++-14 gfortran-14
-            sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-14 140 
-            sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-14 140 
-            sudo update-alternatives --install /usr/bin/gfortran gfortran /usr/bin/gfortran-14 140
-            gcc -v
-            g++ -v
-            gfortran -v
+      sudo apt install gcc-14 g++-14 gfortran-14
+      sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-14 140 
+      sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-14 140 
+      sudo update-alternatives --install /usr/bin/gfortran gfortran /usr/bin/gfortran-14 140
+      gcc -v
+      g++ -v
+      gfortran -v
 
 
    * Install Intel oneAPI. Following the instructions to install the Intel oneAPI base 
    toolkit (https://www.intel.com/content/www/us/en/developer/tools/oneapi/base-toolkit.html) and 
    HPC toolkit (https://www.intel.com/content/www/us/en/developer/tools/oneapi/hpc-toolkit.html).
+
+
 
 #. Install necessary pre-requisite packages are installed.
 
@@ -37,14 +39,14 @@ The build system is 99% done so this documentation is interim, more detailed doc
 
       .. code-block:: bash
                   
-         sudo apt install git cmake gfortran pkg-config bison flex libmpich-dev liblapack-dev libblas-dev python3-dev python3-numpy swig doxygen graphviz
+      sudo apt install git cmake gfortran pkg-config bison flex libmpich-dev liblapack-dev libblas-dev python3-dev python3-numpy swig doxygen graphviz
 
 
    * For Fedora
 
-      .. code-block:: bash
+   .. code-block:: bash
                   
-         sudo git dnf install cmake gcc-gfortran pkgconf bison flex mpich-devel lapack-devel blas-devel python3-devel python3-numpy swig doxygen graphviz
+   sudo git dnf install cmake gcc-gfortran pkgconf bison flex mpich-devel lapack-devel blas-devel python3-devel python3-numpy swig doxygen graphviz
 
 
 #. Create a directory for OpenCMISS and change directory into it e.g.,
@@ -194,14 +196,14 @@ The build system is 99% done so this documentation is interim, more detailed doc
 
    * GNU/mpich configuration
 
-      .. code-block:: bash
+         .. code-block:: bash
 
          cd ~/OpenCMISS/build/x86_64-linux/gnu-C14.2-gnu-F14.2/mpi-mpich-system/OpenCMISS/Release
          make install
 
   * Intel configuration
 
-      .. code-block:: bash
+         .. code-block:: bash
 
          cd ~/OpenCMISS/build/x86_64-linux/intel-C2025.0-intel-F2025.0/mpi-intel-system/OpenCMISS/Release
          make install

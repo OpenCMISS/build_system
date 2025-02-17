@@ -322,7 +322,7 @@ add_custom_target(dependencies
 
 add_custom_target(build_configuration
   COMMAND ${CMAKE_COMMAND} --build ${OC_CURRENT_CONFIG_DIRECTORY}/. ${OC_CMAKE_BUILD_FLAGS} 
-  DEPENDS dependencies create_configuration
+  DEPENDS create_configuration
   WORKING_DIRECTORY ${OC_CURRENT_CONFIG_DIRECTORY}
   COMMENT "Building OpenCMISS configuration..."
 )
