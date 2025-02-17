@@ -28,7 +28,7 @@ if(NOT libCellML_FOUND)
   
   OCCMakeMessage(STATUS "Trying to find libCellML in the OpenCMISS build system...")
     
-  set(CMAKE_FIND_DEBUG_MODE TRUE)
+  #set(CMAKE_FIND_DEBUG_MODE TRUE)
   
   find_package(libCellML ${libCellML_FIND_VERSION} CONFIG
     QUIET
@@ -42,7 +42,7 @@ if(NOT libCellML_FOUND)
     NO_CMAKE_SYSTEM_PACKAGE_REGISTRY
   )
   
-  set(CMAKE_FIND_DEBUG_MODE FALSE)
+  #set(CMAKE_FIND_DEBUG_MODE FALSE)
   
   if(TARGET cellml)
     OCCMakeDebug("Found target cellml in libCellML configuration." 1)
