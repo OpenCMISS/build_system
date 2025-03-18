@@ -15,3 +15,18 @@ set(OpenCMISS_libCellML_GIT_ORGANISATION @OC_DEPENDENCIES_GIT_ORGANISATION@ CACH
 set(OpenCMISS_libCellML_GIT_BRANCH @OC_DEPENDENCIES_GIT_BRANCH@ CACHE STRING "The branch of the libCellML Git repository to use." FORCE)
 
 # libCellML configuration options
+
+##################################################################################################################
+#
+# SHOULD NOT NEED TO CHANGE ANYTHING BELOW HERE
+#
+##################################################################################################################
+
+# Debug information
+OCCMakeDebug("" 1)
+OCCMakeDebug("    OpenCMISS libCellML Dependency Configuration:" 2)
+OCCMakeDebug("      OpenCMISS_FIND_SYSTEM_libCellML = ${OpenCMISS_FIND_SYSTEM_libCellML}" 2)
+OCCMakeDebug("      OpenCMISS_libCellML_VERSION = ${OpenCMISS_libCellML_VERSION}" 2)
+OCCMakeDebug("      OpenCMISS_libCellML_GIT_HOST = ${OpenCMISS_libCellML_GIT_HOST}" 2)
+OCCMakeDebug("      OpenCMISS_libCellML_GIT_ORGANISATION = ${OpenCMISS_libCellML_GIT_ORGANISATION}" 2)
+OCCMakeDebug("      OpenCMISS_libCellML_GIT_BRANCH = ${OpenCMISS_libCellML_GIT_BRANCH}" 2)

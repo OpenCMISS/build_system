@@ -1,0 +1,32 @@
+#[=======================================================================[.rst:
+OpenCMISS MPI4PY Variables
+-----------------------------
+
+Setup the variables to use MPI4PY with OpenCMISS.
+
+#]=======================================================================]
+
+set(OpenCMISS_FIND_SYSTEM_MPI4PY OFF CACHE BOOL "Find a system version of MPI4PY rather than an OpenCMISS version." FORCE)
+
+# MPI4PY repository options
+set(OpenCMISS_MPI4PY_VERSION 4.0.3 CACHE STRING "The version/tag of MPI4PY to use." FORCE)
+set(OpenCMISS_MPI4PY_GIT_HOST @OC_DEPENDENCIES_GIT_HOST@ CACHE STRING "The hostname of the MPI4PY Git repository." FORCE)
+set(OpenCMISS_MPI4PY_GIT_ORGANISATION @OC_DEPENDENCIES_GIT_ORGANISATION@ CACHE STRING "The organisation of the MPI4PY Git repository." FORCE)
+set(OpenCMISS_MPI4PY_GIT_BRANCH @OC_DEPENDENCIES_GIT_BRANCH@ CACHE STRING "The branch of the MPI4PY Git repository to use." FORCE)
+
+# MPI4PY configuration options
+
+##################################################################################################################
+#
+# SHOULD NOT NEED TO CHANGE ANYTHING BELOW HERE
+#
+##################################################################################################################
+
+# Debug information
+OCCMakeDebug("" 1)
+OCCMakeDebug("    OpenCMISS MPI4PY Dependency Configuration:" 2)
+OCCMakeDebug("      OpenCMISS_FIND_SYSTEM_MPI4PY = ${OpenCMISS_FIND_SYSTEM_MPI4PY}" 2)
+OCCMakeDebug("      OpenCMISS_MPI4PY_VERSION = ${OpenCMISS_MPI4PY_VERSION}" 2)
+OCCMakeDebug("      OpenCMISS_MPI4PY_GIT_HOST = ${OpenCMISS_MPI4PY_GIT_HOST}" 2)
+OCCMakeDebug("      OpenCMISS_MPI4PY_GIT_ORGANISATION = ${OpenCMISS_MPI4PY_GIT_ORGANISATION}" 2)
+OCCMakeDebug("      OpenCMISS_MPI4PY_GIT_BRANCH = ${OpenCMISS_MPI4PY_GIT_BRANCH}" 2)

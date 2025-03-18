@@ -21,6 +21,7 @@ set(OC_KNOWN_DEPENDENCIES
   llvm-project
   METIS
   mpich
+  MPI4PY
   MUMPS
   ompi
   opari2
@@ -1116,7 +1117,41 @@ if(OC_CMAKE_STAGE STREQUAL "configure")
 	"${OC_SLEPc_BACKWARD_DEPENDENCIES}"
       )
     else()
-      
+      if(NOT TARGET SLEPC)
+	add_library(SLEPC ALIAS SLEPc::SLEPc)
+      endif()
+    endif()
+  endif()
+  
+  # MPI4PY
+  if(OpenCMISS_USE_MPI4PY)
+    # Using MPI4PY
+    list(APPEND OC_DEPENDENDICES_LIST MPI4PY)
+    # Set MPI4PY orward/backward dependencies
+    set(OC_MPI4PY_FORWARD_DEPENDENCIES )
+    set(OC_MPI4PY_BACKWARD_DEPENDENCIES )
+    # See if we can find MPI4PY
+    #find_package(MPI4PY)
+    if(NOT MPI4PY_FOUND)
+      # Add and configure an OpenCMISS version of MPI4PY
+      set(OC_MPI4PY_NAME "MPI4PY")
+      set(OC_MPI4PY_REPO_NAME "mpi4py")
+      OCAddExternal(
+	"${OC_MPI4PY_NAME}"
+	"${OC_MPI4PY_REPO_NAME}"
+	"${OC_DEPENDENCIES_SOURCE_BASE_DIR}"
+	""
+	"${OC_DEPENDENCIES_MPI_BUILD_BASE_DIR}"
+	"${OC_DEPENDENCIES_MPI_INSTALL_BASE_DIR}"
+	"${OC_EXTERNAL_ISNT_MAIN}"
+	"${OpenCMISS_WITH_MPI}"
+	"${OC_MPI4PY_DEFINES}"
+	"${OC_MPI4PY_BACKWARD_DEPENDENCIES}"
+      )
+    else()     
+      if(NOT TARGET MPI4PY)
+	add_library(MPI4PY ALIAS mpi4py::mpi4py)
+      endif()
     endif()
   endif()
 
