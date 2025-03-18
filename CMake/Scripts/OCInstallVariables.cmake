@@ -26,6 +26,7 @@ set(OC_VARIABLES_FILES_LIST
   Dependencies/OpenCMISS_Variables_LibXml2
   Dependencies/OpenCMISS_Variables_LLVM
   Dependencies/OpenCMISS_Variables_METIS
+  Dependencies/OpenCMISS_Variables_MPI4PY
   Dependencies/OpenCMISS_Variables_MUMPS
   Dependencies/OpenCMISS_Variables_OPARI2
   Dependencies/OpenCMISS_Variables_OTF2
